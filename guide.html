@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How to Use - Ministry of Tourism">
+    <title>How to Use - Ministry of Tourism</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Khmer&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #004282;
+            --primary-light: #3a6ca8;
+            --secondary-color: #667eea;
+            --accent-color: #764ba2;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-color: #333333;
+            --text-light: #666666;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --gradient: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--white);
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        header img {
+            height: 70px;
+            width: auto;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            transition: var(--transition);
+        }
+
+        header img:hover {
+            transform: scale(1.05);
+        }
+
+        header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        main {
+            flex: 1;
+            padding: 3rem 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            border-left: 5px solid transparent;
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-left-color: var(--secondary-color);
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .icon-container {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            margin-bottom: 0;
+            font-size: 1.6rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .section p {
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+            padding-left: 0.5rem;
+        }
+
+        .section ul, .section ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .section ul {
+            list-style: none;
+        }
+
+        .section li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.8rem;
+            color: var(--text-light);
+        }
+
+        .section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+        }
+
+        .section ol li {
+            margin-bottom: 0.8rem;
+            color: var(--text-light);
+            padding-left: 0.5rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(to right, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            border-left: 4px solid var(--secondary-color);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box ul {
+            margin-bottom: 0;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .feature-list i {
+            color: var(--secondary-color);
+            margin-right: 0.8rem;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.2rem;
+            background: rgba(102, 126, 234, 0.08);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .contact-link:hover {
+            background: rgba(102, 126, 234, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .contact-link i {
+            margin-right: 0.7rem;
+            font-size: 1.2rem;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--white);
+            text-align: center;
+            padding: 2.5rem 1rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding-bottom: 2px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.8rem 1rem;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            main {
+                padding: 2rem 1rem;
+            }
+
+            .section {
+                padding: 1.8rem;
+                margin-bottom: 2rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .icon-container {
+                margin-bottom: 1rem;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .section h2 {
+                font-size: 1.4rem;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .contact-link {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.6rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .section h2 {
+                font-size: 1.3rem;
+            }
+
+            .icon-container {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .section:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            
+            .contact-link:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="assets/img/tourism-logo.png" alt="Ministry of Tourism Logo">
+            <h1>How to Use Our Website</h1>
+            <p class="subtitle">A comprehensive guide to navigate and utilize all features of our tourism research platform</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="section" id="register">
+            <div class="section-header">
+                <div class="icon-container">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h2>Registering an Account</h2>
+            </div>
+            <p>To access full features of our website, you need to create an account. Follow these steps:</p>
+            <ol>
+                <li>Click on the "Register" button in the header.</li>
+                <li>Fill in your personal details including name, email, and password.</li>
+                <li>Agree to the terms and conditions.</li>
+                <li>Click "Submit" to create your account.</li>
+                <li>Check your email for a verification link and click it to activate your account.</li>
+            </ol>
+            <p>Once registered, you can log in anytime using your email and password.</p>
+            <div class="highlight-box">
+                <p><strong>Tip:</strong> Use a strong password with a mix of letters, numbers, and symbols for better security.</p>
+            </div>
+        </section>
+
+        <section class="section" id="upload">
+            <div class="section-header">
+                <div class="icon-container">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h2>Uploading Documents</h2>
+            </div>
+            <p>Our platform allows you to upload research documents and reports. Here's how:</p>
+            <ol>
+                <li>Log in to your account.</li>
+                <li>Navigate to the "Upload" page from the menu.</li>
+                <li>Click "Choose File" to select your document (supported formats: PDF, DOC, DOCX).</li>
+                <li>Add a title, description, and relevant tags for your document.</li>
+                <li>Select the appropriate category (e.g., Research, Policy, Reports).</li>
+                <li>Click "Upload" to submit your document.</li>
+            </ol>
+            <p>Your uploaded documents will be reviewed by our team before being published in the library.</p>
+            <div class="highlight-box">
+                <ul>
+                    <li>Maximum file size: 10MB</li>
+                    <li>Ensure documents are original and properly cited</li>
+                    <li>Contact support if you encounter any upload issues</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="library">
+            <div class="section-header">
+                <div class="icon-container">
+                    <i class="fas fa-book-reader"></i>
+                </div>
+                <h2>Using the Library</h2>
+            </div>
+            <p>Our library contains a comprehensive collection of tourism-related research and documents. To make the most of it:</p>
+            <ul class="feature-list">
+                <li><i class="fas fa-search"></i> <strong>Search:</strong> Use the search bar to find specific topics or keywords.</li>
+                <li><i class="fas fa-folder-open"></i> <strong>Browse Categories:</strong> Explore documents by categories like Research Papers, Policy Documents, or Reports.</li>
+                <li><i class="fas fa-download"></i> <strong>Download:</strong> Click on any document to view details and download if available.</li>
+                <li><i class="fas fa-bookmark"></i> <strong>Save Favorites:</strong> Log in to bookmark documents for easy access later.</li>
+                <li><i class="fas fa-share-alt"></i> <strong>Share:</strong> Use the share buttons to distribute links to important documents.</li>
+            </ul>
+            <p>The library is regularly updated with new content. Check back often for the latest research and publications.</p>
+        </section>
+
+        <section class="section" id="support">
+            <div class="section-header">
+                <div class="icon-container">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h2>Getting Help</h2>
+            </div>
+            <p>If you need assistance, we're here to help you:</p>
+            <ul class="feature-list">
+                <li><i class="fas fa-question-circle"></i> Check this guide for common questions</li>
+                <li><i class="fas fa-life-ring"></i> Contact our support team for technical issues</li>
+                <li><i class="fas fa-comments"></i> Join our community for discussions and updates</li>
+                <li><i class="fas fa-bullhorn"></i> Follow our social media for announcements</li>
+            </ul>
+            
+            <div class="contact-links">
+                <a href="mailto:researchdeparment.info@gmail.com" class="contact-link">
+                    <i class="fas fa-envelope"></i> Email Support
+                </a>
+                <a href="https://t.me/example" target="_blank" class="contact-link">
+                    <i class="fab fa-telegram"></i> Telegram Channel
+                </a>
+                <a href="https://facebook.com/example" target="_blank" class="contact-link">
+                    <i class="fab fa-facebook"></i> Facebook Page
+                </a>
+                <a href="#" class="contact-link">
+                    <i class="fas fa-phone-alt"></i> Call Support
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Research and Policy Department. Created by <a href="#" class="footer-logo">Rith Bora</a></p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;display:none">Ministry of Tourism - Empowering Research and Policy Development</p>
+    </footer>
+
+    <script>
+        // Add subtle animation to sections when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Add click animation to contact links
+            const contactLinks = document.querySelectorAll('.contact-link');
+            contactLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    this.style.animation = 'pulse 0.3s ease';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 300);
+                });
+            });
+            
+            // Add hover effect for sections on touch devices
+            if ('ontouchstart' in window) {
+                sections.forEach(section => {
+                    section.addEventListener('touchstart', function() {
+                        this.classList.add('hover-effect');
+                    });
+                    
+                    section.addEventListener('touchend', function() {
+                        setTimeout(() => {
+                            this.classList.remove('hover-effect');
+                        }, 300);
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

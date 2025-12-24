@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Document Library - Ministry Of Tourism">
+    <title>បណ្ណាល័យឯកសារ - Document Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Khmer&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="src/css/style.css"> -->
+    <style>
+        :root {
+            --primary-blue: #004282;
+            --secondary-orange: #ee7d20;
+            --accent-purple: #667eea;
+            --light-blue: #e8f0fe;
+            --light-orange: #fff3e0;
+            --light-gray: #f8fafc;
+            --medium-gray: #e2e8f0;
+            --dark-gray: #64748b;
+            --text-dark: #1e293b;
+            --success-green: #10b981;
+            --warning-yellow: #f59e0b;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 20px 40px rgba(0, 66, 130, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-full: 50px;
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Khmer', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+        }
+
+        .library-page {
+            min-height: 100vh;
+        }
+
+        /* Header Styles - Enhanced */
+        .library-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #002c5f 100%);
+            padding: 1.2rem 1.5rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background-blend-mode: overlay;
+            border-bottom: 4px solid var(--secondary-orange);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .library-logo {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            object-fit: contain;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+            padding: 6px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
+            transition: all var(--transition-base);
+        }
+
+        .library-logo:hover {
+            transform: rotate(5deg) scale(1.05);
+            border-color: var(--secondary-orange);
+        }
+
+        .library-header h1 {
+            font-size: 1.3rem;
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-khmer {
+            font-family: 'Khmer', sans-serif;
+            font-size: 1.1rem;
+            display: block;
+            color: rgba(255, 255, 255, 0.95);
+            letter-spacing: 0.5px;
+        }
+
+        .header-english {
+            font-size: 1rem;
+            display: block;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* Enhanced Close Button */
+        .close-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: linear-gradient(135deg, var(--secondary-orange) 0%, #ff6b00 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            text-decoration: none;
+            transition: all var(--transition-base);
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 6px 20px rgba(238, 125, 32, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .close-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+            border-radius: 50%;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            transform: scale(1.15) rotate(90deg);
+            box-shadow: 0 10px 30px rgba(238, 125, 32, 0.6);
+            background: linear-gradient(135deg, #ff8c42 0%, #ff5500 100%);
+        }
+
+        .close-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Enhanced Search Container */
+        .search-container {
+            background: linear-gradient(to right, #ffffff, #f8fafc);
+            padding: 1.5rem 1.5rem;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 94px;
+            z-index: 999;
+            border-bottom: 1px solid rgba(0, 66, 130, 0.1);
+        }
+
+        .search-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.2rem 1.2rem 1.2rem 4rem;
+            border: 2px solid var(--medium-gray);
+            border-radius: var(--radius-full);
+            font-size: 1.1rem;
+            transition: all var(--transition-base);
+            background: white;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0, 66, 130, 0.2), var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            pointer-events: none;
+            width: 22px;
+            height: 22px;
+            transition: all var(--transition-base);
+        }
+
+        .search-input:focus + .search-icon {
+            color: var(--accent-purple);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Enhanced Search Results */
+        .search-results {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            z-index: 100;
+            overflow-y: auto;
+            padding: 1.5rem;
+            animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid rgba(0, 66, 130, 0.1);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            padding: 1rem 0;
+            margin-top: -1rem;
+        }
+
+        .search-results-header h2 {
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .results-count {
+            color: var(--secondary-orange);
+            font-size: 1rem;
+            font-weight: 700;
+            background: rgba(238, 125, 32, 0.1);
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--radius-full);
+            border: 2px solid rgba(238, 125, 32, 0.2);
+        }
+
+        .close-results {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.8rem;
+            border-radius: 50%;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .close-results:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Enhanced Document Grid - 2 columns on mobile */
+        .document-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding: 0.5rem;
+        }
+
+        /* Enhanced Document Cards */
+        .document-item {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 1.8rem;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 66, 130, 0.1);
+            box-shadow: var(--shadow-md);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .document-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-blue);
+        }
+
+        .document-item:active {
+            transform: translateY(-4px);
+        }
+
+        .document-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-blue), var(--accent-purple));
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .document-item:hover::before {
+            opacity: 1;
+        }
+
+        .document-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(0, 66, 130, 0.05) 0%, rgba(102, 126, 234, 0.05) 100%);
+            border-radius: 0 0 0 60px;
+            transition: all var(--transition-base);
+        }
+
+        .document-item:hover::after {
+            width: 80px;
+            height: 80px;
+        }
+
+        .document-item-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .doc-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doc-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+        }
+
+        .doc-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .document-item h3 {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 0 0.8rem 0;
+            line-height: 1.4;
+            word-break: break-word;
+            flex: 1;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .document-type {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            background: rgba(0, 66, 130, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: var(--radius-full);
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0, 66, 130, 0.2);
+        }
+
+        .document-item-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 1.2rem;
+            border-top: 2px solid rgba(0, 66, 130, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .meta-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .document-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .document-date::before {
+            content: '📅';
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .document-size {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .document-size::before {
+            content: '💾';
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .view-btn {
+            background: linear-gradient(135deg, var(--secondary-orange) 0%, #ff6b00 100%);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: var(--radius-full);
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(238, 125, 32, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .view-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(238, 125, 32, 0.4);
+        }
+
+        .view-btn i {
+            font-size: 1rem;
+        }
+
+        /* File Type Colors */
+        .doc-icon.pdf { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); }
+        .doc-icon.docx { background: linear-gradient(135deg, #4dabf7 0%, #339af0 100%); }
+        .doc-icon.xlsx { background: linear-gradient(135deg, #51cf66 0%, #40c057 100%); }
+        .doc-icon.pptx { background: linear-gradient(135deg, #ff922b 0%, #fd7e14 100%); }
+        .doc-icon.image { background: linear-gradient(135deg, #cc5de8 0%, #be4bdb 100%); }
+        .doc-icon.folder { background: linear-gradient(135deg, #ffa94d 0%, #ff922b 100%); }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 4rem;
+            grid-column: 1 / -1;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 66, 130, 0.1);
+            border-top: 4px solid var(--primary-blue);
+            border-right: 4px solid var(--accent-purple);
+            border-bottom: 4px solid var(--secondary-orange);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            margin: 0 auto 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-spinner p {
+            color: var(--dark-gray);
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--dark-gray);
+            display: none;
+            grid-column: 1 / -1;
+        }
+
+        .no-results svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1.5rem;
+            color: var(--medium-gray);
+            opacity: 0.5;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            color: var(--dark-gray);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .no-results p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .embed-container {
+            width: 100%;
+            height: calc(100vh - 170px);
+            position: relative;
+            background: white;
+            overflow: hidden;
+        }
+
+        .google-drive-embed {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            background: white;
+        }
+
+        /* Responsive Design - Mobile First */
+        /* Tablet */
+        @media (min-width: 768px) {
+            .document-list {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+            
+            .search-container {
+                padding: 1.5rem 2rem;
+            }
+            
+            .search-input {
+                padding: 1.3rem 1.3rem 1.3rem 4.5rem;
+                font-size: 1.15rem;
+            }
+            
+            .library-header {
+                padding: 1.2rem 2rem;
+            }
+            
+            .library-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .library-header h1 {
+                font-size: 1.4rem;
+            }
+            
+            .header-khmer {
+                font-size: 1.2rem;
+            }
+            
+            .header-english {
+                font-size: 1.1rem;
+            }
+            
+            .close-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Desktop */
+        @media (min-width: 1024px) {
+            .document-list {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 2.5rem;
+            }
+            
+            .search-container {
+                padding: 1.8rem 3rem;
+            }
+            
+            .search-wrapper {
+                max-width: 1400px;
+            }
+            
+            .search-input {
+                padding: 1.4rem 1.4rem 1.4rem 5rem;
+                font-size: 1.2rem;
+            }
+            
+            .library-header {
+                padding: 1.5rem 3rem;
+            }
+            
+            .close-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 2.5rem;
+            }
+            
+            .document-item {
+                padding: 2rem;
+            }
+            
+            .doc-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .doc-icon svg {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            /* Force 2-column grid on mobile */
+            .document-list {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                padding: 0.25rem;
+            }
+            
+            .document-item {
+                padding: 1.2rem;
+                border-radius: var(--radius-lg);
+            }
+            
+            .document-item-header {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .doc-icon {
+                width: 50px;
+                height: 50px;
+                align-self: center;
+            }
+            
+            .doc-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .document-item h3 {
+                font-size: 1rem;
+                text-align: center;
+            }
+            
+            .document-type {
+                align-self: center;
+                font-size: 0.8rem;
+                padding: 0.2rem 0.6rem;
+            }
+            
+            .document-item-meta {
+                flex-direction: column;
+                gap: 0.8rem;
+                align-items: stretch;
+            }
+            
+            .view-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .library-header {
+                padding: 0.8rem 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .header-left {
+                order: 1;
+                flex: 1 1 100%;
+                justify-content: center;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+            
+            .close-btn {
+                order: 2;
+                position: absolute;
+                right: 1rem;
+                top: 1rem;
+                width: 42px;
+                height: 42px;
+                font-size: 1.8rem;
+            }
+            
+            .library-logo {
+                width: 44px;
+                height: 44px;
+            }
+            
+            .library-header h1 {
+                font-size: 1rem;
+            }
+            
+            .header-khmer {
+                font-size: 0.95rem;
+            }
+            
+            .header-english {
+                font-size: 0.85rem;
+            }
+            
+            .search-container {
+                top: 120px;
+                padding: 1rem;
+            }
+            
+            .search-input {
+                padding: 0.9rem 0.9rem 0.9rem 3.2rem;
+                font-size: 1rem;
+            }
+            
+            .search-icon {
+                left: 1rem;
+                width: 18px;
+                height: 18px;
+            }
+            
+            .embed-container {
+                height: calc(100vh - 160px);
+            }
+            
+            .search-results-header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .results-count {
+                font-size: 0.9rem;
+                padding: 0.4rem 1rem;
+            }
+            
+            .close-results {
+                width: 40px;
+                height: 40px;
+                padding: 0.6rem;
+            }
+        }
+
+        /* Extra Small Mobile */
+        @media (max-width: 360px) {
+            .document-list {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            
+            .document-item {
+                padding: 1rem;
+            }
+            
+            .document-item h3 {
+                font-size: 0.95rem;
+            }
+            
+            .view-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --light-gray: #1a1a1a;
+                --text-dark: #ffffff;
+                --dark-gray: #94a3b8;
+                --medium-gray: #334155;
+            }
+            
+            body {
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            }
+            
+            .search-container {
+                background: linear-gradient(to right, #1e293b, #0f172a);
+            }
+            
+            .search-input {
+                background: #334155;
+                color: #ffffff;
+                border-color: #475569;
+            }
+            
+            .search-input:focus {
+                background: #334155;
+            }
+            
+            .document-item {
+                background: #1e293b;
+                border-color: #334155;
+            }
+            
+            .search-results {
+                background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            }
+            
+            .document-type {
+                background: rgba(0, 66, 130, 0.2);
+                border-color: rgba(0, 66, 130, 0.4);
+            }
+        }
+
+        /* Accessibility */
+        .search-input:focus-visible,
+        .close-btn:focus-visible,
+        .document-item:focus-visible,
+        .close-results:focus-visible,
+        .view-btn:focus-visible {
+            outline: 3px solid var(--secondary-orange);
+            outline-offset: 2px;
+        }
+
+        /* Print Styles */
+        @media print {
+            .library-header,
+            .search-container,
+            .close-btn,
+            .view-btn {
+                display: none;
+            }
+            
+            .embed-container {
+                height: auto;
+            }
+            
+            .document-item {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+
+        /* Skeleton Loading Animation */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite ease-in-out;
+            border-radius: var(--radius-lg);
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="library-page">
+    <header class="library-header">
+        <div class="header-left">
+            <img src="assets/img/Logo of the Ministry of Tourism of Cambodia.png" alt="Ministry of Tourism Logo" class="library-logo">
+            <div>
+                <h1>
+                    <span class="header-khmer">បណ្ណាល័យឯកសារ</span>
+                    <span class="header-english">Document Library</span>
+                </h1>
+            </div>
+        </div>
+        <a href="index.html" class="close-btn" aria-label="Close Library">×</a>
+    </header>
+
+    <div class="search-container">
+        <div class="search-wrapper">
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="ស្វែងរកឯកសារ... / Search documents..." autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <!-- Google Drive Embed -->
+        <div class="embed-container">
+            <iframe class="google-drive-embed" 
+                    id="driveEmbed"
+                    src="https://drive.google.com/embeddedfolderview?id=1dn9wHTvR4xkmwvfzcskhKDXfLLorlG0C#grid"
+                    allowfullscreen
+                    title="Google Drive Document Library"
+                    loading="lazy">
+            </iframe>
+            
+            <!-- Enhanced Search Results -->
+            <div class="search-results" id="searchResults">
+                <div class="search-results-header">
+                    <div>
+                        <h2>Search Results</h2>
+                        <span class="results-count" id="resultsCount"></span>
+                    </div>
+                    <button class="close-results" id="closeResults" aria-label="Close search results">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner"></div>
+                    <p>Searching Documents...</p>
+                </div>
+                
+                <div class="document-list" id="documentList"></div>
+                
+                <div class="no-results" id="noResults">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                    <h3>No documents found</h3>
+                    <p>Try different keywords or check your spelling</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Enhanced document search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const documentList = document.getElementById('documentList');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const noResults = document.getElementById('noResults');
+        const resultsCount = document.getElementById('resultsCount');
+        const closeResults = document.getElementById('closeResults');
+        const baseFolderId = '1dn9wHTvR4xkmwvfzcskhKDXfLLorlG0C';
+        
+        const API_KEY = 'AIzaSyA7gFR9qcGWDbYaQlgLdzEf7vH1MnF5nXs';
+        let searchTimeout;
+        
+        // Get file type icon class
+        function getFileIconClass(filename, mimeType) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const mime = mimeType || '';
+            
+            if (mime.includes('pdf')) return 'pdf';
+            if (mime.includes('word') || ext === 'doc' || ext === 'docx') return 'docx';
+            if (mime.includes('excel') || ext === 'xls' || ext === 'xlsx') return 'xlsx';
+            if (mime.includes('powerpoint') || ext === 'ppt' || ext === 'pptx') return 'pptx';
+            if (mime.includes('image')) return 'image';
+            if (mime.includes('folder') || mime.includes('vnd.google-apps.folder')) return 'folder';
+            return 'pdf'; // default
+        }
+        
+        // Get file type text
+        function getFileTypeText(filename, mimeType) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const mime = mimeType || '';
+            
+            if (mime.includes('pdf')) return 'PDF';
+            if (mime.includes('word') || ext === 'doc' || ext === 'docx') return 'Word';
+            if (mime.includes('excel') || ext === 'xls' || ext === 'xlsx') return 'Excel';
+            if (mime.includes('powerpoint') || ext === 'ppt' || ext === 'pptx') return 'PowerPoint';
+            if (mime.includes('image')) return 'Image';
+            if (mime.includes('folder')) return 'Folder';
+            return 'Document';
+        }
+        
+        // Format file size
+        function formatFileSize(bytes) {
+            if (!bytes || bytes === 0) return 'Size unknown';
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let size = bytes;
+            let unitIndex = 0;
+            
+            while (size >= 1024 && unitIndex < units.length - 1) {
+                size /= 1024;
+                unitIndex++;
+            }
+            
+            return `${size.toFixed(1)} ${units[unitIndex]}`;
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        // Close results
+        closeResults.addEventListener('click', function() {
+            searchResults.classList.remove('active');
+            searchInput.value = '';
+            searchInput.style.borderColor = '';
+            searchInput.style.background = '';
+            searchInput.focus();
+        });
+        
+        // Fetch files from Google Drive
+        async function fetchDriveFiles() {
+            try {
+                loadingSpinner.classList.add('active');
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                
+                const response = await fetch(
+                    `https://www.googleapis.com/drive/v3/files?q='${baseFolderId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,modifiedTime,webViewLink,iconLink,size,fileExtension)`,
+                    { signal: controller.signal }
+                );
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.error('API Error:', data.error);
+                    return { error: data.error.message };
+                }
+                
+                return data.files || [];
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.error('Fetch timeout');
+                    return { error: 'Request timeout. Please try again.' };
+                }
+                console.error('Fetch error:', error);
+                return { error: error.message };
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+        
+        // Create skeleton loading items
+        function createSkeletonItems(count = 6) {
+            documentList.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const skeleton = document.createElement('div');
+                skeleton.className = 'document-item skeleton';
+                skeleton.style.height = '200px';
+                documentList.appendChild(skeleton);
+            }
+        }
+        
+        // Search input handler
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.trim().toLowerCase();
+            
+            clearTimeout(searchTimeout);
+            
+            if (searchTerm.length > 0) {
+                searchInput.style.borderColor = 'var(--primary-blue)';
+                searchInput.style.background = 'rgba(0, 66, 130, 0.05)';
+                
+                searchTimeout = setTimeout(() => {
+                    performSearch(searchTerm);
+                }, 400);
+            } else {
+                searchResults.classList.remove('active');
+                searchInput.style.borderColor = '';
+                searchInput.style.background = '';
+            }
+        });
+        
+        // Perform search
+        async function performSearch(searchTerm) {
+            searchResults.classList.add('active');
+            noResults.style.display = 'none';
+            
+            // Show skeleton loading
+            createSkeletonItems();
+            
+            const files = await fetchDriveFiles();
+            
+            if (files.error) {
+                documentList.innerHTML = `
+                    <div class="error-message" style="grid-column: 1/-1; text-align: center; padding: 3rem; background: rgba(255, 221, 221, 0.1); border: 2px solid #ff4444; border-radius: var(--radius-xl);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ff4444; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #ff4444; margin-bottom: 0.5rem;">Connection Error</h3>
+                        <p style="color: #666; margin: 0;">Unable to fetch documents. Please check your connection.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Filter files
+            const filteredFiles = files.filter(file => 
+                file.name.toLowerCase().includes(searchTerm)
+            );
+            
+            resultsCount.textContent = `${filteredFiles.length} document${filteredFiles.length !== 1 ? 's' : ''} found`;
+            
+            if (filteredFiles.length === 0) {
+                noResults.style.display = 'flex';
+                documentList.innerHTML = '';
+                return;
+            }
+            
+            // Display results
+            documentList.innerHTML = filteredFiles.map(file => {
+                const iconClass = getFileIconClass(file.name, file.mimeType);
+                const fileType = getFileTypeText(file.name, file.mimeType);
+                const fileSize = file.size ? formatFileSize(parseInt(file.size)) : 'Size unknown';
+                const modifiedDate = formatDate(file.modifiedTime);
+                
+                return `
+                    <div class="document-item" onclick="window.open('${file.webViewLink}', '_blank')" tabindex="0" role="button" aria-label="Open ${file.name}">
+                        <div class="document-item-header">
+                            <div class="doc-icon ${iconClass}">
+                                <i class="fas fa-file-${iconClass === 'pdf' ? 'pdf' : 
+                                                  iconClass === 'docx' ? 'word' : 
+                                                  iconClass === 'xlsx' ? 'excel' : 
+                                                  iconClass === 'pptx' ? 'presentation' : 
+                                                  iconClass === 'image' ? 'image' : 
+                                                  iconClass === 'folder' ? 'folder' : 'file'}"></i>
+                            </div>
+                            <h3>${file.name}</h3>
+                        </div>
+                        <span class="document-type">${fileType}</span>
+                        <div class="document-item-meta">
+                            <div class="meta-left">
+                                <span class="document-date">${modifiedDate}</span>
+                                <span class="document-size">${fileSize}</span>
+                            </div>
+                            <button class="view-btn" onclick="event.stopPropagation(); window.open('${file.webViewLink}', '_blank')">
+                                <i class="fas fa-external-link-alt"></i> View
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Keyboard shortcuts
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = e.target.value.trim();
+                if (searchTerm.length > 0) {
+                    const searchUrl = `https://drive.google.com/drive/folders/${baseFolderId}?q=${encodeURIComponent(searchTerm)}`;
+                    window.open(searchUrl, '_blank');
+                }
+            }
+        });
+        
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchResults.classList.remove('active');
+                searchInput.style.borderColor = '';
+                searchInput.style.background = '';
+                searchInput.blur();
+            }
+        });
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            searchInput.focus();
+            
+            // Add some demo data for testing if needed
+            // You can remove this in production
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            if (isLocalhost) {
+                console.log('Development mode: Document library ready');
+            }
+        });
+    </script>
+</body>
+</html>

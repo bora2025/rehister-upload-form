@@ -1,0 +1,26 @@
+{
+  "name": "mini-app",
+  "version": "1.0.0",
+  "description": "A simple mini web application",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html"
+  },
+  "keywords": [
+    "mini-app",
+    "web",
+    "javascript",
+    "html",
+    "css"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/mini-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/mini-app/issues"
+  },
+  "homepage": "https://github.com/yourusername/mini-app#readme"
+}
