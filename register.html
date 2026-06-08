@@ -843,8 +843,8 @@
                 <hr class="form-divider">
 
                 <div class="form-group">
-                    <label for="phone">លេខទូរសព្ទ / Phone Number</label>
-                    <input type="tel" id="phone" name="phone">
+                    <label for="phone">លេខទូរសព្ទ / Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" required>
                 </div>
 
                 <hr class="form-divider">
@@ -881,44 +881,63 @@
             }
             
             // Handle form submission
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
+                // Validate form first
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    formStatus.textContent = 'សូមបំពេញព័ត៌មានទាំងអស់ដែលត្រូវការ / Please fill all required fields';
+                    formStatus.className = 'form-status error';
+                    return;
+                }
+
                 // Show loading state
                 const submitBtn = form.querySelector('.btn');
                 const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> កំពុងដាក់ស្នើ / Submitting...';
                 submitBtn.disabled = true;
-                
-                // Simulate API call delay
-                setTimeout(() => {
-                    // Validate form
-                    if (form.checkValidity()) {
-                        // Generate registration ID
-                        const registrationId = generateRegistrationId();
-                        document.getElementById('idNumber').textContent = registrationId;
-                        document.getElementById('idNumberEn').textContent = registrationId;
-                        
-                        // Hide form and show success message
-                        form.classList.add('hide');
-                        successContainer.classList.add('show');
-                        
-                        // Reset form
-                        form.reset();
-                        
-                        // Scroll to top of success message
-                        successContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    } else {
-                        // Show validation errors
-                        form.reportValidity();
-                        formStatus.textContent = 'សូមបំពេញព័ត៌មានទាំងអស់ដែលត្រូវការ / Please fill all required fields';
-                        formStatus.className = 'form-status error';
-                    }
-                    
-                    // Reset button state
+                formStatus.textContent = '';
+                formStatus.className = 'form-status';
+
+                // Collect form data
+                const data = {
+                    type: document.getElementById('type').value,
+                    name: document.getElementById('name').value,
+                    gender: form.querySelector('input[name="gender"]:checked')?.value || '',
+                    organization: document.getElementById('organization').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value
+                };
+
+                try {
+                    const scriptUrl = 'https://script.google.com/macros/s/AKfycbxKjTgkT_rRnsGV9bAV40vNvCB2IbY0rz475WL-GFS36Gelg1E2NCJocNr6b8d8D6AN0g/exec';
+
+                    await fetch(scriptUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: JSON.stringify(data)
+                    });
+
+                    // Generate registration ID and show success
+                    const registrationId = generateRegistrationId();
+                    document.getElementById('idNumber').textContent = registrationId;
+                    document.getElementById('idNumberEn').textContent = registrationId;
+
+                    form.classList.add('hide');
+                    successContainer.classList.add('show');
+                    form.reset();
+                    successContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                } catch (error) {
+                    console.error('Submission error:', error);
+                    formStatus.textContent = 'មានបញ្ហាក្នុងការដាក់ស្នើ / Submission failed. Please try again.';
+                    formStatus.className = 'form-status error';
+                } finally {
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
-                }, 1500); // Simulate 1.5 second API delay
+                }
             });
             
             // Handle back to form button
