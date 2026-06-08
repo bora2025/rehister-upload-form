@@ -828,6 +828,13 @@
                 <hr class="form-divider">
 
                 <div class="form-group">
+                    <label for="videoUrl">តំណភ្ជាប់វីដេអូ / Video URL</label>
+                    <input type="url" id="videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="form-group">
                     <label>ឯកសារ PDF / PDF Document <span style="color: red;">*</span></label>
                     <div class="file-upload-wrapper">
                         <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" multiple class="file-upload-input">
@@ -1006,6 +1013,7 @@
                 const email = document.getElementById('email').value.trim();
                 const phone = document.getElementById('phone').value.trim();
                 const documentTitle = document.getElementById('documentTitle').value.trim();
+                const videoUrl = document.getElementById('videoUrl').value.trim();
                 
                 // Validate required fields
                 if (!authorName || !email || !documentTitle) {
@@ -1044,11 +1052,12 @@
                     email: email,
                     phone: phone,
                     documentTitle: documentTitle,
+                    videoUrl: videoUrl,
                     files: filesData
                 };
                 
                 // Send as JSON to Google Apps Script
-                const scriptUrl = 'https://script.google.com/macros/s/AKfycbx_Rqj8ibvYAEoBAlJAtUBCSr-DD0le4H7Csa-dyDGhFu63bYXLXijRoi-bu4_0WX-xJQ/exec';
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbyj_26Z10mhQWXcEpdFAKNeotcbHxQtxWxWF4OVkiYLG1SEjT2qQzMhattD6i8pwW-c/exec';
                 
                 const response = await fetch(scriptUrl, {
                     method: 'POST',
