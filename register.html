@@ -900,23 +900,7 @@
 
                 <hr class="form-divider">
 
-                <!-- Step: Join Telegram (required before submit) -->
-                <div class="form-group" id="telegramStep">
-                    <label>ជំហានបន្ទាប់ / Next Step <span class="required">*</span></label>
-                    <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:0.75rem;">សូមចុចចូលរួមបណ្តាញ Telegram មុនពេលដាក់ស្នើ / Please join our Telegram channel before submitting</p>
-                    <a id="telegramJoinBtn" href="https://t.me/motresearchcompetiton" target="_blank" rel="noopener noreferrer" class="telegram-btn">
-                        <i class="fab fa-telegram-plane"></i>
-                        ចូលរួមបណ្តាញ Telegram / Join Telegram Channel
-                    </a>
-                    <div id="telegramConfirm" class="telegram-confirm" style="display:none;">
-                        <i class="fas fa-check-circle" style="color:var(--success-color);"></i>
-                        បានចូលរួម / Joined — អ្នកអាចដាក់ស្នើបានហើយ / You can now submit
-                    </div>
-                </div>
-
-                <hr class="form-divider">
-
-                <button type="submit" class="btn" id="submitBtn" disabled>
+                <button type="submit" class="btn" id="submitBtn">
                     <i class="fas fa-paper-plane"></i>
                     ដាក់ស្នើ / Submit
                 </button>
@@ -940,17 +924,7 @@
                 return `${prefix}-${year}-${randomNum}`;
             }
             
-            // Telegram join gating
-            const telegramJoinBtn = document.getElementById('telegramJoinBtn');
             const submitBtn = document.getElementById('submitBtn');
-            const telegramConfirm = document.getElementById('telegramConfirm');
-
-            telegramJoinBtn.addEventListener('click', function() {
-                setTimeout(() => {
-                    submitBtn.disabled = false;
-                    telegramConfirm.style.display = 'flex';
-                }, 1500);
-            });
 
             // Handle form submission
             form.addEventListener('submit', async function(e) {
