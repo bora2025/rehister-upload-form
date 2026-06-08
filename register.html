@@ -375,6 +375,50 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
+        /* Telegram Join Button */
+        .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.25rem;
+            background: linear-gradient(135deg, #0088cc, #006aaa);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            width: 100%;
+            justify-content: center;
+            min-height: 52px;
+            font-family: inherit;
+        }
+
+        .telegram-btn:hover {
+            background: linear-gradient(135deg, #006aaa, #004f80);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .telegram-btn i {
+            font-size: 1.2rem;
+        }
+
+        .telegram-confirm {
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--success-bg);
+            border-radius: var(--radius-sm);
+            color: var(--success-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         /* Submit Button */
         .btn {
             width: 100%;
@@ -856,7 +900,23 @@
 
                 <hr class="form-divider">
 
-                <button type="submit" class="btn">
+                <!-- Step: Join Telegram (required before submit) -->
+                <div class="form-group" id="telegramStep">
+                    <label>ជំហានបន្ទាប់ / Next Step <span class="required">*</span></label>
+                    <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:0.75rem;">សូមចុចចូលរួមបណ្តាញ Telegram មុនពេលដាក់ស្នើ / Please join our Telegram channel before submitting</p>
+                    <a id="telegramJoinBtn" href="https://t.me/motresearchcompetiton" target="_blank" rel="noopener noreferrer" class="telegram-btn">
+                        <i class="fab fa-telegram-plane"></i>
+                        ចូលរួមបណ្តាញ Telegram / Join Telegram Channel
+                    </a>
+                    <div id="telegramConfirm" class="telegram-confirm" style="display:none;">
+                        <i class="fas fa-check-circle" style="color:var(--success-color);"></i>
+                        បានចូលរួម / Joined — អ្នកអាចដាក់ស្នើបានហើយ / You can now submit
+                    </div>
+                </div>
+
+                <hr class="form-divider">
+
+                <button type="submit" class="btn" id="submitBtn" disabled>
                     <i class="fas fa-paper-plane"></i>
                     ដាក់ស្នើ / Submit
                 </button>
@@ -880,6 +940,18 @@
                 return `${prefix}-${year}-${randomNum}`;
             }
             
+            // Telegram join gating
+            const telegramJoinBtn = document.getElementById('telegramJoinBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const telegramConfirm = document.getElementById('telegramConfirm');
+
+            telegramJoinBtn.addEventListener('click', function() {
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    telegramConfirm.style.display = 'flex';
+                }, 1500);
+            });
+
             // Handle form submission
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -893,7 +965,6 @@
                 }
 
                 // Show loading state
-                const submitBtn = form.querySelector('.btn');
                 const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> កំពុងដាក់ស្នើ / Submitting...';
                 submitBtn.disabled = true;
