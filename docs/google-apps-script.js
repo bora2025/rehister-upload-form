@@ -18,22 +18,38 @@ function doPost(e) {
     var contentType = e.postData && e.postData.type ? e.postData.type : '';
     var data = {};
 
-    if (contentType.indexOf('application/json') !== -1 && rawBody) {
-      data = JSON.parse(rawBody);
-    } else {
-      data = {
-        type: getFormValue(e.parameter && e.parameter.type),
-        name: getFormValue(e.parameter && e.parameter.name),
-        gender: getFormValue(e.parameter && e.parameter.gender),
-        organization: getFormValue(e.parameter && e.parameter.organization),
-        phone: getFormValue(e.parameter && e.parameter.phone),
-        email: getFormValue(e.parameter && e.parameter.email)
-      };
+    if (rawBody) {
+      try {
+        data = JSON.parse(rawBody);
+      } catch (jsonError) {
+        data = {
+          type: getFormValue(e.parameter && e.parameter.type),
+          name: getFormValue(e.parameter && e.parameter.name),
+          gender: getFormValue(e.parameter && e.parameter.gender),
+          organization: getFormValue(e.parameter && e.parameter.organization),
+          phone: getFormValue(e.parameter && e.parameter.phone),
+          email: getFormValue(e.parameter && e.parameter.email)
+        };
+      }
+    }
 
+    if (data.studentIdCard && data.studentIdCard.data) {
+      try {
+        var fileInfo = data.studentIdCard;
+        var decodedBytes = Utilities.base64Decode(fileInfo.data);
+        var blob = Utilities.newBlob(decodedBytes, fileInfo.mimeType || 'application/octet-stream', fileInfo.name || 'student-id-card');
+        var savedFile = DriveApp.createFile(blob);
+        uploadedFileUrl = savedFile.getUrl();
+        uploadedFileName = savedFile.getName();
+        Logger.log('Student ID card saved to Drive: ' + uploadedFileName);
+      } catch (fileError) {
+        Logger.log('Error saving student ID card: ' + fileError.toString());
+      }
+    } else {
       var uploadedFile = e.parameter && e.parameter.studentIdCard;
       if (uploadedFile && typeof uploadedFile === 'object' && uploadedFile.getBytes) {
         var fileNameBase = (data.name || 'student-id').replace(/[^a-zA-Z0-9._-]/g, '_');
-        var safeFileName = 'student-id-' + fileNameBase + '-' + new Date().getTime() + '.pdf';
+        var safeFileName = 'student-id-' + fileNameBase + '-' + new Date().getTime();
         var savedFile = DriveApp.createFile(uploadedFile.setName(safeFileName));
         uploadedFileUrl = savedFile.getUrl();
         uploadedFileName = savedFile.getName();
