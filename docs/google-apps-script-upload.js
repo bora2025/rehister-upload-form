@@ -5,8 +5,11 @@ function doPost(e) {
   try {
     Logger.log('=== Upload Request Started ===');
     
+    // Replace with your Google Sheet ID
+    var SHEET_ID = '1ySDbBD7NsV5qQfLCQGwGE_6pj6Gh73sCYMD9tRvdEyA';
+    
     // Debug: Write raw request to sheet
-    var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    var spreadsheet = SpreadsheetApp.openById(SHEET_ID);
     var debugSheet = spreadsheet.getSheetByName('Debug');
     if (!debugSheet) {
       debugSheet = spreadsheet.insertSheet('Debug');
@@ -31,6 +34,7 @@ function doPost(e) {
     var email = jsonData.email || '';
     var phone = jsonData.phone || '';
     var documentTitle = jsonData.documentTitle || '';
+    var videoUrl = jsonData.videoUrl || '';
     var filesData = jsonData.files || [];
     
     Logger.log('Author Name: ' + authorName);
@@ -114,19 +118,14 @@ function doPost(e) {
     
     // Save metadata to Google Sheet
     try {
-      // Use the active spreadsheet instead of openById to avoid permission issues
-      var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-      
-      // If you need to use a specific spreadsheet, you must bind this script to that spreadsheet
-      // Go to the spreadsheet -> Extensions -> Apps Script, and paste this code there
-      
+      var spreadsheet = SpreadsheetApp.openById(SHEET_ID);
       Logger.log('Spreadsheet opened successfully');
       
       // Create or get "Uploads" sheet
       var uploadsSheet = spreadsheet.getSheetByName('Uploads');
       if (!uploadsSheet) {
         uploadsSheet = spreadsheet.insertSheet('Uploads');
-        uploadsSheet.appendRow(['Timestamp', 'Author Name', 'Email', 'Phone', 'Document Title', 'Files', 'File URLs']);
+        uploadsSheet.appendRow(['Timestamp', 'Author Name', 'Email', 'Phone', 'Document Title', 'Video URL', 'Files', 'File URLs']);
       }
       
       // Prepare file info for sheet
@@ -140,6 +139,7 @@ function doPost(e) {
         email,
         phone,
         documentTitle,
+        videoUrl,
         fileNames,
         fileUrls
       ]);
@@ -159,6 +159,7 @@ function doPost(e) {
           email: email,
           phone: phone,
           documentTitle: documentTitle,
+          videoUrl: videoUrl,
           files: files
         });
         Logger.log('Confirmation email sent to: ' + email);
@@ -209,6 +210,7 @@ function sendUploadConfirmationEmail(data) {
                 "<div style='background: #f5f7fa; padding: 15px; border-radius: 8px; margin: 20px 0;'>" +
                 "<h3 style='color: #004282; margin-top: 0;'>Upload Details:</h3>" +
                 "<p style='margin: 5px 0;'><strong>Document Title:</strong> " + data.documentTitle + "</p>" +
+                "<p style='margin: 5px 0;'><strong>Video URL:</strong> " + (data.videoUrl ? "<a href='" + data.videoUrl + "' style='color:#004282;'>" + data.videoUrl + "</a>" : 'N/A') + "</p>" +
                 "<p style='margin: 5px 0;'><strong>Author Name:</strong> " + data.authorName + "</p>" +
                 "<p style='margin: 5px 0;'><strong>Email:</strong> " + data.email + "</p>" +
                 "<p style='margin: 5px 0;'><strong>Phone:</strong> " + data.phone + "</p>" +

@@ -329,6 +329,35 @@
             background: var(--background-white);
         }
 
+        .file-help {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--background-white);
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .form-group input[type="file"]::file-selector-button {
+            margin-right: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--secondary-color);
+            color: var(--background-white);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
         /* Radio Group */
         .radio-group {
             display: flex;
@@ -880,8 +909,16 @@
                 <hr class="form-divider">
 
                 <div class="form-group">
-                    <label for="organization">ស្ថាប័ន / Organization</label>
+                    <label for="organization">មកពីសាលា</label>
                     <input type="text" id="organization" name="organization">
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="form-group">
+                    <label for="studentIdCard">បង្ហោះរូបភាពឯកសារអត្តបញ្ញត្តិសិស្ស / Upload Student ID Card</label>
+                    <input type="file" id="studentIdCard" name="studentIdCard" accept="image/*,.pdf">
+                    <small class="file-help">រូបភាព ឬ PDF នៃអត្តបញ្ញត្តិសិស្សរបស់អ្នក។ / Please upload a clear image or PDF of your student ID card.</small>
                 </div>
 
                 <hr class="form-divider">
@@ -945,15 +982,12 @@
                 formStatus.textContent = '';
                 formStatus.className = 'form-status';
 
-                // Collect form data
-                const data = {
-                    type: document.getElementById('type').value,
-                    name: document.getElementById('name').value,
-                    gender: form.querySelector('input[name="gender"]:checked')?.value || '',
-                    organization: document.getElementById('organization').value,
-                    phone: document.getElementById('phone').value,
-                    email: document.getElementById('email').value
-                };
+                const formData = new FormData(form);
+                const studentIdCardInput = document.getElementById('studentIdCard');
+
+                if (studentIdCardInput.files[0]) {
+                    formData.set('studentIdCard', studentIdCardInput.files[0]);
+                }
 
                 try {
                     const scriptUrl = 'https://script.google.com/macros/s/AKfycbxKjTgkT_rRnsGV9bAV40vNvCB2IbY0rz475WL-GFS36Gelg1E2NCJocNr6b8d8D6AN0g/exec';
@@ -961,8 +995,7 @@
                     await fetch(scriptUrl, {
                         method: 'POST',
                         mode: 'no-cors',
-                        headers: { 'Content-Type': 'text/plain' },
-                        body: JSON.stringify(data)
+                        body: formData
                     });
 
                     // Generate registration ID and show success
