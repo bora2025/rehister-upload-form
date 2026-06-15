@@ -15,60 +15,45 @@ function doPost(e) {
 
   try {
     var rawBody = e.postData ? e.postData.contents : '';
-    var postType = e.postData && e.postData.type ? e.postData.type : '';
-    var params = e.parameter || {};
     var data = {};
+    var filesData = [];
 
-    Logger.log('POST type: ' + postType);
-    Logger.log('Parameter keys: ' + Object.keys(params).join(','));
-
-    if (postType.indexOf('multipart/form-data') !== -1 || params.type || params.name || params.email) {
-      data = {
-        type: getFormValue(params.type),
-        name: getFormValue(params.name),
-        gender: getFormValue(params.gender),
-        organization: getFormValue(params.organization),
-        phone: getFormValue(params.phone),
-        email: getFormValue(params.email)
-      };
-    } else if (rawBody) {
+    if (rawBody) {
       try {
         data = JSON.parse(rawBody);
       } catch (jsonError) {
-        data = {
-          type: getFormValue(params.type),
-          name: getFormValue(params.name),
-          gender: getFormValue(params.gender),
-          organization: getFormValue(params.organization),
-          phone: getFormValue(params.phone),
-          email: getFormValue(params.email)
-        };
+        data = {};
       }
     }
 
-    var uploadedFile = params.studentIdCard;
-    if (uploadedFile && typeof uploadedFile === 'object') {
+    if (data.files && Array.isArray(data.files)) {
+      filesData = data.files;
+    } else if (data.studentIdCard && data.studentIdCard.data) {
+      filesData = [data.studentIdCard];
+    }
+
+    Logger.log('Received data: ' + JSON.stringify(data));
+    Logger.log('Files in payload: ' + filesData.length);
+
+    for (var i = 0; i < filesData.length; i++) {
       try {
-        var fileName = uploadedFile.getName ? uploadedFile.getName() : (data.name || 'student-id-card');
-        var bytes = uploadedFile.getBytes ? uploadedFile.getBytes() : null;
-        if (bytes) {
-          var contentType = uploadedFile.getContentType ? uploadedFile.getContentType() : 'application/octet-stream';
-          var blob = Utilities.newBlob(bytes, contentType, fileName);
+        var fileData = filesData[i];
+        var decodedBytes = Utilities.base64Decode(fileData.data);
+        var blob = Utilities.newBlob(decodedBytes, fileData.mimeType || 'application/octet-stream', fileData.name || 'student-id-card');
 
-          var targetFolder = null;
-          try {
-            targetFolder = DriveApp.getFolderById('1oxA9viF7R_46gjog8oWb0Pnr6at05LJE');
-            Logger.log('Using target folder: ' + targetFolder.getName());
-          } catch (folderError) {
-            Logger.log('Could not access target folder, using Drive root: ' + folderError.toString());
-            targetFolder = DriveApp.getRootFolder();
-          }
-
-          var savedFile = targetFolder.createFile(blob);
-          uploadedFileUrl = savedFile.getUrl();
-          uploadedFileName = savedFile.getName();
-          Logger.log('Student ID card saved to Drive: ' + uploadedFileName + ' | URL: ' + uploadedFileUrl);
+        var targetFolder = null;
+        try {
+          targetFolder = DriveApp.getFolderById('1oxA9viF7R_46gjog8oWb0Pnr6at05LJE');
+          Logger.log('Using target folder: ' + targetFolder.getName());
+        } catch (folderError) {
+          Logger.log('Could not access target folder, using Drive root: ' + folderError.toString());
+          targetFolder = DriveApp.getRootFolder();
         }
+
+        var savedFile = targetFolder.createFile(blob);
+        uploadedFileUrl = savedFile.getUrl();
+        uploadedFileName = savedFile.getName();
+        Logger.log('Student ID card saved to Drive: ' + uploadedFileName + ' | URL: ' + uploadedFileUrl);
       } catch (fileError) {
         Logger.log('Error saving student ID card: ' + fileError.toString());
       }
