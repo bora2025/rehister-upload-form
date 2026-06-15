@@ -15,50 +15,68 @@ function doPost(e) {
 
   try {
     var rawBody = e.postData ? e.postData.contents : '';
-    var contentType = e.postData && e.postData.type ? e.postData.type : '';
+    var postType = e.postData && e.postData.type ? e.postData.type : '';
+    var params = e.parameter || {};
     var data = {};
 
-    if (rawBody) {
+    Logger.log('POST type: ' + postType);
+    Logger.log('Parameter keys: ' + Object.keys(params).join(','));
+
+    if (postType.indexOf('multipart/form-data') !== -1 || params.type || params.name || params.email) {
+      data = {
+        type: getFormValue(params.type),
+        name: getFormValue(params.name),
+        gender: getFormValue(params.gender),
+        organization: getFormValue(params.organization),
+        phone: getFormValue(params.phone),
+        email: getFormValue(params.email)
+      };
+    } else if (rawBody) {
       try {
         data = JSON.parse(rawBody);
       } catch (jsonError) {
         data = {
-          type: getFormValue(e.parameter && e.parameter.type),
-          name: getFormValue(e.parameter && e.parameter.name),
-          gender: getFormValue(e.parameter && e.parameter.gender),
-          organization: getFormValue(e.parameter && e.parameter.organization),
-          phone: getFormValue(e.parameter && e.parameter.phone),
-          email: getFormValue(e.parameter && e.parameter.email)
+          type: getFormValue(params.type),
+          name: getFormValue(params.name),
+          gender: getFormValue(params.gender),
+          organization: getFormValue(params.organization),
+          phone: getFormValue(params.phone),
+          email: getFormValue(params.email)
         };
       }
     }
 
-    if (data.studentIdCard && data.studentIdCard.data) {
+    var uploadedFile = params.studentIdCard;
+    if (uploadedFile && typeof uploadedFile === 'object') {
       try {
-        var fileInfo = data.studentIdCard;
-        var decodedBytes = Utilities.base64Decode(fileInfo.data);
-        var blob = Utilities.newBlob(decodedBytes, fileInfo.mimeType || 'application/octet-stream', fileInfo.name || 'student-id-card');
-        var savedFile = DriveApp.createFile(blob);
-        uploadedFileUrl = savedFile.getUrl();
-        uploadedFileName = savedFile.getName();
-        Logger.log('Student ID card saved to Drive: ' + uploadedFileName);
+        var fileName = uploadedFile.getName ? uploadedFile.getName() : (data.name || 'student-id-card');
+        var bytes = uploadedFile.getBytes ? uploadedFile.getBytes() : null;
+        if (bytes) {
+          var contentType = uploadedFile.getContentType ? uploadedFile.getContentType() : 'application/octet-stream';
+          var blob = Utilities.newBlob(bytes, contentType, fileName);
+
+          var targetFolder = null;
+          try {
+            targetFolder = DriveApp.getFolderById('1oxA9viF7R_46gjog8oWb0Pnr6at05LJE');
+            Logger.log('Using target folder: ' + targetFolder.getName());
+          } catch (folderError) {
+            Logger.log('Could not access target folder, using Drive root: ' + folderError.toString());
+            targetFolder = DriveApp.getRootFolder();
+          }
+
+          var savedFile = targetFolder.createFile(blob);
+          uploadedFileUrl = savedFile.getUrl();
+          uploadedFileName = savedFile.getName();
+          Logger.log('Student ID card saved to Drive: ' + uploadedFileName + ' | URL: ' + uploadedFileUrl);
+        }
       } catch (fileError) {
         Logger.log('Error saving student ID card: ' + fileError.toString());
-      }
-    } else {
-      var uploadedFile = e.parameter && e.parameter.studentIdCard;
-      if (uploadedFile && typeof uploadedFile === 'object' && uploadedFile.getBytes) {
-        var fileNameBase = (data.name || 'student-id').replace(/[^a-zA-Z0-9._-]/g, '_');
-        var safeFileName = 'student-id-' + fileNameBase + '-' + new Date().getTime();
-        var savedFile = DriveApp.createFile(uploadedFile.setName(safeFileName));
-        uploadedFileUrl = savedFile.getUrl();
-        uploadedFileName = savedFile.getName();
       }
     }
 
     Logger.log('Received data: ' + JSON.stringify(data));
 
-    const SHEET_ID = '1ySDbBD7NsV5qQfLCQGwGE_6pj6Gh73sCYMD9tRvdEyA';
+    const SHEET_ID = '1JQ8pBwlat2rCgCM9VpPnGrv2Op7jvha8T4L-4MKS33w';
     const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
 
     if (sheet.getLastRow() === 0) {

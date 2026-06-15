@@ -982,30 +982,11 @@
                 formStatus.textContent = '';
                 formStatus.className = 'form-status';
 
+                const formData = new FormData(form);
                 const studentIdCardInput = document.getElementById('studentIdCard');
-                const payload = {
-                    type: document.getElementById('type').value,
-                    name: document.getElementById('name').value,
-                    gender: form.querySelector('input[name="gender"]:checked')?.value || '',
-                    organization: document.getElementById('organization').value,
-                    phone: document.getElementById('phone').value,
-                    email: document.getElementById('email').value
-                };
 
                 if (studentIdCardInput.files[0]) {
-                    const file = studentIdCardInput.files[0];
-                    const fileData = await new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result.split(',')[1]);
-                        reader.onerror = () => reject(new Error('Failed to read selected file'));
-                        reader.readAsDataURL(file);
-                    });
-
-                    payload.studentIdCard = {
-                        name: file.name,
-                        mimeType: file.type || 'application/octet-stream',
-                        data: fileData
-                    };
+                    formData.set('studentIdCard', studentIdCardInput.files[0]);
                 }
 
                 try {
@@ -1014,8 +995,7 @@
                     await fetch(scriptUrl, {
                         method: 'POST',
                         mode: 'no-cors',
-                        headers: { 'Content-Type': 'text/plain' },
-                        body: JSON.stringify(payload)
+                        body: formData
                     });
 
                     // Generate registration ID and show success
