@@ -269,17 +269,19 @@ function setupEventListeners() {
                 
                 const response = await fetch(scriptUrl, {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: {
                         'Content-Type': 'text/plain',
                     },
                     body: JSON.stringify(data)
                 });
 
+                const result = await response.json();
+                if (!result || result.status !== 'success') {
+                    throw new Error(result?.message || 'Submission failed');
+                }
+
                 console.log('Form submitted successfully');
                 
-                // With no-cors mode, we can't read the response
-                // Assume success if no error was thrown
                 formStatus.textContent = 'Thank you! Your submission has been received. Redirecting to home...';
                 formStatus.className = 'form-status success';
                 contactForm.reset();
