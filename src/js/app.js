@@ -241,7 +241,7 @@ function setupEventListeners() {
     const contactForm = document.getElementById('contactForm');
     const formStatus = document.getElementById('formStatus');
 
-    if (contactForm) {
+    if (contactForm && !contactForm.dataset.customSubmitBound) {
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             

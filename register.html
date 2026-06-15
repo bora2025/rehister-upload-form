@@ -962,6 +962,7 @@
             }
             
             const submitBtn = document.getElementById('submitBtn');
+            form.dataset.customSubmitBound = 'true';
 
             // Handle form submission
             form.addEventListener('submit', async function(e) {
