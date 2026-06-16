@@ -97,7 +97,7 @@ function doPost(e) {
     const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
 
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Timestamp', 'Type', 'Name', 'Gender', 'Organization', 'Phone', 'Email', 'Email Sent', 'Student ID Card']);
+      sheet.appendRow(['Timestamp', 'Type', 'Name', 'Gender', 'Organization', 'Phone', 'Email', 'Email Sent', 'Student ID Card', 'File Link']);
     }
 
     // Duplicate prevention: skip if the same email already exists in the sheet
@@ -132,6 +132,15 @@ function doPost(e) {
       Logger.log(emailError);
     }
 
+    var fileLinkFormula = '';
+    if (uploadedFileUrls.length > 0) {
+      var links = uploadedFileUrls.map(function(url, index) {
+        var label = uploadedFileNames[index] || 'View file';
+        return '=HYPERLINK("' + url + '","' + label + '")';
+      });
+      fileLinkFormula = links.join(' & " | " & ');
+    }
+
     sheet.appendRow([
       new Date(),
       data.type || '',
@@ -141,7 +150,8 @@ function doPost(e) {
       data.phone || '',
       data.email || '',
       emailSent ? 'Yes' : ('No: ' + emailError),
-      uploadedFileUrl || ''
+      uploadedFileUrl || '',
+      fileLinkFormula
     ]);
 
     Logger.log('Data saved to sheet');
