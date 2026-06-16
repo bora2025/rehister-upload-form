@@ -7,6 +7,13 @@
 // 3. After any code change, deploy a NEW version (not update existing)
 // 4. MailApp limit: 100 emails/day (free), 1500/day (Workspace)
 
+// CONFIGURATION: replace with your actual Sheet ID and target sheet name
+const CONFIG = {
+  SHEET_ID: '1JQ8pBwlat2rCgCM9VpPnGrv2Op7jvha8T4L-4MKS33w',
+  SHEET_NAME: 'Registrations',
+  DRIVE_FOLDER_ID: '1oxA9viF7R_46gjog8oWb0Pnr6at05LJE'
+};
+
 function doPost(e) {
   var emailSent = false;
   var emailError = '';
@@ -70,7 +77,7 @@ function doPost(e) {
 
         var targetFolder = null;
         try {
-          targetFolder = DriveApp.getFolderById('1oxA9viF7R_46gjog8oWb0Pnr6at05LJE');
+          targetFolder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
           Logger.log('Using target folder: ' + targetFolder.getName());
         } catch (folderError) {
           Logger.log('Could not access target folder, using Drive root: ' + folderError.toString());
@@ -93,10 +100,10 @@ function doPost(e) {
     uploadedFileUrl = uploadedFileUrls.join(', ');
     uploadedFileName = uploadedFileNames.join(', ');
 
-    const SHEET_ID = '1JQ8pBwlat2rCgCM9VpPnGrv2Op7jvha8T4L-4MKS33w';
-    const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
-
-    if (sheet.getLastRow() === 0) {
+    var spreadsheet = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+    var sheet = spreadsheet.getSheetByName(CONFIG.SHEET_NAME);
+    if (!sheet) {
+      sheet = spreadsheet.insertSheet(CONFIG.SHEET_NAME);
       sheet.appendRow(['Timestamp', 'Type', 'Name', 'Gender', 'Organization', 'Phone', 'Email', 'Email Sent', 'Student ID Card', 'File Link']);
     }
 
