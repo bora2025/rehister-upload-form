@@ -35,11 +35,38 @@ function doPost(e) {
     Logger.log('Received data: ' + JSON.stringify(data));
     Logger.log('Files in payload: ' + filesData.length);
 
+    const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'];
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+    var uploadedFileUrls = [];
+    var uploadedFileNames = [];
+    var fileErrors = [];
+
     for (var i = 0; i < filesData.length; i++) {
       try {
         var fileData = filesData[i];
+
+        if (!fileData || !fileData.data) {
+          fileErrors.push('File ' + i + ': missing base64 data');
+          continue;
+        }
+
+        var mimeType = (fileData.mimeType || 'application/octet-stream').toLowerCase();
+        if (ALLOWED_MIME_TYPES.indexOf(mimeType) === -1) {
+          fileErrors.push('File ' + i + ': invalid type ' + mimeType);
+          continue;
+        }
+
         var decodedBytes = Utilities.base64Decode(fileData.data);
-        var blob = Utilities.newBlob(decodedBytes, fileData.mimeType || 'application/octet-stream', fileData.name || 'student-id-card');
+        if (!decodedBytes || decodedBytes.length === 0) {
+          fileErrors.push('File ' + i + ': empty decoded data');
+          continue;
+        }
+        if (decodedBytes.length > MAX_FILE_SIZE) {
+          fileErrors.push('File ' + i + ': exceeds 5MB limit');
+          continue;
+        }
+
+        var blob = Utilities.newBlob(decodedBytes, mimeType, fileData.name || 'student-id-card');
 
         var targetFolder = null;
         try {
@@ -51,21 +78,44 @@ function doPost(e) {
         }
 
         var savedFile = targetFolder.createFile(blob);
-        uploadedFileUrl = savedFile.getUrl();
-        uploadedFileName = savedFile.getName();
-        Logger.log('Student ID card saved to Drive: ' + uploadedFileName + ' | URL: ' + uploadedFileUrl);
+        var savedUrl = savedFile.getUrl();
+        var savedName = savedFile.getName();
+        uploadedFileUrls.push(savedUrl);
+        uploadedFileNames.push(savedName);
+        Logger.log('Student ID card saved to Drive: ' + savedName + ' | URL: ' + savedUrl);
       } catch (fileError) {
-        Logger.log('Error saving student ID card: ' + fileError.toString());
+        var errMsg = 'Error saving student ID card ' + i + ': ' + fileError.toString();
+        Logger.log(errMsg);
+        fileErrors.push(errMsg);
       }
     }
 
-    Logger.log('Received data: ' + JSON.stringify(data));
+    uploadedFileUrl = uploadedFileUrls.join(', ');
+    uploadedFileName = uploadedFileNames.join(', ');
 
     const SHEET_ID = '1JQ8pBwlat2rCgCM9VpPnGrv2Op7jvha8T4L-4MKS33w';
     const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
 
     if (sheet.getLastRow() === 0) {
       sheet.appendRow(['Timestamp', 'Type', 'Name', 'Gender', 'Organization', 'Phone', 'Email', 'Email Sent', 'Student ID Card']);
+    }
+
+    // Duplicate prevention: skip if the same email already exists in the sheet
+    var emailToCheck = (data.email || '').trim().toLowerCase();
+    if (emailToCheck) {
+      var emailColumn = sheet.getRange(2, 7, Math.max(sheet.getLastRow() - 1, 1), 1).getValues();
+      for (var r = 0; r < emailColumn.length; r++) {
+        if (String(emailColumn[r][0] || '').trim().toLowerCase() === emailToCheck) {
+          Logger.log('Duplicate submission detected for email: ' + data.email);
+          return ContentService
+            .createTextOutput(JSON.stringify({
+              status: 'duplicate',
+              message: 'This email has already been registered.',
+              email: data.email
+            }))
+            .setMimeType(ContentService.MimeType.JSON);
+        }
+      }
     }
 
     if (data.email && data.email.trim() !== '') {
@@ -103,7 +153,8 @@ function doPost(e) {
         email_sent: emailSent,
         email_error: emailError || null,
         student_id_card: uploadedFileUrl || null,
-        student_id_card_name: uploadedFileName || null
+        student_id_card_name: uploadedFileName || null,
+        file_errors: fileErrors.length > 0 ? fileErrors : null
       }))
       .setMimeType(ContentService.MimeType.JSON);
 
@@ -116,7 +167,8 @@ function doPost(e) {
         email_sent: emailSent,
         email_error: emailError || null,
         student_id_card: uploadedFileUrl || null,
-        student_id_card_name: uploadedFileName || null
+        student_id_card_name: uploadedFileName || null,
+        file_errors: fileErrors.length > 0 ? fileErrors : null
       }))
       .setMimeType(ContentService.MimeType.JSON);
   }
