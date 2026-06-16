@@ -358,6 +358,98 @@
             cursor: pointer;
         }
 
+        .form-group input[type="file"].has-file {
+            border-color: var(--success-color);
+            background: var(--success-bg);
+        }
+
+        .file-error {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+            line-height: 1.4;
+        }
+
+        .file-error.show {
+            display: block;
+        }
+
+        .file-info {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background: var(--background-light);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .file-info.show {
+            display: flex;
+        }
+
+        .file-info-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-info-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-info-size {
+            font-size: 0.8rem;
+        }
+
+        .file-remove {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 0.4rem 0.6rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .file-remove:hover {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .file-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--background-light);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .file-preview.show {
+            display: block;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: var(--radius-sm);
+            display: block;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
         /* Radio Group */
         .radio-group {
             display: flex;
@@ -918,7 +1010,20 @@
                 <div class="form-group">
                     <label for="studentIdCard">បណ្ណសម្គាល់ខ្លូនសិស្ស / Upload Student ID Card</label>
                     <input type="file" id="studentIdCard" name="studentIdCard" accept="image/*,.pdf">
-                    <small class="file-help">រូបភាព ឬ PDF នៃអត្តបញ្ញត្តិសិស្សរបស់អ្នក។ / Please upload a clear image or PDF of your student ID card.</small>
+                    <small class="file-help">រូបភាព ឬ PDF នៃអត្តបញ្ញត្តិសិស្សរបស់អ្នក។ / Please upload a clear image or PDF of your student ID card (max 5MB).</small>
+                    <div id="fileError" class="file-error"></div>
+                    <div id="fileInfo" class="file-info">
+                        <div class="file-info-text">
+                            <div id="fileInfoName" class="file-info-name"></div>
+                            <div id="fileInfoSize" class="file-info-size"></div>
+                        </div>
+                        <button type="button" id="fileRemove" class="file-remove">
+                            <i class="fas fa-trash-alt"></i> Remove
+                        </button>
+                    </div>
+                    <div id="filePreview" class="file-preview">
+                        <img id="filePreviewImg" src="" alt="Student ID card preview">
+                    </div>
                 </div>
 
                 <hr class="form-divider">
@@ -962,6 +1067,148 @@
             }
             
             const submitBtn = document.getElementById('submitBtn');
+            const studentIdCardInput = document.getElementById('studentIdCard');
+            const fileError = document.getElementById('fileError');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileInfoName = document.getElementById('fileInfoName');
+            const fileInfoSize = document.getElementById('fileInfoSize');
+            const fileRemove = document.getElementById('fileRemove');
+            const filePreview = document.getElementById('filePreview');
+            const filePreviewImg = document.getElementById('filePreviewImg');
+            const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+            const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'];
+            let selectedFile = null;
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            function showFileError(message) {
+                fileError.textContent = message;
+                fileError.classList.add('show');
+                studentIdCardInput.classList.add('error');
+                selectedFile = null;
+                fileInfo.classList.remove('show');
+                filePreview.classList.remove('show');
+                filePreviewImg.src = '';
+            }
+
+            function clearFileError() {
+                fileError.textContent = '';
+                fileError.classList.remove('show');
+                studentIdCardInput.classList.remove('error');
+            }
+
+            function removeSelectedFile() {
+                selectedFile = null;
+                studentIdCardInput.value = '';
+                studentIdCardInput.classList.remove('has-file');
+                fileInfo.classList.remove('show');
+                filePreview.classList.remove('show');
+                filePreviewImg.src = '';
+                clearFileError();
+            }
+
+            function validateFile(file) {
+                if (!file) return { valid: false, message: 'No file selected.' };
+                if (!ALLOWED_TYPES.includes(file.type)) {
+                    return { valid: false, message: 'Invalid file type. Please upload an image (JPG, PNG, WEBP, GIF) or PDF.' };
+                }
+                if (file.size > MAX_FILE_SIZE) {
+                    return { valid: false, message: 'File is too large. Maximum size is 5MB.' };
+                }
+                return { valid: true };
+            }
+
+            async function compressImage(file) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    const url = URL.createObjectURL(file);
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const maxWidth = 1200;
+                        const maxHeight = 1200;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > maxWidth || height > maxHeight) {
+                            const ratio = Math.min(maxWidth / width, maxHeight / height);
+                            width = width * ratio;
+                            height = height * ratio;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        const outputType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+                        const quality = file.type === 'image/png' ? undefined : 0.85;
+
+                        canvas.toBlob((blob) => {
+                            URL.revokeObjectURL(url);
+                            if (!blob) {
+                                reject(new Error('Image compression failed'));
+                                return;
+                            }
+                            const compressedFile = new File([blob], file.name, { type: outputType, lastModified: Date.now() });
+                            resolve(compressedFile);
+                        }, outputType, quality);
+                    };
+                    img.onerror = () => {
+                        URL.revokeObjectURL(url);
+                        reject(new Error('Failed to load image for compression'));
+                    };
+                    img.src = url;
+                });
+            }
+
+            async function readFileAsBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = () => reject(new Error('Failed to read selected file'));
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            studentIdCardInput.addEventListener('change', async function() {
+                const file = this.files[0];
+                clearFileError();
+
+                if (!file) {
+                    removeSelectedFile();
+                    return;
+                }
+
+                const validation = validateFile(file);
+                if (!validation.valid) {
+                    showFileError(validation.message);
+                    return;
+                }
+
+                selectedFile = file;
+                this.classList.add('has-file');
+                fileInfoName.textContent = file.name;
+                fileInfoSize.textContent = formatFileSize(file.size);
+                fileInfo.classList.add('show');
+
+                if (file.type.startsWith('image/')) {
+                    const url = URL.createObjectURL(file);
+                    filePreviewImg.src = url;
+                    filePreview.classList.add('show');
+                } else {
+                    filePreview.classList.remove('show');
+                    filePreviewImg.src = '';
+                }
+            });
+
+            fileRemove.addEventListener('click', removeSelectedFile);
+
             form.dataset.customSubmitBound = 'true';
 
             // Handle form submission
@@ -983,7 +1230,6 @@
                 formStatus.textContent = '';
                 formStatus.className = 'form-status';
 
-                const studentIdCardInput = document.getElementById('studentIdCard');
                 const payload = {
                     type: document.getElementById('type').value,
                     name: document.getElementById('name').value,
@@ -993,18 +1239,23 @@
                     email: document.getElementById('email').value
                 };
 
-                if (studentIdCardInput.files[0]) {
-                    const file = studentIdCardInput.files[0];
-                    const fileData = await new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result.split(',')[1]);
-                        reader.onerror = () => reject(new Error('Failed to read selected file'));
-                        reader.readAsDataURL(file);
-                    });
+                if (selectedFile) {
+                    let fileToUpload = selectedFile;
+
+                    if (selectedFile.type.startsWith('image/') && selectedFile.size > 1024 * 1024) {
+                        try {
+                            fileToUpload = await compressImage(selectedFile);
+                            fileInfoSize.textContent = formatFileSize(fileToUpload.size) + ' (compressed)';
+                        } catch (compressionError) {
+                            console.warn('Image compression failed, using original file:', compressionError);
+                        }
+                    }
+
+                    const fileData = await readFileAsBase64(fileToUpload);
 
                     payload.files = [{
-                        name: file.name,
-                        mimeType: file.type || 'application/octet-stream',
+                        name: fileToUpload.name,
+                        mimeType: fileToUpload.type || 'application/octet-stream',
                         data: fileData
                     }];
                 }
