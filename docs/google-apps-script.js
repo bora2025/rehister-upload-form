@@ -100,11 +100,15 @@ function doPost(e) {
     uploadedFileUrl = uploadedFileUrls.join(', ');
     uploadedFileName = uploadedFileNames.join(', ');
 
+    Logger.log('Opening spreadsheet: ' + CONFIG.SHEET_ID + ' | Sheet name: ' + CONFIG.SHEET_NAME);
     var spreadsheet = SpreadsheetApp.openById(CONFIG.SHEET_ID);
     var sheet = spreadsheet.getSheetByName(CONFIG.SHEET_NAME);
     if (!sheet) {
       sheet = spreadsheet.insertSheet(CONFIG.SHEET_NAME);
       sheet.appendRow(['Timestamp', 'Type', 'Name', 'Gender', 'Organization', 'Phone', 'Email', 'Email Sent', 'Student ID Card', 'File Link']);
+      Logger.log('Created new sheet: ' + CONFIG.SHEET_NAME);
+    } else {
+      Logger.log('Using existing sheet: ' + CONFIG.SHEET_NAME);
     }
 
     // Duplicate prevention: skip if the same email already exists in the sheet
@@ -139,6 +143,15 @@ function doPost(e) {
       Logger.log(emailError);
     }
 
+    var fileLinkFormula = '';
+    if (uploadedFileUrls.length > 0) {
+      var links = uploadedFileUrls.map(function(url, index) {
+        var label = uploadedFileNames[index] || 'View file';
+        return '=HYPERLINK("' + url + '","' + label + '")';
+      });
+      fileLinkFormula = links.join(' & " | " & ');
+    }
+
     sheet.appendRow([
       new Date(),
       data.type || '',
@@ -149,7 +162,7 @@ function doPost(e) {
       data.email || '',
       emailSent ? 'Yes' : ('No: ' + emailError),
       uploadedFileUrl || '',
-      uploadedFileUrl || ''
+      fileLinkFormula
     ]);
 
     Logger.log('Data saved to sheet');
