@@ -116,6 +116,18 @@ function doPost(e) {
     }
 
     // Duplicate prevention: skip if the same email already exists in the sheet
+    // Validate email format
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!data.email || !emailRegex.test(data.email.trim())) {
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          status: 'error',
+          message: 'Invalid email address.'
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Duplicate prevention: skip if the same email already exists in the sheet
     var emailToCheck = (data.email || '').trim().toLowerCase();
     if (emailToCheck) {
       var emailColumn = sheet.getRange(2, 7, Math.max(sheet.getLastRow() - 1, 1), 1).getValues();
@@ -126,7 +138,7 @@ function doPost(e) {
             .createTextOutput(JSON.stringify({
               status: 'duplicate',
               message: 'This email has already been registered.',
-              email: data.email
+              email: sanitizeInput(data.email)
             }))
             .setMimeType(ContentService.MimeType.JSON);
         }
@@ -158,12 +170,12 @@ function doPost(e) {
 
     sheet.appendRow([
       new Date(),
-      data.type || '',
-      data.name || '',
-      data.gender || '',
-      data.organization || '',
-      data.phone || '',
-      data.email || '',
+      sanitizeInput(data.type) || '',
+      sanitizeInput(data.name) || '',
+      sanitizeInput(data.gender) || '',
+      sanitizeInput(data.organization) || '',
+      sanitizeInput(data.phone) || '',
+      sanitizeInput(data.email) || '',
       emailSent ? 'Yes' : ('No: ' + emailError),
       uploadedFileUrl || '',
       fileLinkFormula
@@ -218,23 +230,44 @@ function getFormValue(value) {
   return String(value);
 }
 
+function sanitizeInput(value) {
+  if (value === undefined || value === null) {
+    return '';
+  }
+  return String(value)
+    .replace(/\u003cscript[^\u003e]*\u003e.*?\u003c\/script\u003e/gi, '')
+    .replace(/\u003cscript[^\u003e]*\u003e/gi, '')
+    .replace(/\u003c\/script\u003e/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '');
+}
+
 // Function to send confirmation email
 function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
   var subject = "ការចុះឈ្មោះជោគជ័យ - Registration Successful";
   var linkLabel = uploadedFileName || 'View file';
   var fileLine = uploadedFileUrl ? "<p>📎 Student ID Card uploaded: <a href='" + uploadedFileUrl + "'>" + linkLabel + "</a></p>" : '';
   
-  var htmlMessage = "<p>Hello " + data.name + ",</p>" +
+  var safeData = {
+    type: sanitizeInput(data.type),
+    name: sanitizeInput(data.name),
+    gender: sanitizeInput(data.gender),
+    organization: sanitizeInput(data.organization),
+    phone: sanitizeInput(data.phone),
+    email: sanitizeInput(data.email)
+  };
+
+  var htmlMessage = "<p>Hello " + safeData.name + "</p>" +
                 "<p style='color:green; font-weight:bold;'>✅ ការចុះឈ្មោះជោគជ័យ - Successful Registration!</p>" +
                 "<p>Thank you for registering for the Competition Research. Your data has been received and recorded successfully.</p>" +
                 "<p>Here's a copy of your submission:<br>" +
                 "---------------------------------<br>" +
-                "Type: " + data.type + "<br>" +
-                "Name: " + data.name + "<br>" +
-                "Gender: " + data.gender + "<br>" +
-                "Organization: " + data.organization + "<br>" +
-                "Phone: " + data.phone + "<br>" +
-                "Email: " + data.email + "<br>" +
+                "Type: " + safeData.type + "<br>" +
+                "Name: " + safeData.name + "<br>" +
+                "Gender: " + safeData.gender + "<br>" +
+                "Organization: " + safeData.organization + "<br>" +
+                "Phone: " + safeData.phone + "<br>" +
+                "Email: " + safeData.email + "<br>" +
                 "---------------------------------</p>" +
                 fileLine +
                 "<p>More Information:<br>" +

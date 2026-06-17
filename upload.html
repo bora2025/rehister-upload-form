@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src https://script.google.com;">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
     <meta name="description" content="Upload Document Form">
     <title>ទម្រង់ផ្ញើឯកសារ - Ministry Of Tourism</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -919,6 +924,16 @@
             }
         });
 
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return '';
+            return String(text)
+                .replace(/\u0026/g, '&amp;')
+                .replace(/\u003c/g, '&lt;')
+                .replace(/\u003e/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         // Display file list
         function displayFileList() {
             fileListDiv.innerHTML = '';
@@ -930,15 +945,30 @@
             selectedFiles.forEach((file, index) => {
                 const fileItem = document.createElement('div');
                 fileItem.className = 'file-item';
-                fileItem.innerHTML = `
-                    <div class="file-item-info">
-                        <svg class="file-item-icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H9V10H15V15L13,19H10Z"/>
-                        </svg>
-                        <span class="file-item-name">${file.name} (${formatFileSize(file.size)})</span>
-                    </div>
-                    <button type="button" class="file-item-remove" onclick="removeFile(${index})" aria-label="Remove ${file.name}">Remove</button>
+                
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'file-item-info';
+                infoDiv.innerHTML = `
+                    <svg class="file-item-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H9V10H15V15L13,19H10Z"/>
+                    </svg>
                 `;
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'file-item-name';
+                nameSpan.textContent = file.name + ' (' + formatFileSize(file.size) + ')';
+                infoDiv.appendChild(nameSpan);
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'file-item-remove';
+                removeBtn.textContent = 'Remove';
+                removeBtn.setAttribute('aria-label', 'Remove ' + file.name);
+                removeBtn.addEventListener('click', function() {
+                    removeFile(index);
+                });
+                
+                fileItem.appendChild(infoDiv);
+                fileItem.appendChild(removeBtn);
                 fileListDiv.appendChild(fileItem);
             });
         }
