@@ -171,6 +171,9 @@ function doPost(e) {
       .createTextOutput(JSON.stringify({
         status: 'success',
         message: 'Form submitted successfully',
+        script_version: '2026-06-17-v2',
+        sheet_id: CONFIG.SHEET_ID,
+        sheet_name: CONFIG.SHEET_NAME,
         email_sent: emailSent,
         email_error: emailError || null,
         student_id_card: uploadedFileUrl || null,
