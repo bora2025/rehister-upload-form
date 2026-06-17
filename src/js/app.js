@@ -264,7 +264,7 @@ function setupEventListeners() {
 
             try {
                 // Replace with your Google Apps Script Web App URL
-                const scriptUrl = 'https://script.google.com/macros/s/AKfycbwHXEg_mwe6tP3Gz9sbq9G07X83kx354PbdfMMds-BS4eIqiKF9qqszR86F94-uxepCKg/exec';
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbw_0hVZo5-cZopnZYM5u1l3eCQsBW5uHh1FD_XYDu79c-8KN0jtaNS_XNbxmcUTP6cJ/exec';
                 
                 console.log('Submitting form data:', data);
                 
