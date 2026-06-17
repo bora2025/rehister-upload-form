@@ -9,7 +9,7 @@
 
 // CONFIGURATION: replace with your actual Sheet ID and target sheet name
 const CONFIG = {
-  SHEET_ID: '1JQ8pBwlat2rCgCM9VpPnGrv2Op7jvha8T4L-4MKS33w',
+  SHEET_ID: '1AfSHKI-vkuoWkLdS91oWIHiCAg--4vwSngi_hKZE3SE',
   SHEET_NAME: 'Registrations',
   DRIVE_FOLDER_ID: '1y8wdyCIVNMrW6jn_2857-_6kCH9dUrb_'
 };
@@ -103,13 +103,16 @@ function doPost(e) {
 
     Logger.log('Opening spreadsheet: ' + CONFIG.SHEET_ID + ' | Sheet name: ' + CONFIG.SHEET_NAME);
     var spreadsheet = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+    var spreadsheetName = spreadsheet.getName();
+    Logger.log('Spreadsheet name: ' + spreadsheetName);
+
     var sheet = spreadsheet.getSheetByName(CONFIG.SHEET_NAME);
     if (!sheet) {
       sheet = spreadsheet.insertSheet(CONFIG.SHEET_NAME);
       sheet.appendRow(['Timestamp', 'Type', 'Name', 'Gender', 'Organization', 'Phone', 'Email', 'Email Sent', 'Student ID Card', 'File Link']);
       Logger.log('Created new sheet: ' + CONFIG.SHEET_NAME);
     } else {
-      Logger.log('Using existing sheet: ' + CONFIG.SHEET_NAME);
+      Logger.log('Using existing sheet: ' + CONFIG.SHEET_NAME + ' | Last row: ' + sheet.getLastRow());
     }
 
     // Duplicate prevention: skip if the same email already exists in the sheet
