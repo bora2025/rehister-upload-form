@@ -19,9 +19,12 @@ function doPost(e) {
   var emailError = '';
   var uploadedFileUrl = '';
   var uploadedFileName = '';
+  var uploadedFileUrls = [];
+  var uploadedFileNames = [];
+  var fileErrors = [];
 
   try {
-    var rawBody = e.postData ? e.postData.contents : '';
+    var rawBody = (e.postData && e.postData.contents) ? e.postData.contents : '';
     var data = {};
     var filesData = [];
 
@@ -29,6 +32,7 @@ function doPost(e) {
       try {
         data = JSON.parse(rawBody);
       } catch (jsonError) {
+        Logger.log('JSON parse error: ' + jsonError.toString());
         data = {};
       }
     }
@@ -40,13 +44,10 @@ function doPost(e) {
     }
 
     Logger.log('Received data: ' + JSON.stringify(data));
-    Logger.log('Files in payload: ' + filesData.length);
+    Logger.log('Files in payload: ' + (filesData ? filesData.length : 0));
 
     const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'];
     const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-    var uploadedFileUrls = [];
-    var uploadedFileNames = [];
-    var fileErrors = [];
 
     for (var i = 0; i < filesData.length; i++) {
       try {
