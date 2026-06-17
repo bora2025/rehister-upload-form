@@ -277,6 +277,11 @@ function setupEventListeners() {
                 });
 
                 const result = await response.json();
+                if (result && result.status === 'duplicate') {
+                    formStatus.innerHTML = 'អ៊ីមែលនេះបានចុះឈ្មោះរួចហើយ / This email is already registered.';
+                    formStatus.className = 'form-status error';
+                    return;
+                }
                 if (!result || result.status !== 'success') {
                     throw new Error(result?.message || 'Submission failed');
                 }

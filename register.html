@@ -1282,6 +1282,12 @@
                         throw new Error('Invalid response from server: ' + responseText.substring(0, 200));
                     }
 
+                    if (responseData && responseData.status === 'duplicate') {
+                        formStatus.innerHTML = 'អ៊ីមែលនេះបានចុះឈ្មោះរួចហើយ / This email is already registered.';
+                        formStatus.className = 'form-status error';
+                        return;
+                    }
+
                     if (!responseData || responseData.status !== 'success') {
                         throw new Error(responseData?.message || 'Submission failed');
                     }
