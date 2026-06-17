@@ -237,11 +237,12 @@ function setupEventListeners() {
         console.log('Window resized to:', window.innerWidth, 'x', window.innerHeight);
     });
 
-    // Handle contact form submission
+    // Handle contact form submission (only if no custom handler is already bound)
     const contactForm = document.getElementById('contactForm');
     const formStatus = document.getElementById('formStatus');
 
-    if (contactForm && !contactForm.dataset.customSubmitBound) {
+    if (contactForm && !contactForm.dataset.customSubmitBound && !contactForm.dataset.listenerAdded) {
+        contactForm.dataset.listenerAdded = 'true';
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
