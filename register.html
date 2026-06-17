@@ -1261,13 +1261,27 @@
                 try {
                     const scriptUrl = 'https://script.google.com/macros/s/AKfycbxKjTgkT_rRnsGV9bAV40vNvCB2IbY0rz475WL-GFS36Gelg1E2NCJocNr6b8d8D6AN0g/exec';
 
+                    console.log('Submitting payload:', payload);
+
                     const response = await fetch(scriptUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'text/plain' },
                         body: JSON.stringify(payload)
                     });
 
-                    const responseData = await response.json();
+                    console.log('Response status:', response.status);
+
+                    const responseText = await response.text();
+                    console.log('Response text:', responseText);
+
+                    let responseData = null;
+                    try {
+                        responseData = JSON.parse(responseText);
+                    } catch (parseError) {
+                        console.error('Failed to parse response as JSON:', parseError);
+                        throw new Error('Invalid response from server: ' + responseText.substring(0, 200));
+                    }
+
                     if (!responseData || responseData.status !== 'success') {
                         throw new Error(responseData?.message || 'Submission failed');
                     }
@@ -1284,7 +1298,7 @@
 
                 } catch (error) {
                     console.error('Submission error:', error);
-                    formStatus.textContent = 'មានបញ្ហាក្នុងការដាក់ស្នើ / Submission failed. Please try again.';
+                    formStatus.innerHTML = 'មានបញ្ហាក្នុងការដាក់ស្នើ / Submission failed.<br><small>' + error.message + '</small>';
                     formStatus.className = 'form-status error';
                 } finally {
                     submitBtn.innerHTML = originalText;
