@@ -1,6 +1,30 @@
 // Google Apps Script for Upload Document Form
 // Deploy as Web App with permissions to access Drive and send emails
 
+function sanitizeInput(value) {
+  if (value === undefined || value === null) {
+    return '';
+  }
+  return String(value)
+    .replace(/\u003cscript[^\u003e]*\u003e.*?\u003c\/script\u003e/gi, '')
+    .replace(/\u003cscript[^\u003e]*\u003e/gi, '')
+    .replace(/\u003c\/script\u003e/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '');
+}
+
+function escapeHtml(value) {
+  if (value === undefined || value === null) {
+    return '';
+  }
+  return String(value)
+    .replace(/\u0026/g, '&amp;')
+    .replace(/\u003c/g, '&lt;')
+    .replace(/\u003e/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 function doPost(e) {
   try {
     Logger.log('=== Upload Request Started ===');
@@ -30,12 +54,27 @@ function doPost(e) {
     // Parse JSON data
     var jsonData = JSON.parse(e.postData.contents);
     
-    var authorName = jsonData.authorName || '';
-    var email = jsonData.email || '';
-    var phone = jsonData.phone || '';
-    var documentTitle = jsonData.documentTitle || '';
-    var videoUrl = jsonData.videoUrl || '';
+    var authorName = sanitizeInput(jsonData.authorName || '');
+    var email = sanitizeInput(jsonData.email || '');
+    var phone = sanitizeInput(jsonData.phone || '');
+    var documentTitle = sanitizeInput(jsonData.documentTitle || '');
+    var videoUrl = sanitizeInput(jsonData.videoUrl || '');
     var filesData = jsonData.files || [];
+
+    // Validate email format
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email.trim())) {
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          status: 'error',
+          message: 'Invalid email address.'
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Allowed file types and max size (10 MB)
+    const ALLOWED_MIME_TYPES = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const MAX_FILE_SIZE = 10 * 1024 * 1024;
     
     Logger.log('Author Name: ' + authorName);
     Logger.log('Email: ' + email);
@@ -66,19 +105,27 @@ function doPost(e) {
               debugSheet.appendRow([new Date(), 'Processing file: ' + fileData.name, fileData.mimeType, '']);
             } catch (e) {}
             
-            // Decode base64 and create blob
-            var decoded = Utilities.base64Decode(fileData.data);
-            var blob = Utilities.newBlob(decoded);
-            blob.setName(fileData.name);
-            
-            // Set content type if available
-            if (fileData.mimeType) {
-              blob.setContentType(fileData.mimeType);
+            // Validate file type and size
+            var mimeType = (fileData.mimeType || 'application/octet-stream').toLowerCase();
+            if (ALLOWED_MIME_TYPES.indexOf(mimeType) === -1) {
+              throw new Error('Invalid file type: ' + mimeType);
             }
+            var decoded = Utilities.base64Decode(fileData.data);
+            if (!decoded || decoded.length === 0) {
+              throw new Error('Empty file data');
+            }
+            if (decoded.length > MAX_FILE_SIZE) {
+              throw new Error('File exceeds 10MB limit');
+            }
+
+            // Decode base64 and create blob
+            var blob = Utilities.newBlob(decoded);
+            blob.setName(sanitizeInput(fileData.name) || 'uploaded-file');
+            blob.setContentType(mimeType);
             
             // Create file in Drive
             var file = folder.createFile(blob);
-            file.setDescription('Uploaded by: ' + authorName + ' | Email: ' + email + ' | Phone: ' + phone + ' | Title: ' + documentTitle);
+            file.setDescription('Uploaded by: ' + escapeHtml(authorName) + ' | Email: ' + escapeHtml(email) + ' | Phone: ' + escapeHtml(phone) + ' | Title: ' + escapeHtml(documentTitle));
             
             files.push({
               name: file.getName(),
@@ -140,7 +187,7 @@ function doPost(e) {
         phone,
         documentTitle,
         videoUrl,
-        fileNames,
+        sanitizeInput(fileNames),
         fileUrls
       ]);
       
@@ -193,27 +240,35 @@ function sendUploadConfirmationEmail(data) {
   var subject = "ការផ្ទុកឯកសារជោគជ័យ - Document Upload Successful";
   
   // Build file list HTML
+  var safeData = {
+    authorName: escapeHtml(data.authorName),
+    email: escapeHtml(data.email),
+    phone: escapeHtml(data.phone),
+    documentTitle: escapeHtml(data.documentTitle),
+    videoUrl: escapeHtml(data.videoUrl)
+  };
+
   var fileListHtml = '';
   if (data.files && data.files.length > 0) {
     fileListHtml = '<ul style="margin: 10px 0; padding-left: 20px;">';
     data.files.forEach(function(file) {
-      fileListHtml += '<li><a href="' + file.url + '" style="color: #004282;">' + file.name + '</a></li>';
+      fileListHtml += '<li><a href="' + escapeHtml(file.url) + '" style="color: #004282;">' + escapeHtml(file.name) + '</a></li>';
     });
     fileListHtml += '</ul>';
   }
   
   var htmlMessage = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>" +
                 "<h2 style='color: #004282; border-bottom: 3px solid #ee7d20; padding-bottom: 10px;'>Ministry Of Tourism</h2>" +
-                "<p>Dear " + data.authorName + ",</p>" +
+                "<p>Dear " + safeData.authorName + ",</p>" +
                 "<p style='color:green; font-weight:bold;'>✅ ការផ្ទុកឯកសារជោគជ័យ - Document Upload Successful!</p>" +
                 "<p>Thank you for submitting your document(s) to our library. Your upload has been received and processed successfully.</p>" +
                 "<div style='background: #f5f7fa; padding: 15px; border-radius: 8px; margin: 20px 0;'>" +
                 "<h3 style='color: #004282; margin-top: 0;'>Upload Details:</h3>" +
-                "<p style='margin: 5px 0;'><strong>Document Title:</strong> " + data.documentTitle + "</p>" +
-                "<p style='margin: 5px 0;'><strong>Video URL:</strong> " + (data.videoUrl ? "<a href='" + data.videoUrl + "' style='color:#004282;'>" + data.videoUrl + "</a>" : 'N/A') + "</p>" +
-                "<p style='margin: 5px 0;'><strong>Author Name:</strong> " + data.authorName + "</p>" +
-                "<p style='margin: 5px 0;'><strong>Email:</strong> " + data.email + "</p>" +
-                "<p style='margin: 5px 0;'><strong>Phone:</strong> " + data.phone + "</p>" +
+                "<p style='margin: 5px 0;'><strong>Document Title:</strong> " + safeData.documentTitle + "</p>" +
+                "<p style='margin: 5px 0;'><strong>Video URL:</strong> " + (safeData.videoUrl ? "<a href='" + safeData.videoUrl + "' style='color:#004282;'>" + safeData.videoUrl + "</a>" : 'N/A') + "</p>" +
+                "<p style='margin: 5px 0;'><strong>Author Name:</strong> " + safeData.authorName + "</p>" +
+                "<p style='margin: 5px 0;'><strong>Email:</strong> " + safeData.email + "</p>" +
+                "<p style='margin: 5px 0;'><strong>Phone:</strong> " + safeData.phone + "</p>" +
                 "<p style='margin: 5px 0;'><strong>Uploaded File(s):</strong></p>" +
                 fileListHtml +
                 "</div>" +
