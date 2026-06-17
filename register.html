@@ -1261,35 +1261,17 @@
                 }
 
                 try {
-                    const scriptUrls = [
-                        'https://script.google.com/macros/s/AKfycbxKjTgkT_rRnsGV9bAV40vNvCB2IbY0rz475WL-GFS36Gelg1E2NCJocNr6b8d8D6AN0g/exec',
-                        'https://script.google.com/macros/s/AKfycbx_Rqj8ibvYAEoBAlJAtUBCSr-DD0le4H7Csa-dyDGhFu63bYXLXijRoi-bu4_0WX-xJQ/exec'
-                    ];
+                    const scriptUrl = 'https://script.google.com/macros/s/AKfycbxKjTgkT_rRnsGV9bAV40vNvCB2IbY0rz475WL-GFS36Gelg1E2NCJocNr6b8d8D6AN0g/exec';
 
-                    let responseData = null;
-                    let lastError = null;
+                    const response = await fetch(scriptUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: JSON.stringify(payload)
+                    });
 
-                    for (const scriptUrl of scriptUrls) {
-                        try {
-                            const response = await fetch(scriptUrl, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'text/plain' },
-                                body: JSON.stringify(payload)
-                            });
-
-                            responseData = await response.json();
-                            if (responseData && responseData.status === 'success') {
-                                break;
-                            }
-
-                            lastError = new Error(responseData?.message || 'Submission failed');
-                        } catch (error) {
-                            lastError = error;
-                        }
-                    }
-
+                    const responseData = await response.json();
                     if (!responseData || responseData.status !== 'success') {
-                        throw lastError || new Error('Submission failed');
+                        throw new Error(responseData?.message || 'Submission failed');
                     }
 
                     // Generate registration ID and show success

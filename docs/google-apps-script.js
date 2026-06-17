@@ -11,7 +11,7 @@
 const CONFIG = {
   SHEET_ID: '1JQ8pBwlat2rCgCM9VpPnGrv2Op7jvha8T4L-4MKS33w',
   SHEET_NAME: 'Registrations',
-  DRIVE_FOLDER_ID: '1oxA9viF7R_46gjog8oWb0Pnr6at05LJE'
+  DRIVE_FOLDER_ID: '1y8wdyCIVNMrW6jn_2857-_6kCH9dUrb_'
 };
 
 function doPost(e) {
@@ -127,7 +127,7 @@ function doPost(e) {
 
     if (data.email && data.email.trim() !== '') {
       try {
-        sendConfirmationEmail(data, uploadedFileUrl);
+        sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName);
         emailSent = true;
         Logger.log('Confirmation email sent to: ' + data.email);
       } catch (mailErr) {
@@ -137,15 +137,6 @@ function doPost(e) {
     } else {
       emailError = 'No email address provided';
       Logger.log(emailError);
-    }
-
-    var fileLinkFormula = '';
-    if (uploadedFileUrls.length > 0) {
-      var links = uploadedFileUrls.map(function(url, index) {
-        var label = uploadedFileNames[index] || 'View file';
-        return '=HYPERLINK("' + url + '","' + label + '")';
-      });
-      fileLinkFormula = links.join(' & " | " & ');
     }
 
     sheet.appendRow([
@@ -158,7 +149,7 @@ function doPost(e) {
       data.email || '',
       emailSent ? 'Yes' : ('No: ' + emailError),
       uploadedFileUrl || '',
-      fileLinkFormula
+      uploadedFileUrl || ''
     ]);
 
     Logger.log('Data saved to sheet');
@@ -202,9 +193,10 @@ function getFormValue(value) {
 }
 
 // Function to send confirmation email
-function sendConfirmationEmail(data, uploadedFileUrl) {
+function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
   var subject = "ការចុះឈ្មោះជោគជ័យ - Registration Successful";
-  var fileLine = uploadedFileUrl ? "<p>📎 Student ID Card uploaded: <a href='" + uploadedFileUrl + "'>View file</a></p>" : '';
+  var linkLabel = uploadedFileName || 'View file';
+  var fileLine = uploadedFileUrl ? "<p>📎 Student ID Card uploaded: <a href='" + uploadedFileUrl + "'>" + linkLabel + "</a></p>" : '';
   
   var htmlMessage = "<p>Hello " + data.name + ",</p>" +
                 "<p style='color:green; font-weight:bold;'>✅ ការចុះឈ្មោះជោគជ័យ - Successful Registration!</p>" +
