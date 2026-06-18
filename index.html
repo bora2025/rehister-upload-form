@@ -532,13 +532,6 @@
             }
 
             .header-red-line {
-                width: calc(100% + 1.5rem);
-                height: 2px;
-                margin: 0.5rem -0.75rem 0;
-                order: 3;
-            }
-
-            .header-red-line {
                 display: block;
                 width: calc(100% + 1.5rem);
                 height: 2px;
@@ -556,7 +549,7 @@
             }
 
             .brand > a {
-                max-width: 100%;
+                max-width: 220px;
             }
 
             .register {
@@ -568,6 +561,13 @@
                 border-bottom: none;
             }
 
+            /* Ensure tap targets meet 44px minimum */
+            .register .btn {
+                min-height: 44px;
+                padding: 0.6rem 1.1rem;
+                font-size: 0.9rem;
+            }
+
             nav {
                 order: 3;
                 width: 100%;
@@ -575,68 +575,327 @@
                 margin-left: 0;
                 margin-right: 0;
                 text-align: center;
+                border-top: 1px solid rgba(255, 255, 255, 0.12);
+                margin-top: 0.25rem;
             }
 
             nav ul {
                 justify-content: center;
+                gap: 0.5rem 1rem;
             }
 
-            .brand > a {
-                max-width: 220px;
+            nav a {
+                font-size: 0.95rem;
+                padding: 0.4rem 0.2rem;
+                display: inline-block;
+                min-height: 44px;
+                line-height: 1.8;
             }
 
             header img.logo {
-                height: 64px;
+                height: 56px;
+            }
+
+            main {
+                padding-top: 0.5rem;
+            }
+
+            .hero {
+                margin-top: 0.5rem;
+            }
+
+            .slider {
+                border-radius: 12px;
+            }
+
+            .slide-caption {
+                padding: 1.25rem 1rem;
+                justify-content: flex-end;
+                background: linear-gradient(0deg, rgba(0, 30, 60, 0.85) 0%, rgba(0, 66, 130, 0.35) 60%, rgba(0, 66, 130, 0.15) 100%);
+            }
+
+            .slide-caption h2 {
+                font-size: 1.3rem;
+                max-width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .slide-caption p {
+                font-size: 0.95rem;
+                max-width: 100%;
+            }
+
+            .slider-controls {
+                gap: 0.75rem;
+                margin-top: 0.75rem;
+            }
+
+            .slider-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+
+            .dot {
+                width: 14px;
+                height: 14px;
+            }
+
+            .section {
+                padding: 1.25rem 1rem;
+                margin-top: 1rem;
+                border-radius: 12px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.15rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+            }
+
+            .about-list {
+                padding-left: 1.1rem;
+            }
+
+            .about-list li {
+                font-size: 0.92rem;
+                line-height: 1.7;
+                margin-bottom: 0.6rem;
+            }
+
+            .event-meta {
+                gap: 0.75rem;
+                font-size: 0.9rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.4rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .card {
+                flex-direction: row;
+                align-items: stretch;
             }
 
             .card .icon {
-                height: 120px;
-                font-size: 2.5rem;
+                width: 90px;
+                height: auto;
+                font-size: 2.2rem;
+                flex-shrink: 0;
             }
 
             .card .meta {
                 padding: 1rem;
             }
 
+            .card h3 {
+                font-size: 1.1rem;
+            }
+
+            .card p {
+                font-size: 0.9rem;
+            }
+
+            .card a {
+                padding: 0.5rem 0.9rem;
+                font-size: 0.9rem;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
             footer {
                 padding: 1.25rem 0.75rem;
+                border-radius: 12px 12px 0 0;
+            }
+
+            footer h3 {
+                font-size: 1.1rem;
             }
 
             .contact-list a {
                 font-size: 0.9rem;
+                min-height: 44px;
+            }
+
+            .social {
+                gap: 0.75rem;
+            }
+
+            .social a {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
             }
         }
 
         @media (max-width: 480px) {
+            header, main, footer {
+                padding: 0.6rem;
+            }
+
             .brand > a {
-                max-width: 180px;
+                max-width: 170px;
             }
 
             header img.logo {
-                height: 52px;
+                height: 48px;
             }
 
             header h1 {
                 font-size: 0.85rem;
             }
 
-            footer {
-                padding: 1rem 0.5rem;
-            }
-
-            nav ul {
-                gap: 0.4rem 0.6rem;
-                font-size: 0.8rem;
+            .header-divider {
+                display: none;
             }
 
             .register .btn {
-                padding: 0.4rem 0.65rem;
-                font-size: 0.7rem;
-                min-width: auto;
+                padding: 0.5rem 0.85rem;
+                font-size: 0.82rem;
+            }
+
+            nav ul {
+                gap: 0.3rem 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            nav a {
+                padding: 0.35rem 0.15rem;
             }
 
             h2 {
                 font-size: 1.25rem;
+                padding-bottom: 0.6rem;
+            }
+
+            h2::after {
+                width: 50px;
+                height: 3px;
+            }
+
+            .section {
+                padding: 1rem 0.85rem;
+            }
+
+            .slide-caption {
+                padding: 1rem 0.85rem;
+            }
+
+            .slide-caption h2 {
+                font-size: 1.05rem;
+            }
+
+            .slide-caption p {
+                font-size: 0.82rem;
+                line-height: 1.5;
+            }
+
+            .slider-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .about-list li {
+                font-size: 0.88rem;
+            }
+
+            .card .icon {
+                width: 72px;
+                font-size: 1.8rem;
+            }
+
+            .card .meta {
+                padding: 0.85rem;
+            }
+
+            .card h3 {
+                font-size: 1rem;
+            }
+
+            .card p {
+                font-size: 0.85rem;
+            }
+
+            footer {
+                padding: 1rem 0.6rem;
+            }
+
+            footer h3 {
+                font-size: 1rem;
+            }
+
+            .contact-list a {
+                font-size: 0.85rem;
+            }
+
+            .social a {
+                padding: 0.5rem 0.85rem;
+                font-size: 0.85rem;
+            }
+
+            footer > p {
+                font-size: 0.82rem;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 360px) {
+            .brand > a {
+                max-width: 140px;
+            }
+
+            header img.logo {
+                height: 42px;
+            }
+
+            .register .btn {
+                padding: 0.45rem 0.7rem;
+                font-size: 0.78rem;
+            }
+
+            nav ul {
+                gap: 0.25rem 0.4rem;
+                font-size: 0.8rem;
+            }
+
+            .slide-caption h2 {
+                font-size: 0.95rem;
+            }
+
+            .slide-caption p {
+                font-size: 0.78rem;
+            }
+
+            h2 {
+                font-size: 1.15rem;
+            }
+
+            .card .icon {
+                width: 64px;
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Landscape orientation tweaks */
+        @media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+            .slide-caption {
+                justify-content: center;
+                padding: 1rem;
             }
 
             .slide-caption h2 {
@@ -644,11 +903,7 @@
             }
 
             .slide-caption p {
-                font-size: 0.8rem;
-            }
-
-            .card .meta {
-                padding: 1rem;
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -663,7 +918,6 @@
         <div class="register">
             <a class="btn" href="register.html">ចុះឈ្មោះ</a>
         </div>
-        <hr class="header-red-line" aria-hidden="true">
         <nav aria-label="Primary">
             <ul>
                 <li><a href="#about">About</a></li>
