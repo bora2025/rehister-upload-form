@@ -606,18 +606,24 @@
 
             .slider {
                 border-radius: 12px;
-                height: 30vh;
-                min-height: 180px;
+                height: 50vh;
+                min-height: 240px;
             }
 
             .slide {
                 height: 100%;
             }
 
+            .slide picture,
             .slide img {
                 width: 100%;
                 height: 100%;
+                display: block;
+            }
+
+            .slide img {
                 object-fit: cover;
+                object-position: center top;
             }
 
             .slide-caption {
@@ -944,28 +950,40 @@
         <section class="hero" aria-label="Hero banner">
             <div class="slider">
                 <div class="slide active">
-                    <img src="assets/img/vibrant-illustr.png" alt="Research Forum Banner">
+                    <picture>
+                        <source media="(max-width: 768px)" srcset="assets/img/vibrant-illustr-mobile.png">
+                        <img src="assets/img/vibrant-illustr.png" alt="Research Forum Banner">
+                    </picture>
                     <div class="slide-caption">
                         <h2>វេទិកាសិក្សាស្រាវជ្រាវក្នុងវិស័យទេសចរណ៍</h2>
                         <p>ការរីកចម្រើននៃវិស័យទេសចរណ៍នៅកម្ពុជាតាមរយៈការស្រាវជ្រាវ ភាពច្នៃប្រឌិត នវានុវត្តន៍ និងកិច្ចសហការ</p>
                     </div>
                 </div>
                 <div class="slide">
-                    <img src="assets/img/vibrant-illustr.png" alt="Research Contest">
+                    <picture>
+                        <source media="(max-width: 768px)" srcset="assets/img/vibrant-illustr-mobile.png">
+                        <img src="assets/img/vibrant-illustr.png" alt="Research Contest">
+                    </picture>
                     <div class="slide-caption">
                         <h2>ចលនាប្រឡងប្រណាំង</h2>
                         <p>ស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើមក្នុងវិស័យទេសចរណ៍ប្រចាឆ្នាំ២០២៦</p>
                     </div>
                 </div>
                 <div class="slide">
-                    <img src="assets/img/vibrant-illustr.png" alt="Online Registration">
+                    <picture>
+                        <source media="(max-width: 768px)" srcset="assets/img/vibrant-illustr-mobile.png">
+                        <img src="assets/img/vibrant-illustr.png" alt="Online Registration">
+                    </picture>
                     <div class="slide-caption">
                         <h2>ការចុះឈ្មោះ ប្រឡងប្រណាំងអត្ថបទសិក្សាស្រាវជ្រាវឆ្នើម</h2>
                         <p>តាមរយៈអនឡាញក្នុងវេបសាយផ្លូវការរបស់ព្រឹត្តិការណ៍</p>
                     </div>
                 </div>
                 <div class="slide">
-                    <img src="assets/img/vibrant-illustr.png" alt="Contact Us">
+                    <picture>
+                        <source media="(max-width: 768px)" srcset="assets/img/vibrant-illustr-mobile.png">
+                        <img src="assets/img/vibrant-illustr.png" alt="Contact Us">
+                    </picture>
                     <div class="slide-caption">
                         <h2>សូមទំនាក់ទំនងមកយើងខ្ញុំ</h2>
                         <p>ប្រសិន លោក លោកស្រីមានសំណួរ ឬចង់បានព័ត៌មានបន្ថែម សូមទំនាក់ទំនងមកយើងខ្ញុំ</p>
