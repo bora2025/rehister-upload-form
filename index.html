@@ -1020,6 +1020,21 @@
             background: #172236;
         }
 
+        @media (min-width: 769px) {
+            .hero {
+                width: 100vw;
+                max-width: none;
+                margin-left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .hero .slider {
+                width: 100%;
+                max-width: none;
+                border-radius: 0;
+            }
+        }
+
         .hero-banner-image {
             position: absolute;
             inset: 0;
@@ -1031,16 +1046,23 @@
             animation: heroDrift 14s ease-in-out infinite alternate;
         }
 
+        .hero-banner-picture {
+            position: absolute;
+            inset: 0;
+            display: block;
+            overflow: hidden;
+        }
+
         .hero-slides, .hero .slide, .hero .slide-caption { position: absolute; inset: 0; }
         .hero .slide { z-index: 2; }
 
         .hero .slide-caption {
             justify-content: flex-end;
-            padding: 3rem clamp(2rem, 6vw, 5rem) 7.5rem;
+            padding: 3rem clamp(2rem, 6vw, 5rem) 5.5rem;
             background: linear-gradient(180deg,
-                        rgba(3, 15, 30, 0) 0%,
-                        rgba(3, 15, 30, 0.08) 30%,
-                        rgba(3, 15, 30, 0.72) 64%,
+                        rgba(3, 15, 30, 0.26) 0%,
+                        rgba(3, 15, 30, 0.38) 30%,
+                        rgba(3, 15, 30, 0.76) 64%,
                         rgba(3, 15, 30, 0.96) 100%);
         }
 
@@ -1312,7 +1334,10 @@
     <main>
         <section class="hero" aria-label="Hero banner">
             <div class="slider">
-                <img class="hero-banner-image" src="assets/img/vibrant-illustr-mobile.png" alt="" aria-hidden="true">
+                <picture class="hero-banner-picture" aria-hidden="true">
+                    <source media="(min-width: 769px)" srcset="assets/img/phnom%20penh%20silhouette.png">
+                    <img class="hero-banner-image" src="assets/img/vibrant-illustr-mobile.png" alt="">
+                </picture>
                 <div class="hero-slides">
                 <div class="slide active">
                     <div class="slide-caption">
