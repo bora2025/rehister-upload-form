@@ -9,6 +9,7 @@
     <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
     <meta name="description" content="Ministry Of Tourism">
     <title>Ministry Of Tourism</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="assets/img/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Khmer&display=swap" rel="stylesheet">
@@ -71,12 +72,13 @@
             flex-shrink: 0;
             display: flex;
             align-items: center;
-            max-width: 150px;
+            width: clamp(240px, 22vw, 320px);
+            max-width: 100%;
         }
 
         header img.logo {
-            height: 56px;
-            width: auto;
+            width: 100%;
+            height: auto;
             max-width: 100%;
             display: block;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
@@ -328,6 +330,41 @@
             border-top: 1px solid #e2e8f0;
         }
 
+        .announcement {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .announcement h3 {
+            margin: 0 0 1.25rem;
+            color: #004282;
+            font-size: clamp(1.35rem, 3vw, 1.8rem);
+            text-align: center;
+        }
+
+        .announcement-pages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: 1.25rem;
+            align-items: start;
+        }
+
+        .announcement-page {
+            display: block;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.1);
+        }
+
+        .announcement-page img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
         footer {
             font-size: 0.95rem;
             color: #e2e8f0;
@@ -423,6 +460,52 @@
             width: 100%;
             height: auto;
             display: block;
+        }
+
+        .hero .slider {
+            animation: heroReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .hero .slide.active img {
+            transform-origin: center top;
+            animation: heroDrift 14s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .motion-enabled .motion-reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.75s ease var(--reveal-delay, 0ms),
+                        transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+        }
+
+        .motion-enabled .motion-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes heroReveal {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes heroDrift {
+            from { transform: scale(1); }
+            to { transform: scale(1.035); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero .slider,
+            .hero .slide.active img {
+                animation: none;
+            }
+
+            .motion-enabled .motion-reveal,
+            .motion-enabled .motion-reveal.is-visible {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
         }
 
         .slide-caption {
@@ -549,6 +632,7 @@
             }
 
             .brand > a {
+                width: 100%;
                 max-width: 220px;
             }
 
@@ -593,7 +677,7 @@
             }
 
             header img.logo {
-                height: 56px;
+                height: auto;
             }
 
             main {
@@ -766,11 +850,12 @@
             }
 
             .brand > a {
+                width: 100%;
                 max-width: 170px;
             }
 
             header img.logo {
-                height: 48px;
+                height: auto;
             }
 
             header h1 {
@@ -874,11 +959,12 @@
         /* Extra small devices */
         @media (max-width: 360px) {
             .brand > a {
+                width: 100%;
                 max-width: 140px;
             }
 
             header img.logo {
-                height: 42px;
+                height: auto;
             }
 
             .register .btn {
@@ -924,6 +1010,96 @@
                 font-size: 0.85rem;
             }
         }
+        /* Five-panel hero carousel */
+        .hero { min-height: 0; }
+
+        .hero .slider {
+            height: clamp(460px, 64vh, 650px);
+            max-width: 1200px;
+            margin-inline: auto;
+            background: #172236;
+        }
+
+        .hero-banner-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 18%;
+            animation: heroDrift 14s ease-in-out infinite alternate;
+        }
+
+        .hero-slides, .hero .slide, .hero .slide-caption { position: absolute; inset: 0; }
+        .hero .slide { z-index: 2; }
+
+        .hero .slide-caption {
+            justify-content: center;
+            padding: clamp(2rem, 6vw, 5rem);
+            background: linear-gradient(90deg, rgba(5, 20, 40, 0.88), rgba(5, 30, 55, 0.6) 55%, rgba(5, 30, 55, 0.35));
+        }
+
+        .hero .slide.active .slide-caption > * { animation: captionRise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        .hero .slide.active .slide-caption p { animation-delay: 80ms; }
+        .hero .slide.active .hero-cta { animation-delay: 160ms; }
+
+        .hero .slide-caption h2 {
+            max-width: 800px;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+        }
+
+        .hero .slide-caption p {
+            max-width: 760px;
+            margin-bottom: 1.5rem;
+            font-size: clamp(1rem, 2vw, 1.25rem);
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 0.75rem 1.4rem;
+            border-radius: 999px;
+            background: #ee7d20;
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(238, 125, 32, 0.3);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .hero-cta:hover { background: #d96a11; transform: translateY(-2px); }
+
+        .hero .slider-controls {
+            position: absolute;
+            z-index: 5;
+            bottom: 1.25rem;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+        }
+
+        @keyframes captionRise {
+            from { opacity: 0; transform: translateY(22px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .hero .slider { height: clamp(430px, 68vh, 570px); }
+            .hero-banner-image { object-position: center top; }
+            .hero .slide-caption {
+                justify-content: center;
+                padding: 2rem 1.2rem 5rem;
+                background: linear-gradient(0deg, rgba(5, 20, 40, 0.92), rgba(5, 30, 55, 0.55));
+            }
+            .hero .slide-caption h2 { font-size: clamp(1.35rem, 6vw, 1.8rem); }
+            .hero .slide-caption p { font-size: 0.95rem; line-height: 1.65; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-banner-image, .hero .slide.active .slide-caption > * { animation: none; }
+        }
     </style>
 </head>
 <body>
@@ -949,56 +1125,55 @@
     <main>
         <section class="hero" aria-label="Hero banner">
             <div class="slider">
+                <img class="hero-banner-image" src="assets/img/vibrant-illustr-mobile.png" alt="" aria-hidden="true">
+                <div class="hero-slides">
                 <div class="slide active">
-                    <picture>
-                        <source media="(max-width: 768px)" srcset="assets/img/vibrant-illustr-mobile.png">
-                        <img src="assets/img/vibrant-illustr.png" alt="Research Forum Banner">
-                    </picture>
                     <div class="slide-caption">
-                        <h2>ចលនាប្រឡងប្រណាំង</h2>
-                        <p>ស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើមក្នុងវិស័យទេសចរណ៍ប្រចាំឆ្នាំ២០២៦</p>
+                        <h2>សេចក្តីជូនដំណឹង</h2>
+                        <p>អានសេចក្តីជូនដំណឹងផ្លូវការ និងព័ត៌មានលម្អិតអំពីការប្រឡងស្នាដៃអត្ថបទស្រាវជ្រាវ។</p>
+                        <a class="hero-cta" href="#announcement">មើលសេចក្តីជូនដំណឹង</a>
                     </div>
                 </div>
                 <div class="slide">
-                    <picture>
-                        <source media="(max-width: 768px)" srcset="assets/img/vibrant-illustr-mobile.png">
-                        <img src="assets/img/vibrant-illustr.png" alt="Research Contest">
-                    </picture>
                     <div class="slide-caption">
-                        <h2>ទេសចរណ៍រីកលូតលាស់</h2>
-                        <p>ផ្តើមពីការចូលរួមរបស់យើងទាំងអស់គ្នា</p>
+                        <h2>ចុះឈ្មោះចូលរួម</h2>
+                        <p>បំពេញព័ត៌មានរបស់អ្នក ដើម្បីចូលរួមប្រឡងស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើមប្រចាំឆ្នាំ២០២៦។</p>
+                        <a class="hero-cta" href="register.html">ចុះឈ្មោះឥឡូវនេះ</a>
                     </div>
                 </div>
                 <div class="slide">
-                    <picture>
-                        <source media="(max-width: 768px)" srcset="assets/img/vibrant-illustr-mobile.png">
-                        <img src="assets/img/vibrant-illustr.png" alt="Online Registration">
-                    </picture>
                     <div class="slide-caption">
-                        <h2>ចុះឈ្មោះឥឡូវនេះ</h2>
-                        <p>ដើម្បីចូលរួមដោយផ្ទាល់ដើម្បីអភិវឌ្ឍវិស័យទេសចរណ៍</p>
+                        <h2>អំពីការប្រឡងស្រាវជ្រាវ</h2>
+                        <p>ចលនានេះលើកទឹកចិត្តដល់និស្សិត បញ្ញវន្ត និងសាធារណជន ឱ្យបង្កើតស្នាដៃស្រាវជ្រាវដែលមានគុណភាព និងគំនិតច្នៃប្រឌិតសម្រាប់វិស័យទេសចរណ៍។</p>
+                        <a class="hero-cta" href="#about">ស្វែងយល់បន្ថែម</a>
                     </div>
                 </div>
                 <div class="slide">
-                    <picture>
-                        <source media="(max-width: 768px)" srcset="assets/img/vibrant-illustr-mobile.png">
-                        <img src="assets/img/vibrant-illustr.png" alt="Contact Us">
-                    </picture>
                     <div class="slide-caption">
-                        <h2>សូមទំនាក់ទំនងមកយើងខ្ញុំ</h2>
-                        <p>ប្រសិន លោក លោកស្រីមានសំណួរ ឬចង់បានព័ត៌មានបន្ថែម សូមទំនាក់ទំនងមកយើងខ្ញុំ</p>
+                        <h2>បញ្ជូនស្នាដៃស្រាវជ្រាវ</h2>
+                        <p>បញ្ជូនឯកសារស្នាដៃអត្ថបទស្រាវជ្រាវរបស់អ្នកតាមប្រព័ន្ធអនឡាញ។</p>
+                        <a class="hero-cta" href="upload.html">បញ្ជូនឯកសារ</a>
                     </div>
                 </div>
-            </div>
-            <div class="slider-controls">
-                <button class="slider-btn prev" aria-label="Previous slide">&#8592;</button>
-                <div class="slider-dots">
-                    <span class="dot active" data-slide="0"></span>
-                    <span class="dot" data-slide="1"></span>
-                    <span class="dot" data-slide="2"></span>
-                    <span class="dot" data-slide="3"></span>
+                <div class="slide">
+                    <div class="slide-caption">
+                        <h2>បណ្ណាល័យស្នាដៃ</h2>
+                        <p>ស្វែងរក និងអានស្នាដៃអត្ថបទស្រាវជ្រាវដែលបានចងក្រងក្នុងបណ្ណាល័យ។</p>
+                        <a class="hero-cta" href="library.html">ចូលបណ្ណាល័យ</a>
+                    </div>
                 </div>
-                <button class="slider-btn next" aria-label="Next slide">&#8594;</button>
+                </div>
+                <div class="slider-controls" aria-label="ការគ្រប់គ្រងស្លាយ">
+                    <button class="slider-btn prev" type="button" aria-label="ស្លាយមុន">&#8592;</button>
+                    <div class="slider-dots">
+                        <button class="dot active" type="button" data-slide="0" aria-label="ស្លាយទី១"></button>
+                        <button class="dot" type="button" data-slide="1" aria-label="ស្លាយទី២"></button>
+                        <button class="dot" type="button" data-slide="2" aria-label="ស្លាយទី៣"></button>
+                        <button class="dot" type="button" data-slide="3" aria-label="ស្លាយទី៤"></button>
+                        <button class="dot" type="button" data-slide="4" aria-label="ស្លាយទី៥"></button>
+                    </div>
+                    <button class="slider-btn next" type="button" aria-label="ស្លាយបន្ទាប់">&#8594;</button>
+                </div>
             </div>
         </section>
 
@@ -1011,13 +1186,24 @@
                 <li>ស្វែងរក និងជ្រើសរើស នូវអត្ថបទឆ្នើមៗ ដែលមានគំនិតថ្មីប្រកបដោយភាពច្នៃប្រឌិត</li>
                 <li>លើកស្ទួយការយល់ដឹង និងចំណេះដឹង ឱ្យកាន់តែទូលំទូលាយអំពីសក្តានុពល ផលប៉ះពាល់ និងទិសដៅអភិវឌ្ឍន៍នៃវិស័យទេសចរណ៍</li>
                 <li>ប្រើប្រាស់ស្នាដៃឆ្នើមទាំងនោះសម្រាប់ជាឯកសារយោង ជាគំនិត ឬជាយុទ្ធសាស្ត្រក្នុងការអភិវឌ្ឍវិស័យទេសចរណ៍ប្រកបដោយចីរភាព</li>
-                <li>ជម្រុញការអភិវឌ្ឍធនធានមនុស្ស ជាពិសេសការអភិវឌ្ឍសមត្ថភាពក្នុងការងារស្រាវជ្រាវក្នុងវិស័យទេសចរណ៍</li>
+                <li>ជំរុញការអភិវឌ្ឍធនធានមនុស្ស ជាពិសេសការអភិវឌ្ឍសមត្ថភាពក្នុងការងារស្រាវជ្រាវក្នុងវិស័យទេសចរណ៍</li>
                 <li>ឆ្ពោះទៅរៀបចំអនុស្សារណៈយោគយល់ រវាងវិទ្យាស្ថានជាតិទេសចរណ៍ និងសាកលវិទ្យាល័យនានា ក្នុងប្រទេស</li>
                 <li>ចងក្រងបណ្តាញអ្នកជំនាញ សាស្ត្រាចារ្យជាតិ និងអន្តរជាតិ និងអ្នកស្រាវជ្រាវក្នុងវិស័យទេសចរណ៍</li>
             </ul>
             <div class="event-meta">
-                <span>&#128197; ថ្ងៃទី ខែ ឆ្នាំ២០២៦</span>
+                <span>&#128197;កាលបរិច្ឆេទចុះឈ្មោះប្រគួតចាប់ពីថ្ងៃជូនដំណឹង ដល់ថ្ងៃទី១៥ ខែសីហា ឆ្នាំ២០២៦</span>
                 <span>&#128205; នៅរាជធានីភ្នំពេញ</span>
+            </div>
+            <div class="announcement" id="announcement">
+                <h3>សេចក្តីជូនដំណឹង</h3>
+                <div class="announcement-pages">
+                    <a class="announcement-page" href="assets/img/page1.jpg" target="_blank" rel="noopener" aria-label="បើកសេចក្តីជូនដំណឹង ទំព័រទី១">
+                        <img src="assets/img/page1.jpg" alt="សេចក្តីជូនដំណឹង ទំព័រទី១" loading="lazy">
+                    </a>
+                    <a class="announcement-page" href="assets/img/page2.jpg" target="_blank" rel="noopener" aria-label="បើកសេចក្តីជូនដំណឹង ទំព័រទី២">
+                        <img src="assets/img/page2.jpg" alt="សេចក្តីជូនដំណឹង ទំព័រទី២" loading="lazy">
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -1061,8 +1247,14 @@
                     <span>researchdeparment.info@gmail.com</span>
                 </a>
                
+                <a href="tel:070 801 800">
+                    <span>&#128222;</span>
+                    <span>070 801 800</span>
+                  
+                </a>
                 <a href="tel:095676763">
                     <span>&#128222;</span>
+                    
                     <span>095 676 763</span>
                 </a>
             </div>
@@ -1071,7 +1263,7 @@
             <a href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer">Telegram</a>
             <a href="https://www.facebook.com/share/1BGkHw3TCq/" target="_blank" rel="noopener noreferrer">Facebook</a>
         </section>
-        <p>&copy; 2025 Research and Policy Department.</p>
+        <p>&copy; 2025 Research and Tourism Policy Department.</p>
         <p>Created By RBA</p>
     </footer>
 

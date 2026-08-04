@@ -2,6 +2,30 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Mini App loaded successfully!');
 
+    // Reveal page content as it enters the viewport. Keep everything visible
+    // when the visitor has requested reduced motion.
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealTargets = document.querySelectorAll('main > .section, .announcement-page, footer');
+
+    if (!prefersReducedMotion && 'IntersectionObserver' in window && revealTargets.length > 0) {
+        document.body.classList.add('motion-enabled');
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px' });
+
+        revealTargets.forEach((element, index) => {
+            element.classList.add('motion-reveal');
+            element.style.setProperty('--reveal-delay', `${(index % 3) * 90}ms`);
+            revealObserver.observe(element);
+        });
+    }
+
     // Get elements
     const actionBtn = document.getElementById('actionBtn');
     const output = document.getElementById('output');

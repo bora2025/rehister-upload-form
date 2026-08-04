@@ -40,21 +40,27 @@
         
         .title {
             position: absolute;
-            top: 80px;
-            left: 0;
-            right: 0;
+            top: 48px;
+            left: 44px;
+            right: 44px;
             text-align: center;
-            font-size: 56px;
+            font-size: clamp(32px, 4.5vw, 36px);
             font-weight: bold;
             color: #ffffff;
             text-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
-            font-family: Arial, sans-serif;
+            font-family: "Khmer OS Muol Light", "Noto Sans Khmer", "Khmer OS Content", "Khmer OS", sans-serif;
+            line-height: 1.8;
+            text-wrap: balance;
             z-index: 2;
+        }
+
+        .title span {
+            display: block;
         }
         
         .khmer-text {
             position: absolute;
-            top: 170px;
+            top: 275px;
             left: 0;
             right: 0;
             text-align: center;
@@ -68,7 +74,7 @@
         
         .subtitle {
             position: absolute;
-            top: 245px;
+            top: 360px;
             left: 0;
             right: 0;
             text-align: center;
@@ -82,7 +88,11 @@
 </head>
 <body>
     <div id="banner">
-        <div class="title">Research Contest 2026</div>
+        <div class="title" lang="km">
+            <span>ចលនាប្រឡងប្រណាំងស្នាដៃអត្ថបទ</span>
+            <span>ស្រាវជ្រាវឆ្នើមក្នុងវិស័យទេសចរណ៍</span>
+            <span>ប្រចាំឆ្នាំ២០២៦</span>
+        </div>
         <div class="khmer-text">ទេសចរណ៍នៅកម្ពុជា</div>
         <div class="subtitle">Tourism in Cambodia</div>
     </div>

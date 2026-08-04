@@ -9,6 +9,7 @@
     <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
     <meta name="description" content="Upload Document Form">
     <title>ទម្រង់ផ្ញើឯកសារ - Ministry Of Tourism</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="assets/img/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Khmer&display=swap" rel="stylesheet">
@@ -782,6 +783,41 @@
             outline: 2px solid #667eea;
             outline-offset: 2px;
         }
+
+        /* Mobile-first upload experience */
+        :root { --navy: #073b5c; --blue: #087fb9; --sky: #e8f6fc; --ink: #152a38; --muted: #6c7c87; }
+        body.register-page { background: #f4f8fa; color: var(--ink); padding-bottom: 2rem; }
+        .register-header { background: var(--navy); min-height: 72px; padding: 0.75rem 1rem; box-shadow: none; }
+        .header-left { gap: 0.7rem; }
+        .header-left h1 { font-size: 0.9rem; letter-spacing: .01em; }
+        .register-logo { width: 42px; height: 42px; border-color: rgba(255,255,255,.45); }
+        .close-btn { width: 42px; height: 42px; background: rgba(255,255,255,.12); border-radius: 13px; font-size: 1.8rem; }
+        .register-container { max-width: 540px; padding: 0 1rem; margin: 1.25rem auto; }
+        .mobile-hero { background: linear-gradient(135deg, #087fb9, #075983); color: #fff; padding: 1.5rem 1.25rem 1.35rem; border-radius: 20px 20px 0 0; }
+        .eyebrow { display: flex; align-items: center; gap: .45rem; text-transform: uppercase; letter-spacing: .1em; font: 700 .68rem/1.2 system-ui, sans-serif; opacity: .88; }
+        .eyebrow svg { width: 17px; height: 17px; fill: currentColor; }
+        .mobile-hero h1 { margin: .8rem 0 .45rem; font-size: 1.38rem; line-height: 1.55; }
+        .mobile-hero p { margin: 0; font: .9rem/1.5 system-ui, sans-serif; opacity: .84; }
+        .form-title { display: none; }
+        .upload-steps { background: #fff; display: flex; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid #e6edf1; }
+        .step { display: flex; align-items: center; gap: .45rem; color: #7c8c96; font: 600 .72rem/1.2 system-ui, sans-serif; }
+        .step span { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 50%; background: #e9eff2; font-size: .68rem; }
+        .step.active { color: var(--blue); }.step.active span { background: var(--blue); color: #fff; }
+        .register-form { padding: 1.25rem; border-radius: 0 0 20px 20px; box-shadow: 0 10px 30px rgba(19,63,84,.09); }
+        .form-divider { display: none; }
+        .form-group { margin-bottom: 1.15rem; }
+        .form-group:last-of-type { margin-bottom: 1.4rem; }
+        .form-group label { margin-bottom: .45rem; color: var(--ink); font-size: .9rem; }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"], .form-group input[type="url"] { min-height: 52px; padding: .8rem .9rem; border: 1px solid #d7e1e6; border-radius: 12px; background: #fbfdfe; color: var(--ink); font: 1rem system-ui, sans-serif; }
+        .form-group input:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(8,127,185,.13); }
+        .file-upload-wrapper { margin-top: .35rem; }
+        .file-upload-label { min-height: 146px; padding: 1.1rem; gap: .45rem; border: 1.5px dashed #62afd1; border-radius: 14px; background: var(--sky); }
+        .file-upload-label svg { width: 37px; height: 37px; fill: var(--blue); }.file-upload-text { color: var(--navy); font-size: .92rem; }.file-upload-hint { color: var(--muted); font: .75rem system-ui, sans-serif; }
+        .file-item { padding: .75rem; background: #f3f8fa; border-radius: 10px; }.file-item-remove { background: transparent; color: #c43d3d; padding: .45rem; font-weight: 700; }
+        .btn { min-height: 56px; padding: .9rem 1rem; border-radius: 14px; background: var(--blue); box-shadow: 0 5px 13px rgba(8,127,185,.25); font-size: 1rem; }.btn:hover { box-shadow: 0 7px 18px rgba(8,127,185,.3); }
+        .privacy-note { margin: 1rem 0 0; color: var(--muted); font: .73rem/1.5 system-ui, sans-serif; text-align: center; }.privacy-note svg { width: 13px; height: 13px; vertical-align: -2px; fill: currentColor; }
+        .success-modal-content { border-radius: 20px; padding: 2rem 1.3rem; }
+        @media (min-width: 600px) { .register-container { margin-top: 2rem; }.register-form { padding: 1.75rem; }.mobile-hero { padding: 1.8rem; } }
     </style>
 </head>
 <body class="register-page">
@@ -795,9 +831,15 @@
 
     <main>
         <div class="register-container">
-            <div class="form-title">
-                <h1>ទម្រង់ផ្ញើឯកសារស្រាវជ្រាវ</h1>
-                <h2>UPLOAD RESEARCH DOCUMENT</h2>
+            <section class="mobile-hero" aria-labelledby="uploadTitle">
+                <div class="eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6 14H7v-2h6v2zm4-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> Research library</div>
+                <h1 id="uploadTitle">ទម្រង់ផ្ញើឯកសារស្រាវជ្រាវ</h1>
+                <p>Upload your research document securely in a few simple steps.</p>
+            </section>
+            <div class="upload-steps" aria-label="Upload progress">
+                <div class="step active"><span>1</span>Details</div>
+                <div class="step"><span>2</span>Document</div>
+                <div class="step"><span>3</span>Done</div>
             </div>
 
             <form id="uploadForm" class="register-form">
@@ -860,6 +902,7 @@
                 <button type="submit" class="btn">
                     <span class="btn-text">ផ្ញើឯកសារ / Upload Document</span>
                 </button>
+                <p class="privacy-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a5 5 0 0 0-5 5v3H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V11a2 2 0 0 0-2-2h-2V6a5 5 0 0 0-5-5zm-3 8V6a3 3 0 0 1 6 0v3H9z"/></svg> Your information is securely submitted to the Ministry of Tourism.</p>
                 <div id="formStatus" class="form-status"></div>
             </form>
         </div>
@@ -884,7 +927,12 @@
         const successBtn = document.getElementById('successBtn');
         const submitBtn = uploadForm.querySelector('.btn');
         const submitBtnText = submitBtn.querySelector('.btn-text');
+        const uploadSteps = document.querySelectorAll('.step');
         let selectedFiles = [];
+
+        function updateUploadSteps() {
+            uploadSteps[1].classList.toggle('active', selectedFiles.length > 0);
+        }
 
         // Handle file selection
         pdfFileInput.addEventListener('change', function(e) {
@@ -913,6 +961,7 @@
             });
             
             displayFileList();
+            updateUploadSteps();
             
             // Reset input so the same file can be selected again if needed
             e.target.value = '';
@@ -938,6 +987,7 @@
             fileListDiv.innerHTML = '';
             
             if (selectedFiles.length === 0) {
+                updateUploadSteps();
                 return;
             }
             
@@ -970,6 +1020,7 @@
                 fileItem.appendChild(removeBtn);
                 fileListDiv.appendChild(fileItem);
             });
+            updateUploadSteps();
         }
 
         // Format file size
@@ -1004,6 +1055,7 @@
 
         // Show success modal
         function showSuccessModal() {
+            uploadSteps[2].classList.add('active');
             successModal.classList.add('show');
             
             // Auto close after 5 seconds
