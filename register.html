@@ -923,6 +923,201 @@
                 border: 2px solid var(--success-color);
             }
         }
+        /* Refined registration form UI */
+        .register-page {
+            --background-white: #ffffff;
+            --background-light: #f8fafc;
+            --text-primary: #102a43;
+            --text-secondary: #52677d;
+            --border-color: #d7e1ec;
+            --success-bg: rgba(16, 185, 129, 0.1);
+            color-scheme: light;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 12% 12%, rgba(238, 125, 32, 0.18), transparent 30%),
+                radial-gradient(circle at 88% 88%, rgba(0, 66, 130, 0.24), transparent 34%),
+                linear-gradient(145deg, #eaf2fb 0%, #f7faff 48%, #eef4fb 100%);
+        }
+
+        main {
+            padding: clamp(1rem, 3vw, 2.25rem);
+        }
+
+        .register-container {
+            max-width: 720px;
+            flex: none;
+            overflow: hidden;
+            border: 1px solid rgba(0, 66, 130, 0.1);
+            border-radius: 22px;
+            background: var(--background-white);
+            box-shadow: 0 24px 60px rgba(0, 43, 88, 0.16);
+        }
+
+        .form-title {
+            margin: 0;
+            padding: 2rem clamp(1.25rem, 4vw, 2.5rem) 1.75rem;
+            border-radius: 0;
+            border-bottom: 4px solid var(--secondary-orange, #ee7d20);
+            background: linear-gradient(135deg, #004282, #07325e);
+            box-shadow: none;
+        }
+
+        .form-title h1 {
+            max-width: 580px;
+            margin: 0 auto 0.65rem;
+            color: #fff;
+            font-size: clamp(1.2rem, 3vw, 1.55rem);
+            font-weight: 700;
+            line-height: 1.65;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        .form-title h2 {
+            color: #ffd6b5;
+            background: none;
+            -webkit-text-fill-color: currentColor;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .register-form {
+            padding: 1.25rem clamp(1.25rem, 5vw, 3rem) 2.25rem;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .register-form > .form-divider {
+            display: none;
+        }
+
+        .register-form .form-group {
+            margin: 0;
+            padding: 1.15rem 0 1.35rem;
+            border-bottom: 1px solid #e7edf5;
+        }
+
+        .register-form .form-group label {
+            margin-bottom: 0.65rem;
+            color: #163b61;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"] {
+            min-height: 54px;
+            border: 1.5px solid #ccd8e6;
+            border-radius: 12px;
+            background: #fbfdff;
+            color: #102a43;
+            box-shadow: inset 0 1px 2px rgba(15, 35, 55, 0.03);
+        }
+
+        .form-group input:hover {
+            border-color: #8ba8c6;
+        }
+
+        .form-group input:focus {
+            border-color: #0065b3;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(0, 101, 179, 0.12);
+        }
+
+        .participant-type {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-height: 54px;
+            padding: 0.8rem 1rem;
+            border: 1px solid #b8d5ee;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #eef7ff, #f7fbff);
+            color: #004282;
+            font-weight: 700;
+        }
+
+        .participant-type i {
+            display: grid;
+            width: 32px;
+            height: 32px;
+            place-items: center;
+            border-radius: 50%;
+            background: #004282;
+            color: #fff;
+        }
+
+        .radio-group {
+            gap: 0.75rem;
+        }
+
+        .radio-option label {
+            min-height: 52px;
+            margin: 0;
+            border: 1.5px solid #ccd8e6;
+            border-radius: 12px;
+            background: #fbfdff;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            border-color: #0065b3;
+            background: #eaf5ff;
+            color: #004282;
+            box-shadow: 0 0 0 3px rgba(0, 101, 179, 0.1);
+        }
+
+        .form-group input[type="file"] {
+            min-height: 62px;
+            border-color: #aac4dc;
+            border-radius: 12px;
+            background: #f8fbfe;
+            color: #102a43;
+        }
+
+        .form-group input[type="file"]::file-selector-button {
+            background: #004282;
+            color: #ffffff;
+        }
+
+        .file-help {
+            margin-top: 0.65rem;
+            padding-left: 0.25rem;
+            line-height: 1.6;
+        }
+
+        #submitBtn {
+            width: 100%;
+            min-height: 54px;
+            margin-top: 1.5rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ee7d20, #d9620b);
+            box-shadow: 0 10px 24px rgba(238, 125, 32, 0.28);
+            font-size: 1rem;
+        }
+
+        #submitBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(238, 125, 32, 0.35);
+        }
+
+        @media (max-width: 600px) {
+            main { padding: 0.75rem; }
+            .register-container { border-radius: 16px; }
+            .form-title { padding: 1.25rem 1rem 1.1rem; }
+            .form-title h1 { font-size: 1.08rem; line-height: 1.65; }
+            .form-title h2 { font-size: 0.8rem; }
+            .register-form { padding: 0.75rem 1rem 1.5rem; }
+            .register-form .form-group { padding: 1rem 0 1.15rem; }
+            .radio-group { flex-direction: row; }
+            .radio-option label { padding: 0.7rem 0.5rem; font-size: 0.9rem; }
+        }
     </style>
 </head>
 <body class="register-page">
@@ -970,21 +1165,18 @@
                 
                 <div class="form-group">
                     <label for="type">ប្រភេទអ្នកចូលរួម / Type Request <span class="required">*</span></label>
-                    <select id="type" name="type" required>
-                        <option value="">-- ជ្រើសរើស / Select --</option>
-                        <option value="public">សាធារណជន / Public</option>
-                        <option value="student">សិស្ស / Student</option>
-                        <option value="university">និស្សិត / University Student</option>
-                        <option value="government">មន្ត្រីរាជការ / Government Official</option>
-                        <option value="teacher">គ្រូបង្រៀន / Teacher</option>
-                    </select>
+                    <input type="hidden" id="type" name="type" value="university">
+                    <div class="participant-type" aria-label="និស្សិត / University Student">
+                        <i class="fas fa-user-graduate" aria-hidden="true"></i>
+                        <span>និស្សិត / University Student</span>
+                    </div>
                 </div>
 
                 <hr class="form-divider">
 
                 <div class="form-group">
                     <label for="name">ឈ្មោះ / Name <span class="required">*</span></label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" placeholder="បញ្ចូលឈ្មោះពេញ / Enter your full name" autocomplete="name" required>
                 </div>
 
                 <hr class="form-divider">
@@ -1007,7 +1199,7 @@
 
                 <div class="form-group">
                     <label for="organization">មកពីសាលា</label>
-                    <input type="text" id="organization" name="organization">
+                    <input type="text" id="organization" name="organization" placeholder="ឈ្មោះសាកលវិទ្យាល័យ / University name" autocomplete="organization">
                 </div>
 
                 <hr class="form-divider">
@@ -1035,14 +1227,14 @@
 
                 <div class="form-group">
                     <label for="phone">លេខទូរសព្ទ / Phone Number <span class="required">*</span></label>
-                    <input type="tel" id="phone" name="phone" required>
+                    <input type="tel" id="phone" name="phone" placeholder="ឧ. 012 345 678" autocomplete="tel" inputmode="tel" required>
                 </div>
 
                 <hr class="form-divider">
 
                 <div class="form-group">
                     <label for="email">អ៊ីមែល / Email <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" placeholder="name@example.com" autocomplete="email" inputmode="email" required>
                 </div>
 
                 <hr class="form-divider">
