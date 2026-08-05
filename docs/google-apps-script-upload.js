@@ -268,13 +268,17 @@ function doPost(e) {
       // Prepare file info for sheet
       var fileNames = files.length > 0 ? files.map(function(f) { return f.name; }).join(', ') : 'No files uploaded';
       var fileUrls = files.length > 0 ? files.map(function(f) { return f.url; }).join(', ') : '';
-      
+      // For a team, also store Member 1 as the primary author/team leader so the
+      // shared Author columns are not blank in the spreadsheet.
+      var primaryAuthorName = submissionType === 'team' ? teamMember1 : authorName;
+      var primaryAuthorGender = submissionType === 'team' ? teamMember1Gender : authorGender;
+
       // Add to sheet
       uploadsSheet.appendRow([
         new Date(),
         submissionType,
-        authorName,
-        authorGender,
+        primaryAuthorName,
+        primaryAuthorGender,
         teamMember1,
         teamMember1Gender,
         teamMember2,
