@@ -808,8 +808,10 @@
         .form-group { margin-bottom: 1.15rem; }
         .form-group:last-of-type { margin-bottom: 1.4rem; }
         .form-group label { margin-bottom: .45rem; color: var(--ink); font-size: .9rem; }
-        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"], .form-group input[type="url"] { min-height: 52px; padding: .8rem .9rem; border: 1px solid #d7e1e6; border-radius: 12px; background: #fbfdfe; color: var(--ink); font: 1rem system-ui, sans-serif; }
-        .form-group input:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(8,127,185,.13); }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"], .form-group input[type="url"], .form-group select { width: 100%; min-height: 52px; padding: .8rem .9rem; border: 1px solid #d7e1e6; border-radius: 12px; background: #fbfdfe; color: var(--ink); font: 1rem system-ui, sans-serif; }
+        .form-group select { cursor: pointer; }
+        .form-group input + label, .form-group select + label { margin-top: .85rem; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(8,127,185,.13); }
         .file-upload-wrapper { margin-top: .35rem; }
         .file-upload-label { min-height: 146px; padding: 1.1rem; gap: .45rem; border: 1.5px dashed #62afd1; border-radius: 14px; background: var(--sky); }
         .file-upload-label svg { width: 37px; height: 37px; fill: var(--blue); }.file-upload-text { color: var(--navy); font-size: .92rem; }.file-upload-hint { color: var(--muted); font: .75rem system-ui, sans-serif; }
@@ -817,6 +819,16 @@
         .btn { min-height: 56px; padding: .9rem 1rem; border-radius: 14px; background: var(--blue); box-shadow: 0 5px 13px rgba(8,127,185,.25); font-size: 1rem; }.btn:hover { box-shadow: 0 7px 18px rgba(8,127,185,.3); }
         .privacy-note { margin: 1rem 0 0; color: var(--muted); font: .73rem/1.5 system-ui, sans-serif; text-align: center; }.privacy-note svg { width: 13px; height: 13px; vertical-align: -2px; fill: currentColor; }
         .success-modal-content { border-radius: 20px; padding: 2rem 1.3rem; }
+        .submission-type-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; }
+        .submission-type-option { position: relative; }
+        .submission-type-option input { position: absolute; opacity: 0; pointer-events: none; }
+        .submission-type-option label { display: flex; align-items: center; justify-content: center; min-height: 52px; margin: 0; padding: .7rem; border: 1.5px solid #d7e1e6; border-radius: 12px; background: #fbfdfe; color: var(--ink); cursor: pointer; transition: .2s ease; }
+        .submission-type-option input:checked + label { border-color: var(--blue); background: var(--sky); color: var(--navy); box-shadow: 0 0 0 3px rgba(8,127,185,.1); }
+        .submission-type-option input:focus-visible + label { outline: 2px solid var(--blue); outline-offset: 2px; }
+        .team-fields { padding: 1rem; margin-bottom: 1.15rem; border: 1px solid #d8e8f0; border-radius: 14px; background: #f7fbfd; }
+        .team-fields[hidden], .form-group[hidden] { display: none; }
+        .team-fields-title { margin: 0 0 .9rem; color: var(--navy); font-weight: 700; }
+        .team-fields .form-group:last-child { margin-bottom: 0; }
         @media (min-width: 600px) { .register-container { margin-top: 2rem; }.register-form { padding: 1.75rem; }.mobile-hero { padding: 1.8rem; } }
     </style>
 </head>
@@ -844,10 +856,54 @@
 
             <form id="uploadForm" class="register-form">
                 <hr class="form-divider">
-                
+
                 <div class="form-group">
+                    <label>ប្រភេទនៃការដាក់ស្នើ / Submission Type <span style="color: red;">*</span></label>
+                    <div class="submission-type-options">
+                        <div class="submission-type-option">
+                            <input type="radio" id="submissionIndividual" name="submissionType" value="individual" checked>
+                            <label for="submissionIndividual">បុគ្គល / Individual</label>
+                        </div>
+                        <div class="submission-type-option">
+                            <input type="radio" id="submissionTeam" name="submissionType" value="team">
+                            <label for="submissionTeam">ក្រុម / Team</label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="form-group" id="individualNameGroup">
                     <label for="authorName">ឈ្មោះ / Name <span style="color: red;">*</span></label>
                     <input type="text" id="authorName" name="authorName" required>
+                    <label for="authorGender">ភេទ / Gender <span style="color: red;">*</span></label>
+                    <select id="authorGender" name="authorGender" required>
+                        <option value="">ជ្រើសរើសភេទ / Choose gender</option>
+                        <option value="male">ប្រុស / Male</option>
+                        <option value="female">ស្រី / Female</option>
+                    </select>
+                </div>
+
+                <div class="team-fields" id="teamFields" hidden>
+                    <p class="team-fields-title">ឈ្មោះសមាជិកក្រុមទាំង ៣ / Three Team Members</p>
+                    <div class="form-group">
+                        <label for="teamMember1">សមាជិកទី១ / Member 1 <span style="color: red;">*</span></label>
+                        <input type="text" id="teamMember1" name="teamMember1" autocomplete="name">
+                        <label for="teamMember1Gender">ភេទ / Gender <span style="color: red;">*</span></label>
+                        <select id="teamMember1Gender" name="teamMember1Gender"><option value="">ជ្រើសរើសភេទ / Choose gender</option><option value="male">ប្រុស / Male</option><option value="female">ស្រី / Female</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="teamMember2">សមាជិកទី២ / Member 2 <span style="color: red;">*</span></label>
+                        <input type="text" id="teamMember2" name="teamMember2" autocomplete="name">
+                        <label for="teamMember2Gender">ភេទ / Gender <span style="color: red;">*</span></label>
+                        <select id="teamMember2Gender" name="teamMember2Gender"><option value="">ជ្រើសរើសភេទ / Choose gender</option><option value="male">ប្រុស / Male</option><option value="female">ស្រី / Female</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="teamMember3">សមាជិកទី៣ / Member 3 <span style="color: red;">*</span></label>
+                        <input type="text" id="teamMember3" name="teamMember3" autocomplete="name">
+                        <label for="teamMember3Gender">ភេទ / Gender <span style="color: red;">*</span></label>
+                        <select id="teamMember3Gender" name="teamMember3Gender"><option value="">ជ្រើសរើសភេទ / Choose gender</option><option value="male">ប្រុស / Male</option><option value="female">ស្រី / Female</option></select>
+                    </div>
                 </div>
 
                 <hr class="form-divider">
@@ -928,7 +984,27 @@
         const submitBtn = uploadForm.querySelector('.btn');
         const submitBtnText = submitBtn.querySelector('.btn-text');
         const uploadSteps = document.querySelectorAll('.step');
+        const submissionTypeInputs = document.querySelectorAll('input[name="submissionType"]');
+        const individualNameGroup = document.getElementById('individualNameGroup');
+        const authorNameInput = document.getElementById('authorName');
+        const authorGenderInput = document.getElementById('authorGender');
+        const teamFields = document.getElementById('teamFields');
+        const teamMemberInputs = [1, 2, 3].map(number => document.getElementById(`teamMember${number}`));
+        const teamMemberGenderInputs = [1, 2, 3].map(number => document.getElementById(`teamMember${number}Gender`));
         let selectedFiles = [];
+
+        function updateSubmissionType() {
+            const isTeam = document.querySelector('input[name="submissionType"]:checked').value === 'team';
+            individualNameGroup.hidden = isTeam;
+            authorNameInput.required = !isTeam;
+            authorGenderInput.required = !isTeam;
+            teamFields.hidden = !isTeam;
+            teamMemberInputs.forEach(input => { input.required = isTeam; });
+            teamMemberGenderInputs.forEach(input => { input.required = isTeam; });
+        }
+
+        submissionTypeInputs.forEach(input => input.addEventListener('change', updateSubmissionType));
+        updateSubmissionType();
 
         function updateUploadSteps() {
             uploadSteps[1].classList.toggle('active', selectedFiles.length > 0);
@@ -1090,14 +1166,25 @@
             
             try {
                 // Get form values
+                const submissionType = document.querySelector('input[name="submissionType"]:checked').value;
                 const authorName = document.getElementById('authorName').value.trim();
+                const authorGender = document.getElementById('authorGender').value;
+                const teamMember1 = document.getElementById('teamMember1').value.trim();
+                const teamMember1Gender = document.getElementById('teamMember1Gender').value;
+                const teamMember2 = document.getElementById('teamMember2').value.trim();
+                const teamMember2Gender = document.getElementById('teamMember2Gender').value;
+                const teamMember3 = document.getElementById('teamMember3').value.trim();
+                const teamMember3Gender = document.getElementById('teamMember3Gender').value;
                 const email = document.getElementById('email').value.trim();
                 const phone = document.getElementById('phone').value.trim();
                 const documentTitle = document.getElementById('documentTitle').value.trim();
                 const videoUrl = document.getElementById('videoUrl').value.trim();
                 
                 // Validate required fields
-                if (!authorName || !email || !documentTitle) {
+                const hasValidNames = submissionType === 'team'
+                    ? Boolean(teamMember1 && teamMember1Gender && teamMember2 && teamMember2Gender && teamMember3 && teamMember3Gender)
+                    : Boolean(authorName && authorGender);
+                if (!hasValidNames || !email || !documentTitle) {
                     throw new Error('Please fill in all required fields.');
                 }
                 
@@ -1129,7 +1216,15 @@
                 console.log('Uploading files:', filesData.length);
                 
                 const payload = {
+                    submissionType: submissionType,
                     authorName: authorName,
+                    authorGender: authorGender,
+                    teamMember1: teamMember1,
+                    teamMember1Gender: teamMember1Gender,
+                    teamMember2: teamMember2,
+                    teamMember2Gender: teamMember2Gender,
+                    teamMember3: teamMember3,
+                    teamMember3Gender: teamMember3Gender,
                     email: email,
                     phone: phone,
                     documentTitle: documentTitle,
@@ -1157,6 +1252,7 @@
                     
                     // Reset form
                     uploadForm.reset();
+                    updateSubmissionType();
                     selectedFiles = [];
                     displayFileList();
                     

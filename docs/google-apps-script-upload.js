@@ -25,12 +25,71 @@ function escapeHtml(value) {
     .replace(/'/g, '&#039;');
 }
 
+const UPLOAD_HEADERS = [
+  'Timestamp',
+  'Submission Type',
+  'Author Name',
+  'Author Gender',
+  'Team Member 1',
+  'Team Member 1 Gender',
+  'Team Member 2',
+  'Team Member 2 Gender',
+  'Team Member 3',
+  'Team Member 3 Gender',
+  'Email',
+  'Phone',
+  'Document Title',
+  'Video URL',
+  'Files',
+  'File URLs'
+];
+
+// Migrates the previous Uploads sheet without deleting existing submissions.
+function ensureUploadHeaders(sheet) {
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(UPLOAD_HEADERS);
+    return;
+  }
+
+  var columnCount = Math.max(sheet.getLastColumn(), 1);
+  var headers = sheet.getRange(1, 1, 1, columnCount).getValues()[0];
+
+  if (headers[1] !== 'Submission Type') {
+    sheet.insertColumnAfter(1);
+    Logger.log('Inserted Submission Type column');
+    columnCount = Math.max(sheet.getLastColumn(), 1);
+    headers = sheet.getRange(1, 1, 1, columnCount).getValues()[0];
+  }
+
+  var hasTeamColumns = headers.indexOf('Team Member 1') !== -1 &&
+    headers.indexOf('Team Member 2') !== -1 &&
+    headers.indexOf('Team Member 3') !== -1;
+  if (!hasTeamColumns) {
+    sheet.insertColumnsAfter(3, 3);
+    Logger.log('Inserted three Team Member columns');
+  }
+
+  columnCount = Math.max(sheet.getLastColumn(), 1);
+  headers = sheet.getRange(1, 1, 1, columnCount).getValues()[0];
+  if (headers.indexOf('Author Gender') === -1) {
+    // Insert right-to-left so existing submission data remains aligned.
+    sheet.insertColumnAfter(6);
+    sheet.insertColumnAfter(5);
+    sheet.insertColumnAfter(4);
+    sheet.insertColumnAfter(3);
+    Logger.log('Inserted individual and team gender columns');
+  }
+
+  sheet.getRange(1, 1, 1, UPLOAD_HEADERS.length).setValues([UPLOAD_HEADERS]);
+  sheet.setFrozenRows(1);
+}
+
 function doPost(e) {
   try {
     Logger.log('=== Upload Request Started ===');
     
     // Replace with your Google Sheet ID
-    var SHEET_ID = '1ySDbBD7NsV5qQfLCQGwGE_6pj6Gh73sCYMD9tRvdEyA';
+    var SHEET_ID = '1JQ8pBwlat2rCgCM9VpPnGrv2Op7jvha8T4L-4MKS33w';
     
     // Debug: Write raw request to sheet
     var spreadsheet = SpreadsheetApp.openById(SHEET_ID);
@@ -54,12 +113,37 @@ function doPost(e) {
     // Parse JSON data
     var jsonData = JSON.parse(e.postData.contents);
     
+    var submissionType = sanitizeInput(jsonData.submissionType || 'individual').toLowerCase();
     var authorName = sanitizeInput(jsonData.authorName || '');
+    var authorGender = sanitizeInput(jsonData.authorGender || '').toLowerCase();
+    var teamMember1 = sanitizeInput(jsonData.teamMember1 || '');
+    var teamMember1Gender = sanitizeInput(jsonData.teamMember1Gender || '').toLowerCase();
+    var teamMember2 = sanitizeInput(jsonData.teamMember2 || '');
+    var teamMember2Gender = sanitizeInput(jsonData.teamMember2Gender || '').toLowerCase();
+    var teamMember3 = sanitizeInput(jsonData.teamMember3 || '');
+    var teamMember3Gender = sanitizeInput(jsonData.teamMember3Gender || '').toLowerCase();
     var email = sanitizeInput(jsonData.email || '');
     var phone = sanitizeInput(jsonData.phone || '');
     var documentTitle = sanitizeInput(jsonData.documentTitle || '');
     var videoUrl = sanitizeInput(jsonData.videoUrl || '');
     var filesData = jsonData.files || [];
+
+    if (submissionType !== 'individual' && submissionType !== 'team') {
+      throw new Error('Invalid submission type.');
+    }
+    if (submissionType === 'individual' && (!authorName || !authorGender)) {
+      throw new Error('Author name and gender are required for an individual upload.');
+    }
+    if (submissionType === 'team' && (!teamMember1 || !teamMember1Gender || !teamMember2 || !teamMember2Gender || !teamMember3 || !teamMember3Gender)) {
+      throw new Error('Names and genders are required for all three team members.');
+    }
+    var validGenders = ['male', 'female'];
+    var submittedGenders = submissionType === 'team'
+      ? [teamMember1Gender, teamMember2Gender, teamMember3Gender]
+      : [authorGender];
+    if (submittedGenders.some(function(gender) { return validGenders.indexOf(gender) === -1; })) {
+      throw new Error('Invalid gender selection.');
+    }
 
     // Validate email format
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -77,6 +161,7 @@ function doPost(e) {
     const MAX_FILE_SIZE = 10 * 1024 * 1024;
     
     Logger.log('Author Name: ' + authorName);
+    Logger.log('Submission Type: ' + submissionType);
     Logger.log('Email: ' + email);
     Logger.log('Document Title: ' + documentTitle);
     Logger.log('Number of files: ' + filesData.length);
@@ -125,7 +210,10 @@ function doPost(e) {
             
             // Create file in Drive
             var file = folder.createFile(blob);
-            file.setDescription('Uploaded by: ' + escapeHtml(authorName) + ' | Email: ' + escapeHtml(email) + ' | Phone: ' + escapeHtml(phone) + ' | Title: ' + escapeHtml(documentTitle));
+            var uploaderNames = submissionType === 'team'
+              ? [teamMember1, teamMember2, teamMember3].join(', ')
+              : authorName;
+            file.setDescription('Submission type: ' + submissionType + ' | Uploaded by: ' + escapeHtml(uploaderNames) + ' | Email: ' + escapeHtml(email) + ' | Phone: ' + escapeHtml(phone) + ' | Title: ' + escapeHtml(documentTitle));
             
             files.push({
               name: file.getName(),
@@ -172,7 +260,9 @@ function doPost(e) {
       var uploadsSheet = spreadsheet.getSheetByName('Uploads');
       if (!uploadsSheet) {
         uploadsSheet = spreadsheet.insertSheet('Uploads');
-        uploadsSheet.appendRow(['Timestamp', 'Author Name', 'Email', 'Phone', 'Document Title', 'Video URL', 'Files', 'File URLs']);
+        uploadsSheet.appendRow(UPLOAD_HEADERS);
+      } else {
+        ensureUploadHeaders(uploadsSheet);
       }
       
       // Prepare file info for sheet
@@ -182,7 +272,15 @@ function doPost(e) {
       // Add to sheet
       uploadsSheet.appendRow([
         new Date(),
+        submissionType,
         authorName,
+        authorGender,
+        teamMember1,
+        teamMember1Gender,
+        teamMember2,
+        teamMember2Gender,
+        teamMember3,
+        teamMember3Gender,
         email,
         phone,
         documentTitle,
@@ -202,7 +300,15 @@ function doPost(e) {
     if (email && email.trim() !== '') {
       try {
         sendUploadConfirmationEmail({
+          submissionType: submissionType,
           authorName: authorName,
+          authorGender: authorGender,
+          teamMember1: teamMember1,
+          teamMember1Gender: teamMember1Gender,
+          teamMember2: teamMember2,
+          teamMember2Gender: teamMember2Gender,
+          teamMember3: teamMember3,
+          teamMember3Gender: teamMember3Gender,
           email: email,
           phone: phone,
           documentTitle: documentTitle,
@@ -241,7 +347,15 @@ function sendUploadConfirmationEmail(data) {
   
   // Build file list HTML
   var safeData = {
+    submissionType: escapeHtml(data.submissionType),
     authorName: escapeHtml(data.authorName),
+    authorGender: escapeHtml(data.authorGender),
+    teamMember1: escapeHtml(data.teamMember1),
+    teamMember1Gender: escapeHtml(data.teamMember1Gender),
+    teamMember2: escapeHtml(data.teamMember2),
+    teamMember2Gender: escapeHtml(data.teamMember2Gender),
+    teamMember3: escapeHtml(data.teamMember3),
+    teamMember3Gender: escapeHtml(data.teamMember3Gender),
     email: escapeHtml(data.email),
     phone: escapeHtml(data.phone),
     documentTitle: escapeHtml(data.documentTitle),
@@ -256,17 +370,27 @@ function sendUploadConfirmationEmail(data) {
     });
     fileListHtml += '</ul>';
   }
+
+  var submitterDetailsHtml = safeData.submissionType === 'team'
+    ? "<p style='margin: 5px 0;'><strong>Submission Type:</strong> Team</p>" +
+      "<p style='margin: 5px 0;'><strong>Member 1:</strong> " + safeData.teamMember1 + " (" + safeData.teamMember1Gender + ")</p>" +
+      "<p style='margin: 5px 0;'><strong>Member 2:</strong> " + safeData.teamMember2 + " (" + safeData.teamMember2Gender + ")</p>" +
+      "<p style='margin: 5px 0;'><strong>Member 3:</strong> " + safeData.teamMember3 + " (" + safeData.teamMember3Gender + ")</p>"
+    : "<p style='margin: 5px 0;'><strong>Submission Type:</strong> Individual</p>" +
+      "<p style='margin: 5px 0;'><strong>Author Name:</strong> " + safeData.authorName + " (" + safeData.authorGender + ")</p>";
+
+  var greetingName = safeData.submissionType === 'team' ? safeData.teamMember1 : safeData.authorName;
   
   var htmlMessage = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>" +
                 "<h2 style='color: #004282; border-bottom: 3px solid #ee7d20; padding-bottom: 10px;'>Ministry Of Tourism</h2>" +
-                "<p>Dear " + safeData.authorName + ",</p>" +
+                "<p>Dear " + greetingName + ",</p>" +
                 "<p style='color:green; font-weight:bold;'>✅ ការផ្ទុកឯកសារជោគជ័យ - Document Upload Successful!</p>" +
                 "<p>Thank you for submitting your document(s) to our library. Your upload has been received and processed successfully.</p>" +
                 "<div style='background: #f5f7fa; padding: 15px; border-radius: 8px; margin: 20px 0;'>" +
                 "<h3 style='color: #004282; margin-top: 0;'>Upload Details:</h3>" +
                 "<p style='margin: 5px 0;'><strong>Document Title:</strong> " + safeData.documentTitle + "</p>" +
                 "<p style='margin: 5px 0;'><strong>Video URL:</strong> " + (safeData.videoUrl ? "<a href='" + safeData.videoUrl + "' style='color:#004282;'>" + safeData.videoUrl + "</a>" : 'N/A') + "</p>" +
-                "<p style='margin: 5px 0;'><strong>Author Name:</strong> " + safeData.authorName + "</p>" +
+                submitterDetailsHtml +
                 "<p style='margin: 5px 0;'><strong>Email:</strong> " + safeData.email + "</p>" +
                 "<p style='margin: 5px 0;'><strong>Phone:</strong> " + safeData.phone + "</p>" +
                 "<p style='margin: 5px 0;'><strong>Uploaded File(s):</strong></p>" +
