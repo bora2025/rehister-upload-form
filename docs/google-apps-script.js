@@ -14,6 +14,22 @@ const CONFIG = {
   DRIVE_FOLDER_ID: '1y8wdyCIVNMrW6jn_2857-_6kCH9dUrb_'
 };
 
+const REGISTRATION_HEADERS = [
+  'Timestamp',
+  'Name',
+  'Gender',
+  'Nationality',
+  'Education Level',
+  'Study Year',
+  'Major',
+  'Organization',
+  'Phone',
+  'Email',
+  'Email Sent',
+  'Student ID Card',
+  'File Link'
+];
+
 function doPost(e) {
   var emailSent = false;
   var emailError = '';
@@ -109,9 +125,10 @@ function doPost(e) {
     var sheet = spreadsheet.getSheetByName(CONFIG.SHEET_NAME);
     if (!sheet) {
       sheet = spreadsheet.insertSheet(CONFIG.SHEET_NAME);
-      sheet.appendRow(['Timestamp', 'Type', 'Name', 'Gender', 'Organization', 'Phone', 'Email', 'Email Sent', 'Student ID Card', 'File Link']);
+      sheet.appendRow(REGISTRATION_HEADERS);
       Logger.log('Created new sheet: ' + CONFIG.SHEET_NAME);
     } else {
+      ensureRegistrationHeaders(sheet);
       Logger.log('Using existing sheet: ' + CONFIG.SHEET_NAME + ' | Last row: ' + sheet.getLastRow());
     }
 
@@ -130,7 +147,8 @@ function doPost(e) {
     // Duplicate prevention: skip if the same email already exists in the sheet
     var emailToCheck = (data.email || '').trim().toLowerCase();
     if (emailToCheck) {
-      var emailColumn = sheet.getRange(2, 7, Math.max(sheet.getLastRow() - 1, 1), 1).getValues();
+      var emailColumnIndex = REGISTRATION_HEADERS.indexOf('Email') + 1;
+      var emailColumn = sheet.getRange(2, emailColumnIndex, Math.max(sheet.getLastRow() - 1, 1), 1).getValues();
       for (var r = 0; r < emailColumn.length; r++) {
         if (String(emailColumn[r][0] || '').trim().toLowerCase() === emailToCheck) {
           Logger.log('Duplicate submission detected for email: ' + data.email);
@@ -170,9 +188,12 @@ function doPost(e) {
 
     sheet.appendRow([
       new Date(),
-      sanitizeInput(data.type) || '',
       sanitizeInput(data.name) || '',
       sanitizeInput(data.gender) || '',
+      sanitizeInput(data.nationality) || '',
+      sanitizeInput(data.educationLevel) || '',
+      sanitizeInput(data.studyYear) || '',
+      sanitizeInput(data.major) || '',
       sanitizeInput(data.organization) || '',
       sanitizeInput(data.phone) || '',
       sanitizeInput(data.email) || '',
@@ -187,7 +208,7 @@ function doPost(e) {
       .createTextOutput(JSON.stringify({
         status: 'success',
         message: 'Form submitted successfully',
-        script_version: '2026-06-17-v3',
+        script_version: '2026-08-05-v5',
         sheet_id: CONFIG.SHEET_ID,
         sheet_name: CONFIG.SHEET_NAME,
         debug: {
@@ -230,6 +251,38 @@ function getFormValue(value) {
   return String(value);
 }
 
+// Migrates earlier registration sheets to the current schema.
+// Removes the obsolete Type column and places the student fields after Gender.
+function ensureRegistrationHeaders(sheet) {
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(REGISTRATION_HEADERS);
+    return;
+  }
+
+  var currentColumnCount = Math.max(sheet.getLastColumn(), 1);
+  var currentHeaders = sheet.getRange(1, 1, 1, currentColumnCount).getValues()[0];
+
+  if (currentHeaders[1] === 'Type') {
+    sheet.deleteColumn(2);
+    Logger.log('Removed obsolete Type column');
+    currentColumnCount = Math.max(sheet.getLastColumn(), 1);
+    currentHeaders = sheet.getRange(1, 1, 1, currentColumnCount).getValues()[0];
+  }
+
+  var alreadyMigrated = currentHeaders[3] === 'Nationality' &&
+    currentHeaders[4] === 'Education Level' &&
+    currentHeaders[5] === 'Study Year' &&
+    currentHeaders[6] === 'Major';
+
+  if (!alreadyMigrated) {
+    sheet.insertColumnsAfter(3, 4);
+    Logger.log('Inserted columns for Nationality, Education Level, Study Year, and Major');
+  }
+
+  sheet.getRange(1, 1, 1, REGISTRATION_HEADERS.length).setValues([REGISTRATION_HEADERS]);
+  sheet.setFrozenRows(1);
+}
+
 function sanitizeInput(value) {
   if (value === undefined || value === null) {
     return '';
@@ -249,9 +302,12 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
   var fileLine = uploadedFileUrl ? "<p>📎 Student ID Card uploaded: <a href='" + uploadedFileUrl + "'>" + linkLabel + "</a></p>" : '';
   
   var safeData = {
-    type: sanitizeInput(data.type),
     name: sanitizeInput(data.name),
     gender: sanitizeInput(data.gender),
+    nationality: sanitizeInput(data.nationality),
+    educationLevel: sanitizeInput(data.educationLevel),
+    studyYear: sanitizeInput(data.studyYear),
+    major: sanitizeInput(data.major),
     organization: sanitizeInput(data.organization),
     phone: sanitizeInput(data.phone),
     email: sanitizeInput(data.email)
@@ -262,9 +318,12 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
                 "<p>Thank you for registering for the Competition Research. Your data has been received and recorded successfully.</p>" +
                 "<p>Here's a copy of your submission:<br>" +
                 "---------------------------------<br>" +
-                "Type: " + safeData.type + "<br>" +
                 "Name: " + safeData.name + "<br>" +
                 "Gender: " + safeData.gender + "<br>" +
+                "Nationality: " + safeData.nationality + "<br>" +
+                "Education Level: " + safeData.educationLevel + "<br>" +
+                "Study Year: " + safeData.studyYear + "<br>" +
+                "Major: " + safeData.major + "<br>" +
                 "Organization: " + safeData.organization + "<br>" +
                 "Phone: " + safeData.phone + "<br>" +
                 "Email: " + safeData.email + "<br>" +
@@ -312,9 +371,12 @@ function doGet(e) {
 //   2. Verify email delivery works before going live
 function testEmail() {
   var testData = {
-    type: 'student',
     name: 'Test User',
     gender: 'male',
+    nationality: 'Cambodian',
+    educationLevel: 'បរិញ្ញាបត្រ',
+    studyYear: 'ឆ្នាំទី១',
+    major: 'Tourism Management',
     organization: 'Test Org',
     phone: '012345678',
     email: Session.getActiveUser().getEmail() // sends to the script owner's email

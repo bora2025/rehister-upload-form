@@ -1012,13 +1012,21 @@
 
         .form-group input[type="text"],
         .form-group input[type="email"],
-        .form-group input[type="tel"] {
+        .form-group input[type="tel"],
+        .form-group select {
             min-height: 54px;
             border: 1.5px solid #ccd8e6;
             border-radius: 12px;
             background: #fbfdff;
             color: #102a43;
             box-shadow: inset 0 1px 2px rgba(15, 35, 55, 0.03);
+        }
+
+        .form-group select {
+            appearance: auto;
+            -webkit-appearance: menulist;
+            padding-right: 1rem;
+            cursor: pointer;
         }
 
         .form-group input:hover {
@@ -1029,29 +1037,6 @@
             border-color: #0065b3;
             background: #fff;
             box-shadow: 0 0 0 4px rgba(0, 101, 179, 0.12);
-        }
-
-        .participant-type {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            min-height: 54px;
-            padding: 0.8rem 1rem;
-            border: 1px solid #b8d5ee;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #eef7ff, #f7fbff);
-            color: #004282;
-            font-weight: 700;
-        }
-
-        .participant-type i {
-            display: grid;
-            width: 32px;
-            height: 32px;
-            place-items: center;
-            border-radius: 50%;
-            background: #004282;
-            color: #fff;
         }
 
         .radio-group {
@@ -1131,8 +1116,8 @@
     <main>
         <div class="register-container">
             <div class="form-title">
-                <h1>ទម្រង់ចុះឈ្មោះ ចូលរួមចលនាប្រឡងប្រណាំងអត្ថបទសិក្សាស្រាវជ្រាវឆ្នើម</h1>
-                <h2>FORM Research Contest</h2>
+                <h1>ទម្រង់ចុះឈ្មោះ ចូលរួមចលនាប្រឡងប្រណាំងអត្ថបទស្រាវជ្រាវឆ្នើម</h1>
+                <h2>Research Contest FORM</h2>
             </div>
 
             <!-- Success Message Container (Hidden by default) -->
@@ -1162,22 +1147,19 @@
             <!-- Registration Form (Visible by default) -->
             <form id="contactForm" class="register-form" data-register-form="true">
                 <hr class="form-divider">
-                
-                <div class="form-group">
-                    <label for="type"> <span class="required">*</span></label>
-                    <input type="hidden" id="type" name="type" value="university">
-                    <div class="participant-type" aria-label="និស្សិត / University Student">
-                        <i class="fas fa-user-graduate" aria-hidden="true"></i>
-                        <span>និស្សិត / University Student</span>
-                    </div>
-                </div>
-
                 <hr class="form-divider">
 
                 <div class="form-group">
-                    <label for="name">ឈ្មោះ <span class="required">*</span></label>
+                    <label for="name">ឈ្មោះពេញ <span class="required">*</span></label>
                     <input type="text" id="name" name="name" placeholder="បញ្ចូលឈ្មោះពេញ / Enter your full name" autocomplete="name" required>
                 </div>
+                <hr class="form-divider">
+
+                <div class="form-group">
+                    <label for="name">ឈ្មោះពេញជាអក្សរឡាតាំង <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" placeholder="បញ្ចូលឈ្មោះពេញជាអក្សរឡាតាំង / Enter your full name in Latin" autocomplete="name" required>
+                </div>
+
 
                 <hr class="form-divider">
 
@@ -1198,6 +1180,44 @@
                 <hr class="form-divider">
 
                 <div class="form-group">
+                    <label for="nationality">សញ្ជាតិ <span class="required">*</span></label>
+                    <input type="text" id="nationality" name="nationality" placeholder="បញ្ចូលសញ្ជាតិ / Enter nationality" autocomplete="country-name" required>
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="form-group">
+                    <label for="educationLevel">កម្រិតសិក្សា <span class="required">*</span></label>
+                    <select id="educationLevel" name="educationLevel" required>
+                        <option value="" selected disabled>-- ជ្រើសរើសកម្រិតសិក្សា --</option>
+                        <option value="បរិញ្ញាបត្រ">បរិញ្ញាបត្រ</option>
+                        <option value="បរិញ្ញាបត្ររង">បរិញ្ញាបត្ររង</option>
+                    </select>
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="form-group">
+                    <label for="studyYear">ឆ្នាំសិក្សា <span class="required">*</span></label>
+                    <select id="studyYear" name="studyYear" required>
+                        <option value="" selected disabled>-- ជ្រើសរើសឆ្នាំសិក្សា --</option>
+                        <option value="ឆ្នាំទី១">ឆ្នាំទី១</option>
+                        <option value="ឆ្នាំទី២">ឆ្នាំទី២</option>
+                        <option value="ឆ្នាំទី៣">ឆ្នាំទី៣</option>
+                        <option value="ឆ្នាំទី៤">ឆ្នាំទី៤</option>
+                    </select>
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="form-group">
+                    <label for="major">មុខជំនាញ <span class="required">*</span></label>
+                    <input type="text" id="major" name="major" placeholder="បញ្ចូលមុខជំនាញ / Enter major" required>
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="form-group">
                     <label for="organization">ឈ្មោះគ្រឹះស្ថានសិក្សា</label>
                     <input type="text" id="organization" name="organization" placeholder="ឈ្មោះសាកលវិទ្យាល័យ / University name" autocomplete="organization">
                 </div>
@@ -1205,9 +1225,9 @@
                 <hr class="form-divider">
 
                 <div class="form-group">
-                    <label for="studentIdCard">បណ្ណសម្គាល់ខ្លូនសិស្ស</label>
+                    <label for="studentIdCard">បណ្ណសម្គាល់ខ្លូននិស្សិត</label>
                     <input type="file" id="studentIdCard" name="studentIdCard" accept="image/*,.pdf">
-                    <small class="file-help">រូបភាព ឬ PDF បណ្ណសម្គាល់ខ្លួនសិស្សរបស់អ្នក។ / Please upload a clear image or PDF of your student ID card (max 5MB).</small>
+                    <small class="file-help">រូបភាព ឬ PDF បណ្ណសម្គាល់ខ្លួននិស្សិតរបស់អ្នក។ / Please upload a clear image or PDF of your student ID card (max 5MB).</small>
                     <div id="fileError" class="file-error"></div>
                     <div id="fileInfo" class="file-info">
                         <div class="file-info-text">
@@ -1436,9 +1456,12 @@
                 formStatus.className = 'form-status';
 
                 const payload = {
-                    type: document.getElementById('type').value,
                     name: document.getElementById('name').value,
                     gender: form.querySelector('input[name="gender"]:checked')?.value || '',
+                    nationality: document.getElementById('nationality').value,
+                    educationLevel: document.getElementById('educationLevel').value,
+                    studyYear: document.getElementById('studyYear').value,
+                    major: document.getElementById('major').value,
                     organization: document.getElementById('organization').value,
                     phone: document.getElementById('phone').value,
                     email: document.getElementById('email').value
