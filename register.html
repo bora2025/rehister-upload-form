@@ -1156,8 +1156,8 @@
                 <hr class="form-divider">
 
                 <div class="form-group">
-                    <label for="name">ឈ្មោះពេញជាអក្សរឡាតាំង <span class="required">*</span></label>
-                    <input type="text" id="name" name="name" placeholder="បញ្ចូលឈ្មោះពេញជាអក្សរឡាតាំង / Enter your full name in Latin" autocomplete="name" required>
+                    <label for="nameLatin">ឈ្មោះពេញជាអក្សរឡាតាំង <span class="required">*</span></label>
+                    <input type="text" id="nameLatin" name="nameLatin" placeholder="បញ្ចូលឈ្មោះពេញជាអក្សរឡាតាំង / Enter your full name in Latin" autocomplete="name" required>
                 </div>
 
 
@@ -1457,6 +1457,7 @@
 
                 const payload = {
                     name: document.getElementById('name').value,
+                    nameLatin: document.getElementById('nameLatin').value,
                     gender: form.querySelector('input[name="gender"]:checked')?.value || '',
                     nationality: document.getElementById('nationality').value,
                     educationLevel: document.getElementById('educationLevel').value,

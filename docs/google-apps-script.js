@@ -17,6 +17,7 @@ const CONFIG = {
 const REGISTRATION_HEADERS = [
   'Timestamp',
   'Name',
+  'Name (Latin)',
   'Gender',
   'Nationality',
   'Education Level',
@@ -189,6 +190,7 @@ function doPost(e) {
     sheet.appendRow([
       new Date(),
       sanitizeInput(data.name) || '',
+      sanitizeInput(data.nameLatin) || '',
       sanitizeInput(data.gender) || '',
       sanitizeInput(data.nationality) || '',
       sanitizeInput(data.educationLevel) || '',
@@ -279,6 +281,11 @@ function ensureRegistrationHeaders(sheet) {
     Logger.log('Inserted columns for Nationality, Education Level, Study Year, and Major');
   }
 
+  if (currentHeaders[2] !== 'Name (Latin)') {
+    sheet.insertColumnAfter(2);
+    Logger.log('Inserted column for Name (Latin)');
+  }
+
   sheet.getRange(1, 1, 1, REGISTRATION_HEADERS.length).setValues([REGISTRATION_HEADERS]);
   sheet.setFrozenRows(1);
 }
@@ -303,6 +310,7 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
   
   var safeData = {
     name: sanitizeInput(data.name),
+    nameLatin: sanitizeInput(data.nameLatin),
     gender: sanitizeInput(data.gender),
     nationality: sanitizeInput(data.nationality),
     educationLevel: sanitizeInput(data.educationLevel),
@@ -319,6 +327,7 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
                 "<p>Here's a copy of your submission:<br>" +
                 "---------------------------------<br>" +
                 "Name: " + safeData.name + "<br>" +
+                "Name (Latin): " + safeData.nameLatin + "<br>" +
                 "Gender: " + safeData.gender + "<br>" +
                 "Nationality: " + safeData.nationality + "<br>" +
                 "Education Level: " + safeData.educationLevel + "<br>" +
@@ -372,6 +381,7 @@ function doGet(e) {
 function testEmail() {
   var testData = {
     name: 'Test User',
+    nameLatin: 'Test User',
     gender: 'male',
     nationality: 'Cambodian',
     educationLevel: 'បរិញ្ញាបត្រ',
