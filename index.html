@@ -1107,6 +1107,29 @@
 
         .hero-cta:hover { background: #d96a11; transform: translateY(-2px); }
 
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-cta.telegram-cta {
+            gap: 0.5rem;
+            background: #229ed9;
+            box-shadow: 0 10px 26px rgba(34, 158, 217, 0.32);
+        }
+
+        .hero-cta.telegram-cta:hover { background: #168ac2; }
+
+        .telegram-cta svg {
+            width: 19px;
+            height: 19px;
+            flex: 0 0 auto;
+            fill: currentColor;
+        }
+
         .hero .slider-controls {
             position: absolute;
             z-index: 5;
@@ -1146,10 +1169,16 @@
                 line-height: 1.65;
             }
             .hero-cta { min-height: 44px; padding: 0.6rem 1.1rem; font-size: 0.92rem; }
+            .hero-actions { gap: 0.6rem; }
             .hero .slider-controls { bottom: 0.9rem; gap: 0.65rem; }
             .hero .slider-btn { width: 40px; height: 40px; border-width: 1px; }
             .hero .slider-dots { gap: 0.45rem; }
             .hero .dot { width: 9px; height: 9px; border: 1px solid rgba(255,255,255,0.65); }
+        }
+
+        @media (max-width: 430px) {
+            .hero-actions { width: 100%; flex-direction: column; }
+            .hero-actions .hero-cta { width: min(100%, 290px); }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1343,35 +1372,53 @@
                     <div class="slide-caption">
                         <h2>សេចក្តីជូនដំណឹង</h2>
                         <p>អានសេចក្តីជូនដំណឹងផ្លូវការ និងព័ត៌មានលម្អិតអំពីការប្រឡងស្នាដៃអត្ថបទស្រាវជ្រាវ។</p>
-                        <a class="hero-cta" href="#announcement">មើលសេចក្តីជូនដំណឹង</a>
+                        <div class="hero-actions">
+                            <a class="hero-cta" href="#announcement">មើលសេចក្តីជូនដំណឹង</a>
+                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer" aria-label="ចូលរួមឆានែល Telegram សម្រាប់ព័ត៌មានបន្ថែម">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg>
+                                <span>ចូលរួម Telegram</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="slide">
                     <div class="slide-caption">
                         <h2>ចុះឈ្មោះចូលរួម</h2>
                         <p>បំពេញព័ត៌មានរបស់អ្នក ដើម្បីចូលរួមប្រឡងស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើមប្រចាំឆ្នាំ២០២៦។</p>
-                        <a class="hero-cta" href="register.html">ចុះឈ្មោះឥឡូវនេះ</a>
+                        <div class="hero-actions">
+                            <a class="hero-cta" href="register.html">ចុះឈ្មោះឥឡូវនេះ</a>
+                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg><span>ចូលរួម Telegram</span></a>
+                        </div>
                     </div>
                 </div>
                 <div class="slide">
                     <div class="slide-caption">
                         <h2>អំពីការប្រឡងស្រាវជ្រាវ</h2>
                         <p>ចលនានេះលើកទឹកចិត្តដល់និស្សិត បញ្ញវន្ត និងសាធារណជន ឱ្យបង្កើតស្នាដៃស្រាវជ្រាវដែលមានគុណភាព និងគំនិតច្នៃប្រឌិតសម្រាប់វិស័យទេសចរណ៍។</p>
-                        <a class="hero-cta" href="#about">ស្វែងយល់បន្ថែម</a>
+                        <div class="hero-actions">
+                            <a class="hero-cta" href="#about">ស្វែងយល់បន្ថែម</a>
+                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg><span>ចូលរួម Telegram</span></a>
+                        </div>
                     </div>
                 </div>
                 <div class="slide">
                     <div class="slide-caption">
                         <h2>បញ្ជូនស្នាដៃស្រាវជ្រាវ</h2>
                         <p>បញ្ជូនឯកសារស្នាដៃអត្ថបទស្រាវជ្រាវរបស់អ្នកតាមប្រព័ន្ធអនឡាញ។</p>
-                        <a class="hero-cta" href="upload.html">បញ្ជូនឯកសារ</a>
+                        <div class="hero-actions">
+                            <a class="hero-cta" href="upload.html">បញ្ជូនឯកសារ</a>
+                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg><span>ចូលរួម Telegram</span></a>
+                        </div>
                     </div>
                 </div>
                 <div class="slide">
                     <div class="slide-caption">
                         <h2>បណ្ណាល័យឯកសារទេសចរណ៍</h2>
                         <p>ស្វែងរក និងអានឯកសារពាក់ព័ន្ធទៅនឹងវិស័យទេសចរណ៍</p>
-                        <a class="hero-cta" href="library.html">ចូលបណ្ណាល័យ</a>
+                        <div class="hero-actions">
+                            <a class="hero-cta" href="library.html">ចូលបណ្ណាល័យ</a>
+                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg><span>ចូលរួម Telegram</span></a>
+                        </div>
                     </div>
                 </div>
                 </div>
