@@ -138,73 +138,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Slider functionality
-    const slider = document.querySelector('.slider');
-    const slides = document.querySelectorAll('.slide');
-    const prevBtn = document.querySelector('.slider-btn.prev');
-    const nextBtn = document.querySelector('.slider-btn.next');
-    const dots = document.querySelectorAll('.dot');
-    let currentSlide = 0;
-    let slideInterval;
-
-    function showSlide(index) {
-        // Remove active class from all slides and dots
-        slides.forEach(slide => slide.classList.remove('active'));
-        dots.forEach(dot => dot.classList.remove('active'));
-
-        // Add active class to current slide and dot
-        slides[index].classList.add('active');
-        dots[index].classList.add('active');
-
-        currentSlide = index;
-    }
-
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    function prevSlide() {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    function startAutoSlide() {
-        slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
-    }
-
-    function stopAutoSlide() {
-        clearInterval(slideInterval);
-    }
-
-    // Event listeners for slider controls
-    if (prevBtn && nextBtn && dots.length > 0) {
-        prevBtn.addEventListener('click', () => {
-            prevSlide();
-            stopAutoSlide();
-            startAutoSlide(); // Restart auto-slide after manual interaction
-        });
-
-        nextBtn.addEventListener('click', () => {
-            nextSlide();
-            stopAutoSlide();
-            startAutoSlide();
-        });
-
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                showSlide(index);
-                stopAutoSlide();
-                startAutoSlide();
-            });
-        });
-
-        // Pause auto-slide on hover
-        slider.addEventListener('mouseenter', stopAutoSlide);
-        slider.addEventListener('mouseleave', startAutoSlide);
-
-        // Start auto-slide initially
-        startAutoSlide();
+    // Countdown uses an explicit UTC+7 deadline, so every visitor sees Cambodia time.
+    const countdown = document.getElementById('deadlineCountdown');
+    if (countdown) {
+        const deadline = new Date(countdown.dataset.deadline).getTime();
+        const fields = Object.fromEntries(
+            [...countdown.querySelectorAll('[data-countdown]')].map((field) => [field.dataset.countdown, field])
+        );
+        const updateCountdown = () => {
+            const remaining = deadline - Date.now();
+            if (remaining <= 0) {
+                countdown.innerHTML = '<span class="countdown-ended">ការចុះឈ្មោះបានបិទហើយ</span>';
+                return false;
+            }
+            fields.days.textContent = Math.floor(remaining / 86400000).toLocaleString('km-KH');
+            fields.hours.textContent = Math.floor((remaining % 86400000) / 3600000).toLocaleString('km-KH', { minimumIntegerDigits: 2, useGrouping: false });
+            fields.minutes.textContent = Math.floor((remaining % 3600000) / 60000).toLocaleString('km-KH', { minimumIntegerDigits: 2, useGrouping: false });
+            fields.seconds.textContent = Math.floor((remaining % 60000) / 1000).toLocaleString('km-KH', { minimumIntegerDigits: 2, useGrouping: false });
+            return true;
+        };
+        updateCountdown();
+        const countdownTimer = window.setInterval(() => {
+            if (!updateCountdown()) window.clearInterval(countdownTimer);
+        }, 1000);
     }
 
     // Button click handler

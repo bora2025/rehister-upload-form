@@ -1232,6 +1232,157 @@
             .hero-banner-image, .hero .slide.active .slide-caption > * { animation: none; }
         }
 
+        /* Home header: compact, touch-friendly mobile layout */
+        @media (max-width: 768px) {
+            header {
+                gap: .65rem;
+                padding: .7rem;
+                border: 1px solid rgba(255,255,255,.12);
+                border-top: 0;
+                border-radius: 0 0 16px 16px;
+                box-shadow: 0 8px 24px rgba(0,43,88,.22);
+            }
+            .brand { flex: 1 1 0; }
+            .brand > a { width: min(100%,220px); }
+            .header-divider { display: none; }
+            .register .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 44px;
+                padding: .55rem 1rem;
+                border: 1px solid rgba(255,255,255,.2);
+                border-radius: 12px;
+                font-size: .9rem;
+                white-space: nowrap;
+            }
+            nav {
+                padding-top: .65rem;
+                margin-top: .1rem;
+            }
+            nav ul {
+                display: grid;
+                grid-template-columns: repeat(2,minmax(0,1fr));
+                gap: .45rem;
+            }
+            nav li { display: flex; min-width: 0; }
+            nav a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                min-height: 48px;
+                padding: .45rem .55rem;
+                border: 1px solid rgba(255,255,255,.1);
+                border-radius: 10px;
+                background: rgba(255,255,255,.06);
+                font-size: clamp(.78rem,2.7vw,.9rem);
+                line-height: 1.45;
+                text-align: center;
+                text-wrap: balance;
+                transition: background .2s ease,border-color .2s ease;
+            }
+            nav a:active,
+            nav a:focus-visible {
+                background: rgba(255,255,255,.14);
+                border-color: rgba(255,255,255,.3);
+                outline: none;
+            }
+        }
+        @media (max-width: 480px) {
+            .brand > a { width: min(100%,175px); }
+            .register .btn { min-height: 42px; padding: .48rem .8rem; font-size: .82rem; }
+            nav ul { gap: .38rem; }
+            nav a { min-height: 46px; padding: .4rem; font-size: clamp(.72rem,3.25vw,.82rem); }
+        }
+        @media (max-width: 350px) {
+            header { padding: .55rem; }
+            .brand > a { width: min(100%,145px); }
+            .register .btn { padding-inline: .65rem; font-size: .76rem; }
+            nav a { font-size: .7rem; }
+        }
+
+        /* 2026 contest campaign hero */
+        .campaign-hero { position: relative; isolation: isolate; min-height: clamp(660px, 82vh, 820px); overflow: hidden; background: #042d58; color: #fff; }
+        .campaign-hero .hero-banner-picture { z-index: 0; }
+        .campaign-hero::after { content: ""; position: absolute; z-index: 1; inset: 0; background: radial-gradient(circle at 50% 22%, rgba(255,176,74,.2), transparent 32%), linear-gradient(180deg, rgba(3,24,48,.2), rgba(2,22,44,.94)); pointer-events: none; }
+        .campaign-content { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0,1.25fr) minmax(320px,.75fr); align-items: center; gap: clamp(2rem,5vw,5rem); width: min(1180px,calc(100% - 3rem)); min-height: inherit; margin: auto; padding: 3rem 0; }
+        .campaign-copy { animation: captionRise .75s cubic-bezier(.22,1,.36,1) both; }
+        .campaign-title { margin: 0; color: #fff; -webkit-text-fill-color: #fff; background: none; font-size: clamp(2rem,4vw,4rem); font-weight: 900; line-height: 1.35; letter-spacing: 0; text-wrap: balance; text-shadow: 0 3px 4px rgba(0,0,0,.9), 0 8px 28px rgba(0,0,0,.7); animation: none; }
+        .campaign-summary { max-width: 720px; margin: 1rem 0 1.4rem; color: #e7f1fb; font-size: clamp(1rem,1.5vw,1.2rem); line-height: 1.75; }
+        .campaign-deadline { display: inline-flex; align-items: center; gap: .6rem; margin-bottom: 1.35rem; padding: .65rem 1rem; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; background: rgba(0,25,53,.55); font-weight: 700; backdrop-filter: blur(8px); }
+        .campaign-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+        .campaign-secondary { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.38); box-shadow: none; }
+        .campaign-panel { padding: clamp(1.2rem,2.5vw,2rem); border: 1px solid rgba(255,255,255,.22); border-radius: 28px; background: rgba(3,28,57,.72); box-shadow: 0 24px 70px rgba(0,0,0,.3); backdrop-filter: blur(14px); animation: captionRise .75s .12s cubic-bezier(.22,1,.36,1) both; }
+        .campaign-panel h2 { margin: 0 0 1rem; color: #ffc66d; text-align: center; font-size: clamp(1.2rem,2vw,1.55rem); }
+        .prize-list { display: grid; gap: .75rem; }
+        .prize-card { display: grid; grid-template-columns: 50px 1fr; align-items: center; gap: .8rem; padding: .85rem 1rem; border-radius: 16px; background: rgba(255,255,255,.09); }
+        .prize-card:first-child { background: linear-gradient(135deg,rgba(238,125,32,.32),rgba(255,198,109,.12)); border: 1px solid rgba(255,198,109,.48); }
+        .prize-rank { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: #ee7d20; font-weight: 900; font-size: 1.15rem; }
+        .prize-label { display: block; color: #c8d8e9; font-size: .86rem; }
+        .prize-amount { display: block; margin-top: .1rem; font-size: clamp(1.05rem,2vw,1.35rem); font-weight: 900; }
+        .countdown-title { margin: 1.25rem 0 .65rem; text-align: center; color: #dceafa; font-size: .9rem; }
+        .countdown { display: grid; grid-template-columns: repeat(4,1fr); gap: .45rem; }
+        .countdown-unit { padding: .65rem .3rem; border-radius: 12px; background: rgba(0,0,0,.2); text-align: center; }
+        .countdown-value { display: block; color: #fff; font: 800 clamp(1.25rem,3vw,1.7rem)/1 system-ui,sans-serif; }
+        .countdown-label { display: block; margin-top: .35rem; color: #abc0d6; font-size: .72rem; }
+        .countdown-ended { grid-column: 1/-1; padding: 1rem; color: #ffc66d; font-weight: 800; text-align: center; }
+        @media (min-width:769px) { .campaign-hero { width: 100%; border-radius: 0; } }
+        @media (max-width:768px) {
+            .hero { margin-inline: 0; }
+            .campaign-hero { min-height: 0; border-radius: 18px; }
+            .campaign-hero .hero-banner-image { object-position: center top; filter: saturate(.8) contrast(1.04); }
+            .campaign-hero::after { background: linear-gradient(180deg,rgba(2,20,40,.58),rgba(2,22,44,.86)); }
+            .campaign-content { grid-template-columns: minmax(0,1fr); width: min(100% - 1.5rem,600px); gap: 1.35rem; padding: 2rem 0 1.5rem; text-align: center; }
+            .campaign-copy { padding: .75rem .45rem; border: 0; border-radius: 0; background: transparent; box-shadow: none; backdrop-filter: none; }
+            .campaign-title { max-width: 590px; margin-inline: auto; font-size: clamp(1.65rem,6.5vw,2.35rem); line-height: 1.48; }
+            .campaign-summary { margin: .75rem auto 1rem; font-size: .94rem; line-height: 1.7; }
+            .campaign-deadline { max-width: 100%; justify-content: center; margin-bottom: 1rem; padding: .6rem .8rem; border-radius: 14px; font-size: .86rem; line-height: 1.55; }
+            .campaign-actions { justify-content: center; }
+            .campaign-actions .hero-cta { min-height: 48px; }
+            .campaign-panel { padding: 1rem; border-radius: 20px; text-align: left; backdrop-filter: blur(10px); }
+            .campaign-panel h2 { margin-bottom: .8rem; }
+            .prize-list { gap: .6rem; }
+            .prize-card { grid-template-columns: 44px minmax(0,1fr); gap: .7rem; padding: .72rem .8rem; border-radius: 14px; }
+            .prize-rank { width: 42px; height: 42px; }
+            .prize-amount { font-size: clamp(1rem,4.7vw,1.25rem); overflow-wrap: anywhere; }
+            .countdown-title { margin-top: 1rem; }
+            .countdown-unit { min-width: 0; padding: .62rem .2rem; }
+        }
+        @media (max-width:480px) {
+            main { padding-inline: .35rem; }
+            .campaign-content { width: calc(100% - 1rem); }
+            .campaign-actions { width: 100%; flex-direction: column; align-items: stretch; gap: .6rem; }
+            .campaign-actions .hero-cta { width: 100%; }
+            .campaign-title { font-size: clamp(1.5rem,7vw,1.85rem); }
+            .campaign-panel { box-shadow: 0 16px 38px rgba(0,0,0,.26); }
+            .countdown { gap: .3rem; }
+            .countdown-value { font-size: clamp(1.05rem,6vw,1.45rem); }
+            .countdown-label { font-size: .66rem; }
+        }
+        @media (max-width:360px) {
+            .campaign-content { padding-top: 1.5rem; }
+            .campaign-title { font-size: 1.42rem; }
+            .campaign-summary { font-size: .86rem; }
+            .campaign-deadline { font-size: .78rem; }
+            .prize-card { grid-template-columns: 38px minmax(0,1fr); padding: .65rem; }
+            .prize-rank { width: 36px; height: 36px; font-size: 1rem; }
+            .prize-label { font-size: .76rem; }
+            .prize-amount { font-size: .94rem; }
+        }
+        @media (max-height:540px) and (orientation:landscape) {
+            .campaign-content { grid-template-columns: minmax(0,1.15fr) minmax(270px,.85fr); width: calc(100% - 2rem); padding: 1rem 0; gap: 1rem; text-align: left; }
+            .campaign-title { font-size: 1.5rem; }
+            .campaign-summary { margin: .45rem 0 .65rem; font-size: .82rem; }
+            .campaign-deadline { margin-bottom: .65rem; }
+            .campaign-actions { justify-content: flex-start; flex-direction: row; }
+            .campaign-actions .hero-cta { width: auto; }
+            .campaign-panel { padding: .75rem; }
+            .prize-card { padding: .5rem .65rem; }
+            .countdown-title { margin: .65rem 0 .4rem; }
+        }
+        @media (prefers-reduced-motion:reduce) { .campaign-copy,.campaign-panel { animation: none; } }
+
         /* Responsive site footer */
         footer.site-footer {
             position: relative;
@@ -1408,81 +1559,37 @@
     </header>
 
     <main>
-        <section class="hero" aria-label="Hero banner">
-            <div class="slider">
+        <section class="hero" aria-label="ចលនាប្រឡងប្រណាំងស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើម">
+            <div class="campaign-hero">
                 <picture class="hero-banner-picture" aria-hidden="true">
                     <source media="(min-width: 769px)" srcset="assets/img/phnom%20penh%20silhouette.png">
-                    <img class="hero-banner-image" src="assets/img/vibrant-illustr-mobile.png" alt="">
+                    <img class="hero-banner-image" src="assets/img/phnom%20penh%20silhouette2.jpg" alt="">
                 </picture>
-                <p class="hero-announcement" role="status">
-                    <span class="hero-announcement-icon" aria-hidden="true">!</span>
-                    <span>ការប្រឡងស្នាដៃអត្ថបទស្រាវជ្រាវបន្តទទួលចុះឈ្មោះរហូតដល់ថ្ងៃទី៣០ ខែកញ្ញា ឆ្នាំ២០២៦</span>
-                </p>
-                <div class="hero-slides">
-                <div class="slide active">
-                    <div class="slide-caption">
-                        <h2>សេចក្តីជូនដំណឹង</h2>
-                        <p>អានសេចក្តីជូនដំណឹងផ្លូវការ និងព័ត៌មានលម្អិតអំពីការប្រឡងស្នាដៃអត្ថបទស្រាវជ្រាវ។</p>
-                        <div class="hero-actions">
-                            <a class="hero-cta" href="#announcement">មើលសេចក្តីជូនដំណឹង</a>
-                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer" aria-label="ចូលរួមឆានែល Telegram សម្រាប់ព័ត៌មានបន្ថែម">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg>
-                                <span>ចូលរួម Telegram</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="slide-caption">
-                        <h2>ចុះឈ្មោះចូលរួម</h2>
-                        <p>បំពេញព័ត៌មានរបស់អ្នក ដើម្បីចូលរួមប្រឡងស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើមប្រចាំឆ្នាំ២០២៦។</p>
-                        <div class="hero-actions">
+                <div class="campaign-content">
+                    <div class="campaign-copy">
+                        <h1 class="campaign-title">ចលនាប្រឡងប្រណាំងស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើមក្នុងវិស័យទេសចរណ៍ប្រចាំឆ្នាំ២០២៦</h1>
+                        <p class="campaign-summary">បង្ហាញគំនិតច្នៃប្រឌិត និងការស្រាវជ្រាវរបស់អ្នក ដើម្បីរួមចំណែកអភិវឌ្ឍវិស័យទេសចរណ៍កម្ពុជា។</p>
+                        <div class="campaign-deadline"><span aria-hidden="true">📅</span><span>ផុតកំណត់៖ ៣០ កញ្ញា ២០២៦ • ម៉ោងនៅកម្ពុជា</span></div>
+                        <div class="campaign-actions">
                             <a class="hero-cta" href="register.html">ចុះឈ្មោះឥឡូវនេះ</a>
-                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg><span>ចូលរួម Telegram</span></a>
+                            <a class="hero-cta campaign-secondary" href="#announcement">មើលសេចក្តីជូនដំណឹង</a>
                         </div>
                     </div>
-                </div>
-                <div class="slide">
-                    <div class="slide-caption">
-                        <h2>អំពីការប្រឡងស្រាវជ្រាវ</h2>
-                        <p>ចលនានេះលើកទឹកចិត្តដល់និស្សិត បញ្ញវន្ត និងសាធារណជន ឱ្យបង្កើតស្នាដៃស្រាវជ្រាវដែលមានគុណភាព និងគំនិតច្នៃប្រឌិតសម្រាប់វិស័យទេសចរណ៍។</p>
-                        <div class="hero-actions">
-                            <a class="hero-cta" href="#about">ស្វែងយល់បន្ថែម</a>
-                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg><span>ចូលរួម Telegram</span></a>
+                    <aside class="campaign-panel" aria-label="រង្វាន់ និងពេលវេលានៅសល់">
+                        <h2>រង្វាន់ជ័យលាភី</h2>
+                        <div class="prize-list">
+                            <div class="prize-card"><span class="prize-rank">១</span><span><small class="prize-label">ជ័យលាភីលេខ ១</small><strong class="prize-amount">៤,០០០,០០០ រៀល</strong></span></div>
+                            <div class="prize-card"><span class="prize-rank">២</span><span><small class="prize-label">ជ័យលាភីលេខ ២</small><strong class="prize-amount">៣,០០០,០០០ រៀល</strong></span></div>
+                            <div class="prize-card"><span class="prize-rank">៣</span><span><small class="prize-label">ជ័យលាភីលេខ ៣</small><strong class="prize-amount">២,០០០,០០០ រៀល</strong></span></div>
                         </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="slide-caption">
-                        <h2>បញ្ជូនស្នាដៃស្រាវជ្រាវ</h2>
-                        <p>បញ្ជូនឯកសារស្នាដៃអត្ថបទស្រាវជ្រាវរបស់អ្នកតាមប្រព័ន្ធអនឡាញ។</p>
-                        <div class="hero-actions">
-                            <a class="hero-cta" href="upload.html">បញ្ជូនឯកសារ</a>
-                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg><span>ចូលរួម Telegram</span></a>
+                        <p class="countdown-title">ពេលវេលានៅសល់រហូតដល់ថ្ងៃផុតកំណត់</p>
+                        <div class="countdown" id="deadlineCountdown" data-deadline="2026-09-30T23:59:59+07:00" aria-live="polite">
+                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="days">--</strong><small class="countdown-label">ថ្ងៃ</small></span>
+                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="hours">--</strong><small class="countdown-label">ម៉ោង</small></span>
+                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="minutes">--</strong><small class="countdown-label">នាទី</small></span>
+                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="seconds">--</strong><small class="countdown-label">វិនាទី</small></span>
                         </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="slide-caption">
-                        <h2>បណ្ណាល័យឯកសារទេសចរណ៍</h2>
-                        <p>ស្វែងរក និងអានឯកសារពាក់ព័ន្ធទៅនឹងវិស័យទេសចរណ៍</p>
-                        <div class="hero-actions">
-                            <a class="hero-cta" href="library.html">ចូលបណ្ណាល័យ</a>
-                            <a class="hero-cta telegram-cta" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1.2 1.2 0 0 0-1.23-.2L2.9 8.87c-1.2.47-1.18 1.14-.22 1.43l4.5 1.4 1.72 5.3c.22.62.11.87.76.87.5 0 .72-.23 1-.5l2.16-2.1 4.5 3.33c.83.46 1.43.22 1.64-.77l2.97-14c.3-1.2-.46-1.74-.23-1.53ZM8 11.38l10.32-6.5c.52-.31 1-.14.61.2l-8.52 7.7-.33 3.55L8 11.38Z"/></svg><span>ចូលរួម Telegram</span></a>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                <div class="slider-controls" aria-label="ការគ្រប់គ្រងស្លាយ">
-                    <button class="slider-btn prev" type="button" aria-label="ស្លាយមុន">&#8592;</button>
-                    <div class="slider-dots">
-                        <button class="dot active" type="button" data-slide="0" aria-label="ស្លាយទី១"></button>
-                        <button class="dot" type="button" data-slide="1" aria-label="ស្លាយទី២"></button>
-                        <button class="dot" type="button" data-slide="2" aria-label="ស្លាយទី៣"></button>
-                        <button class="dot" type="button" data-slide="3" aria-label="ស្លាយទី៤"></button>
-                        <button class="dot" type="button" data-slide="4" aria-label="ស្លាយទី៥"></button>
-                    </div>
-                    <button class="slider-btn next" type="button" aria-label="ស្លាយបន្ទាប់">&#8594;</button>
+                    </aside>
                 </div>
             </div>
         </section>
