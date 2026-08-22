@@ -464,8 +464,7 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
     teamDetails = "Registration Type: Individual<br>";
   }
 
-  var htmlMessage = "<p>Hello " + safeData.name + "</p>" +
-                "<p style='color:green; font-weight:bold;'>✅ ការចុះឈ្មោះជោគជ័យ - Successful Registration!</p>" +
+  var htmlMessageBody = "<p style='color:green; font-weight:bold;'>✅ ការចុះឈ្មោះជោគជ័យ - Successful Registration!</p>" +
                 "<p>Thank you for registering for the Competition Research. Your data has been received and recorded successfully.</p>" +
                 "<p>Here's a copy of your submission:<br>" +
                 "---------------------------------<br>" +
@@ -484,7 +483,7 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
                 fileLine +
                 "<p>More Information:<br>" +
                 "🔹 <img src='https://cdn-icons-png.flaticon.com/512/2111/2111646.png' width='12' height='12'> " +
-                "<a href='https://t.me/motresearchcompetiton'>Telegram Channel</a><br>" +
+                "<a href='https://t.me/+O8E1NI5QxwJlMjQ1'>Telegram Channel</a><br>" +
                 "🔹 <img src='https://cdn-icons-png.flaticon.com/512/733/733547.png' width='12' height='12'> " +
                 "<a href='https://www.facebook.com/share/1Bh4GkZFYR/'>Facebook Page</a><br>" +
                 "🔹 <img src='https://cdn-icons-png.flaticon.com/512/724/724664.png' width='12' height='12'> " +
@@ -494,17 +493,23 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
                 "<p>We appreciate your interest in the Competition Research and will respond within 24-48 hours.</p>" +
                 "<p>Regards,<br>Ministry Of Tourism<br>Admin Team</p>";
   
-  var mailOptions = {
-    to: data.email,
-    subject: subject,
-    htmlBody: htmlMessage
-  };
+  var recipients = [{ email: safeData.email, name: safeData.name }];
   if (safeData.registrationType === 'team') {
-    var additionalRecipients = [safeData.teamMember2Email];
-    if (safeData.teamSize === '3') additionalRecipients.push(safeData.teamMember3Email);
-    mailOptions.bcc = additionalRecipients.filter(Boolean).join(',');
+    recipients.push({ email: safeData.teamMember2Email, name: safeData.teamMember2Name });
+    if (safeData.teamSize === '3') {
+      recipients.push({ email: safeData.teamMember3Email, name: safeData.teamMember3Name });
+    }
   }
-  MailApp.sendEmail(mailOptions);
+
+  recipients.forEach(function(recipient) {
+    if (!recipient.email) return;
+    MailApp.sendEmail({
+      to: recipient.email,
+      subject: subject,
+      htmlBody: "<p>Hello " + recipient.name + "</p>" + htmlMessageBody
+    });
+    Logger.log('Registration confirmation sent directly to: ' + recipient.email);
+  });
 }
 
 // Handle GET requests - returns API status and quota info

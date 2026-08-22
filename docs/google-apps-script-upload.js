@@ -404,7 +404,7 @@ function sendUploadConfirmationEmail(data) {
                 "<h3 style='color: #004282;'>Stay Connected:</h3>" +
                 "<p style='line-height: 1.8;'>" +
                 "🔹 <img src='https://cdn-icons-png.flaticon.com/512/2111/2111646.png' width='16' height='16' style='vertical-align: middle;'> " +
-                "<a href='https://t.me/motresearchcompetiton' style='color: #004282; text-decoration: none;'>Telegram Channel</a><br>" +
+                "<a href='https://t.me/+O8E1NI5QxwJlMjQ1' style='color: #004282; text-decoration: none;'>Telegram Channel</a><br>" +
                 "🔹 <img src='https://cdn-icons-png.flaticon.com/512/733/733547.png' width='16' height='16' style='vertical-align: middle;'> " +
                 "<a href='https://www.facebook.com/share/1Bh4GkZFYR/' style='color: #004282; text-decoration: none;'>Facebook Page</a><br>" +
                 "🔹 <img src='https://cdn-icons-png.flaticon.com/512/724/724664.png' width='16' height='16' style='vertical-align: middle;'> " +
