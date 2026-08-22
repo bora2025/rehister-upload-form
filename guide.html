@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="km">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +7,8 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
-    <meta name="description" content="How to Use - Ministry of Tourism">
-    <title>How to Use - Ministry of Tourism</title>
+    <meta name="description" content="សៀវភៅណែនាំប្រើប្រាស់គេហទំព័រ និងបណ្ណាល័យឯកសារទេសចរណ៍លើទូរស័ព្ទ">
+    <title>សៀវភៅណែនាំប្រើប្រាស់គេហទំព័រ</title>
     <link rel="icon" type="image/png" sizes="64x64" href="assets/img/favicon.png">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -390,13 +390,80 @@
             }
         }
 
+        /* Mobile-first guidebook refinements */
+        body { font-family: 'Khmer','Inter',sans-serif; }
+        header { padding: 1.5rem 1rem 2rem; background: linear-gradient(145deg,#004282,#002c5f); }
+        .guide-home { position: absolute; z-index: 3; top: 1rem; left: 1rem; display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgba(255,255,255,.25); border-radius: 13px; background: rgba(255,255,255,.12); color: #fff; text-decoration: none; backdrop-filter: blur(8px); }
+        header img { width: min(280px,70vw); height: auto; margin-bottom: .75rem; }
+        header h1 { font-family: 'Khmer','Inter',sans-serif; font-size: clamp(1.45rem,5vw,2.15rem); line-height: 1.45; }
+        main { max-width: 980px; }
+        .guide-nav { position: sticky; z-index: 10; top: .5rem; display: grid; grid-template-columns: repeat(4,1fr); gap: .5rem; margin-bottom: 1.5rem; padding: .55rem; border: 1px solid #dce6ef; border-radius: 16px; background: rgba(255,255,255,.94); box-shadow: 0 8px 24px rgba(0,43,88,.1); backdrop-filter: blur(12px); }
+        .guide-nav a { display: flex; align-items: center; justify-content: center; gap: .45rem; min-height: 46px; padding: .45rem; border-radius: 11px; background: #eef5fb; color: #004282; font-size: .82rem; font-weight: 700; text-align: center; text-decoration: none; }
+        .guide-nav a:hover { background: #dcecf8; }
+        .section { scroll-margin-top: 82px; border: 1px solid #e0e8ef; border-left: 0; box-shadow: 0 8px 26px rgba(0,43,88,.07); }
+        .section:hover { transform: none; border-left-color: transparent; }
+        .section-header { gap: 1rem; }
+        .section h2 { font-family: 'Khmer','Inter',sans-serif; line-height: 1.45; }
+        .section h2 small { color: #718096; font: 600 .65em/1.3 'Inter',sans-serif; }
+        .icon-container { margin-right: 0; background: linear-gradient(135deg,#004282,#1970b8); }
+        .section .guide-steps { margin: 0 0 1rem; padding: 0; list-style: none; counter-reset: guide-step; }
+        .section .guide-steps li { counter-increment: guide-step; min-height: 58px; margin: 0 0 .7rem; padding: .85rem .9rem .85rem 3.55rem; border: 1px solid #dce6ef; border-radius: 14px; background: #f7fafc; color: #2c465d; font-size: .94rem; line-height: 1.75; box-shadow: 0 3px 10px rgba(0,43,88,.035); }
+        .section .guide-steps li::before { content: counter(guide-step); position: absolute; left: .85rem; top: 50%; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #ee7d20; color: #fff; font: 800 .85rem/1 'Inter',sans-serif; box-shadow: 0 5px 12px rgba(238,125,32,.25); transform: translateY(-50%); }
+        .section .guide-steps strong { color: #004282; font-weight: 800; }
+        .highlight-box { border-left-color: #ee7d20; background: #fff8f1; }
+        .highlight-box p { margin: 0; padding: 0; }
+        .guide-action { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: .65rem 1rem; border-radius: 12px; background: #004282; color: #fff; font-weight: 700; text-decoration: none; }
+        .guide-download { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; margin-top: 1rem; padding: .55rem 1rem; border: 1px solid rgba(255,255,255,.35); border-radius: 12px; background: rgba(255,255,255,.14); color: #fff; font-weight: 700; text-decoration: none; }
+        .quick-start { margin-bottom: 1.5rem; padding: 1.25rem; border: 1px solid #b9d4e8; border-radius: 18px; background: linear-gradient(135deg,#eef7fd,#fff); box-shadow: 0 8px 24px rgba(0,66,130,.08); }
+        .quick-start h2 { margin: 0 0 .75rem; color: #004282; font-family: 'Khmer','Inter',sans-serif; font-size: 1.25rem; }
+        .site-address { display: flex; align-items: center; gap: .65rem; margin-bottom: 1rem; padding: .75rem .9rem; border-radius: 12px; background: #004282; color: #fff; font: 700 .9rem/1.5 'Inter',sans-serif; text-decoration: none; overflow-wrap: anywhere; }
+        .page-route-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .55rem; margin: 0; padding: 0; list-style: none; }
+        .page-route-list li { min-width: 0; }
+        .page-route-list a { display: block; height: 100%; padding: .65rem .75rem; border: 1px solid #dbe7f0; border-radius: 11px; background: #fff; color: #294a65; font-size: .8rem; line-height: 1.5; text-decoration: none; overflow-wrap: anywhere; }
+        .page-route-list strong { display: block; color: #00579f; }
+
+        @media (max-width: 600px) {
+            header { padding-top: 1rem; }
+            .guide-home { top: .65rem; left: .65rem; width: 42px; height: 42px; }
+            header img { width: min(210px,62vw); }
+            header h1 { margin-inline: 1.5rem; font-size: 1.38rem; }
+            .subtitle { font-size: .82rem; }
+            main { padding: .8rem .65rem 1.5rem; }
+            .guide-nav { top: .35rem; gap: .3rem; margin-bottom: .8rem; padding: .35rem; border-radius: 13px; }
+            .guide-nav a { flex-direction: column; gap: .15rem; min-height: 54px; padding: .3rem .15rem; font-size: .66rem; line-height: 1.3; }
+            .guide-nav i { font-size: .95rem; }
+            .section { padding: 1rem; margin-bottom: .8rem; border-radius: 16px; }
+            .section-header { flex-direction: row; align-items: center; margin-bottom: 1rem; }
+            .icon-container { width: 42px; height: 42px; margin: 0; }
+            .section h2 { font-size: 1.05rem; }
+            .section .guide-steps li { min-height: 60px; padding: .72rem .7rem .72rem 3.25rem; font-size: .86rem; line-height: 1.75; }
+            .section .guide-steps li::before { left: .7rem; width: 30px; height: 30px; }
+            .highlight-box { padding: .85rem; font-size: .84rem; }
+            .guide-action { width: 100%; }
+            .quick-start { margin-bottom: .8rem; padding: .9rem; border-radius: 15px; }
+            .quick-start h2 { font-size: 1.05rem; }
+            .site-address { font-size: .75rem; }
+            .page-route-list { grid-template-columns: 1fr; gap: .4rem; }
+            .contact-links { gap: .55rem; }
+            .contact-link { min-height: 46px; }
+            footer { margin-top: 1rem; padding: 1.5rem .75rem; font-size: .8rem; }
+        }
+
         /* Print styles */
         @media print {
+            @page { size: A4; margin: 12mm; }
+            body { display: block; background: #fff; color: #172b3c; }
+            header { padding: 12mm 8mm; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            main { max-width: none; padding: 8mm 0; }
+            .guide-home,.guide-nav,.guide-action,.guide-download { display: none; }
+            .quick-start,.section { break-inside: avoid; page-break-inside: avoid; box-shadow: none; opacity: 1 !important; transform: none !important; }
+            .section { padding: 7mm; margin-bottom: 7mm; }
+            .section .guide-steps li { break-inside: avoid; page-break-inside: avoid; }
             .section:hover {
                 transform: none;
                 box-shadow: none;
             }
-            
+
             .contact-link:hover {
                 transform: none;
             }
@@ -405,121 +472,104 @@
 </head>
 <body>
     <header>
+        <a class="guide-home" href="index.html" aria-label="ត្រឡប់ទៅទំព័រដើម"><i class="fas fa-arrow-left"></i></a>
         <div class="header-content">
-            <img src="assets/img/tourism-logo.png" alt="Ministry of Tourism Logo">
-            <h1>How to Use Our Website</h1>
-            <p class="subtitle">A comprehensive guide to navigate and utilize all features of our tourism research platform</p>
+            <img src="assets/img/tourism-logo.png" alt="ក្រសួងទេសចរណ៍">
+            <h1>សៀវភៅណែនាំប្រើប្រាស់គេហទំព័រ</h1>
+            <p class="subtitle">Mobile Website &amp; Library User Guide</p>
+            <a class="guide-download" href="docs/mobile-website-library-guide-2026.pdf" download><i class="fas fa-file-pdf"></i> ទាញយកសៀវភៅណែនាំ PDF</a>
         </div>
     </header>
 
     <main>
-        <section class="section" id="register">
-            <div class="section-header">
-                <div class="icon-container">
-                    <i class="fas fa-user-plus"></i>
-                </div>
-                <h2>Registering an Account</h2>
-            </div>
-            <p>To access full features of our website, you need to create an account. Follow these steps:</p>
-            <ol>
-                <li>Click on the "Register" button in the header.</li>
-                <li>Fill in your personal details including name, email, and password.</li>
-                <li>Agree to the terms and conditions.</li>
-                <li>Click "Submit" to create your account.</li>
-                <li>Check your email for a verification link and click it to activate your account.</li>
+        <section class="quick-start" aria-labelledby="quickStartTitle">
+            <h2 id="quickStartTitle">ចាប់ផ្តើមពីអាសយដ្ឋានគេហទំព័រ</h2>
+            <a class="site-address" href="https://tourism-research-policy.com/" target="_blank" rel="noopener noreferrer"><i class="fas fa-globe"></i> https://tourism-research-policy.com/</a>
+            <ul class="page-route-list">
+                <li><a href="https://tourism-research-policy.com/"><strong>ទំព័រដើម / Home</strong> tourism-research-policy.com/</a></li>
+                <li><a href="https://tourism-research-policy.com/register.html"><strong>ចុះឈ្មោះ / Register</strong> /register.html</a></li>
+                <li><a href="https://tourism-research-policy.com/upload.html"><strong>បញ្ជូនស្នាដៃ / Upload</strong> /upload.html</a></li>
+                <li><a href="https://tourism-research-policy.com/library.html"><strong>បណ្ណាល័យ / Library</strong> /library.html</a></li>
+            </ul>
+        </section>
+
+        <nav class="guide-nav" aria-label="មាតិកាសៀវភៅណែនាំ">
+            <a href="#home"><i class="fas fa-home"></i><span>ទំព័រដើម</span></a>
+            <a href="#register"><i class="fas fa-user-plus"></i><span>ចុះឈ្មោះ</span></a>
+            <a href="#upload"><i class="fas fa-cloud-upload-alt"></i><span>បញ្ជូនឯកសារ</span></a>
+            <a href="#library"><i class="fas fa-book-reader"></i><span>បណ្ណាល័យ</span></a>
+        </nav>
+
+        <section class="section" id="home">
+            <div class="section-header"><div class="icon-container"><i class="fas fa-mobile-alt"></i></div><h2>១. របៀបប្រើទំព័រដើម<br><small>Using the Home Page</small></h2></div>
+            <ol class="guide-steps">
+                <li><strong>បើកម៉ឺនុយ៖</strong> ចុចសញ្ញាបន្ទាត់បីនៅជ្រុងខាងស្តាំ ដើម្បីមើលតំណភ្ជាប់សំខាន់ៗ។</li>
+                <li><strong>ពិនិត្យកាលបរិច្ឆេទ៖</strong> មើលពេលវេលារាប់ថយក្រោយ និងថ្ងៃផុតកំណត់នៅលើផ្ទាំងកម្មវិធី។</li>
+                <li><strong>ចុះឈ្មោះ៖</strong> ចុចប៊ូតុងពណ៌ទឹកក្រូច «ចុះឈ្មោះឥឡូវនេះ»។</li>
+                <li><strong>ទទួលព័ត៌មាន៖</strong> ចុច «ចូលឆាណែលតេឡេក្រាមកម្មវិធី» ដើម្បីទទួលដំណឹងថ្មីៗ។</li>
+                <li><strong>អូសចុះក្រោម៖</strong> មើលរង្វាន់ សេចក្តីជូនដំណឹង និងព័ត៌មានលម្អិតរបស់កម្មវិធី។</li>
             </ol>
-            <p>Once registered, you can log in anytime using your email and password.</p>
-            <div class="highlight-box">
-                <p><strong>Tip:</strong> Use a strong password with a mix of letters, numbers, and symbols for better security.</p>
-            </div>
+        </section>
+
+        <section class="section" id="register">
+            <div class="section-header"><div class="icon-container"><i class="fas fa-user-plus"></i></div><h2>២. របៀបចុះឈ្មោះ<br><small>Registration Guide</small></h2></div>
+            <ol class="guide-steps">
+                <li>ជ្រើសរើសប្រភេទចុះឈ្មោះ <strong>បុគ្គល / Individual</strong> ឬ <strong>ក្រុម / Team</strong>។</li>
+                <li>បើជាក្រុម ជ្រើសរើសសមាជិកសរុប ២ ឬ ៣ នាក់។</li>
+                <li>បំពេញព័ត៌មានទាំងអស់របស់បេក្ខជនម្នាក់ៗ៖ ឈ្មោះខ្មែរ ឈ្មោះឡាតាំង ភេទ សញ្ជាតិ កម្រិតសិក្សា ឆ្នាំសិក្សា មុខជំនាញ ស្ថាប័ន ទូរស័ព្ទ និងអ៊ីមែល។</li>
+                <li>បញ្ចូលរូបភាព ឬ PDF កាតសម្គាល់និស្សិតរបស់សមាជិកម្នាក់ៗ។</li>
+                <li>ពិនិត្យព័ត៌មាន រួចចុចបញ្ជូន។ រក្សាទុកលេខចុះឈ្មោះដែលបង្ហាញក្រោយបញ្ជូនជោគជ័យ។</li>
+                <li>ពិនិត្យអ៊ីមែលបញ្ជាក់ និងចូលឆាណែល Telegram តាមប៊ូតុងនៅលើទំព័រជោគជ័យ។</li>
+            </ol>
+            <div class="highlight-box"><p><strong>ចំណាំ៖</strong> មិនចាំបាច់បង្កើតពាក្យសម្ងាត់ ឬចូលគណនីឡើយ។ ត្រូវប្រើអ៊ីមែលដែលអាចទទួលសារបាន។</p></div>
+            <a class="guide-action" href="register.html">បើកទម្រង់ចុះឈ្មោះ</a>
         </section>
 
         <section class="section" id="upload">
-            <div class="section-header">
-                <div class="icon-container">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                </div>
-                <h2>Uploading Documents</h2>
-            </div>
-            <p>Our platform allows you to upload research documents and reports. Here's how:</p>
-            <ol>
-                <li>Log in to your account.</li>
-                <li>Navigate to the "Upload" page from the menu.</li>
-                <li>Click "Choose File" to select your document (supported formats: PDF, DOC, DOCX).</li>
-                <li>Add a title, description, and relevant tags for your document.</li>
-                <li>Select the appropriate category (e.g., Research, Policy, Reports).</li>
-                <li>Click "Upload" to submit your document.</li>
+            <div class="section-header"><div class="icon-container"><i class="fas fa-cloud-upload-alt"></i></div><h2>៣. របៀបបញ្ជូនស្នាដៃ<br><small>Submit Research Document</small></h2></div>
+            <ol class="guide-steps">
+                <li>បើកទំព័រ «ដាក់បញ្ជូនឯកសារ» ពីម៉ឺនុយ។</li>
+                <li>ជ្រើសរើសបញ្ជូនជា <strong>បុគ្គល</strong> ឬ <strong>ក្រុម</strong>។ ក្រុមអាចមានសមាជិករហូតដល់ ៣ នាក់។</li>
+                <li>បំពេញឈ្មោះ ភេទ អ៊ីមែល លេខទូរស័ព្ទ និងចំណងជើងស្នាដៃតាមដែលទម្រង់ស្នើសុំ។</li>
+                <li>ជ្រើសឯកសារស្រាវជ្រាវពីទូរស័ព្ទ ហើយពិនិត្យឈ្មោះឯកសារមុនបញ្ជូន។</li>
+                <li>ចុចបញ្ជូន ហើយរង់ចាំរហូតទំព័របង្ហាញសារជោគជ័យ។ កុំបិទទំព័រពេលកំពុងផ្ទុកឡើង។</li>
             </ol>
-            <p>Your uploaded documents will be reviewed by our team before being published in the library.</p>
-            <div class="highlight-box">
-                <ul>
-                    <li>Maximum file size: 10MB</li>
-                    <li>Ensure documents are original and properly cited</li>
-                    <li>Contact support if you encounter any upload issues</li>
-                </ul>
-            </div>
+            <div class="highlight-box"><p><strong>សូមត្រៀមមុន៖</strong> ប្រើអ៊ីនធឺណិតមានស្ថិរភាព និងដាក់ឈ្មោះឯកសារឱ្យច្បាស់លាស់។</p></div>
+            <a class="guide-action" href="upload.html">បើកទម្រង់បញ្ជូនឯកសារ</a>
         </section>
 
         <section class="section" id="library">
-            <div class="section-header">
-                <div class="icon-container">
-                    <i class="fas fa-book-reader"></i>
-                </div>
-                <h2>Using the Library</h2>
-            </div>
-            <p>Our library contains a comprehensive collection of tourism-related research and documents. To make the most of it:</p>
-            <ul class="feature-list">
-                <li><i class="fas fa-search"></i> <strong>Search:</strong> Use the search bar to find specific topics or keywords.</li>
-                <li><i class="fas fa-folder-open"></i> <strong>Browse Categories:</strong> Explore documents by categories like Research Papers, Policy Documents, or Reports.</li>
-                <li><i class="fas fa-download"></i> <strong>Download:</strong> Click on any document to view details and download if available.</li>
-                <li><i class="fas fa-bookmark"></i> <strong>Save Favorites:</strong> Log in to bookmark documents for easy access later.</li>
-                <li><i class="fas fa-share-alt"></i> <strong>Share:</strong> Use the share buttons to distribute links to important documents.</li>
-            </ul>
-            <p>The library is regularly updated with new content. Check back often for the latest research and publications.</p>
+            <div class="section-header"><div class="icon-container"><i class="fas fa-book-reader"></i></div><h2>៤. របៀបប្រើបណ្ណាល័យ<br><small>Using the Document Library</small></h2></div>
+            <ol class="guide-steps">
+                <li>បើក «បណ្ណាល័យឯកសារទេសចរណ៍» ពីម៉ឺនុយទំព័រដើម។</li>
+                <li>ឯកសារទាំងអស់នឹងបង្ហាញជាកាត និងមានរូបមើលជាមុននៃទំព័រទី១ ប្រសិនបើ Google Drive គាំទ្រ។</li>
+                <li>វាយពាក្យគន្លឹះ ឬចំណងជើងឯកសារក្នុងប្រអប់ស្វែងរក។ លទ្ធផលនឹងផ្លាស់ប្តូរដោយស្វ័យប្រវត្តិ។</li>
+                <li>ចុចលើកាតឯកសារ ឬប៊ូតុង <strong>View</strong> ដើម្បីបើកឯកសារនៅ Google Drive។</li>
+                <li>ក្នុង Google Drive អ្នកអាចអាន ពង្រីក ចែករំលែក ឬទាញយក ប្រសិនបើម្ចាស់ឯកសារបានអនុញ្ញាត។</li>
+                <li>ចុចសញ្ញា × នៅក្បាលទំព័រ ដើម្បីត្រឡប់ទៅទំព័រដើម។</li>
+            </ol>
+            <div class="highlight-box"><p><strong>បើរូបទំព័រទី១មិនបង្ហាញ៖</strong> រង់ចាំបន្តិច ឬចុច View ដើម្បីបើកឯកសារផ្ទាល់។ ឯកសារខ្លះមិនមានរូបមើលជាមុនទេ។</p></div>
+            <a class="guide-action" href="library.html">បើកបណ្ណាល័យឯកសារ</a>
         </section>
 
         <section class="section" id="support">
-            <div class="section-header">
-                <div class="icon-container">
-                    <i class="fas fa-headset"></i>
-                </div>
-                <h2>Getting Help</h2>
-            </div>
-            <p>If you need assistance, we're here to help you:</p>
-            <ul class="feature-list">
-                <li><i class="fas fa-question-circle"></i> Check this guide for common questions</li>
-                <li><i class="fas fa-life-ring"></i> Contact our support team for technical issues</li>
-                <li><i class="fas fa-comments"></i> Join our community for discussions and updates</li>
-                <li><i class="fas fa-bullhorn"></i> Follow our social media for announcements</li>
-            </ul>
-            
+            <div class="section-header"><div class="icon-container"><i class="fas fa-headset"></i></div><h2>៥. ជំនួយ និងទំនាក់ទំនង<br><small>Help &amp; Support</small></h2></div>
             <div class="contact-links">
-                <a href="mailto:researchdeparment.info@gmail.com" class="contact-link">
-                    <i class="fas fa-envelope"></i> Email Support
-                </a>
-                <a href="https://t.me/example" target="_blank" class="contact-link">
-                    <i class="fab fa-telegram"></i> Telegram Channel
-                </a>
-                <a href="https://facebook.com/example" target="_blank" class="contact-link">
-                    <i class="fab fa-facebook"></i> Facebook Page
-                </a>
-                <a href="#" class="contact-link">
-                    <i class="fas fa-phone-alt"></i> Call Support
-                </a>
+                <a href="mailto:researchdeparment.info@gmail.com" class="contact-link"><i class="fas fa-envelope"></i> Email</a>
+                <a href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer" class="contact-link"><i class="fab fa-telegram"></i> Telegram</a>
+                <a href="tel:+85570801800" class="contact-link"><i class="fas fa-phone-alt"></i> 070 801 800</a>
+                <a href="tel:+85595676763" class="contact-link"><i class="fas fa-phone-alt"></i> 095 676 763</a>
             </div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Research and Policy Department. Created by <a href="#" class="footer-logo">Rith Bora</a></p>
-        <p style="margin-top: 0.5rem; font-size: 0.85rem;display:none">Ministry of Tourism - Empowering Research and Policy Development</p>
-    </footer>
+    <footer><p>&copy; 2026 នាយកដ្ឋានស្រាវជ្រាវ និងគោលនយោបាយទេសចរណ៍</p></footer>
 
     <script>
         // Add subtle animation to sections when they come into view
         document.addEventListener('DOMContentLoaded', function() {
             const sections = document.querySelectorAll('.section');
-            
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -528,11 +578,11 @@
                     }
                 });
             }, { threshold: 0.1 });
-            
+
             sections.forEach(section => {
                 observer.observe(section);
             });
-            
+
             // Add click animation to contact links
             const contactLinks = document.querySelectorAll('.contact-link');
             contactLinks.forEach(link => {
@@ -543,14 +593,14 @@
                     }, 300);
                 });
             });
-            
+
             // Add hover effect for sections on touch devices
             if ('ontouchstart' in window) {
                 sections.forEach(section => {
                     section.addEventListener('touchstart', function() {
                         this.classList.add('hover-effect');
                     });
-                    
+
                     section.addEventListener('touchend', function() {
                         setTimeout(() => {
                             this.classList.remove('hover-effect');
