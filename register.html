@@ -1058,6 +1058,21 @@
             box-shadow: 0 0 0 3px rgba(0, 101, 179, 0.1);
         }
 
+        .team-options,
+        .team-member-card {
+            margin: 0.5rem 0 1rem;
+            padding: 1rem;
+            border: 1px solid #d5e3ee;
+            border-radius: 14px;
+            background: #f6fbff;
+        }
+
+        .team-options[hidden], .team-member-card[hidden] { display: none; }
+        .team-member-card h3 { margin: 0 0 0.25rem; color: #004282; font-size: 1rem; }
+        .team-member-card .form-group:last-child { padding-bottom: 0; }
+        .team-leader-title { margin: 1rem 0 0; color: #004282; font-size: 1.05rem; }
+        .team-leader-title[hidden] { display: none; }
+
         .form-group input[type="file"] {
             min-height: 62px;
             border-color: #aac4dc;
@@ -1146,11 +1161,38 @@
 
             <!-- Registration Form (Visible by default) -->
             <form id="contactForm" class="register-form" data-register-form="true">
+                <div class="form-group">
+                    <label>ប្រភេទនៃការចុះឈ្មោះ / Registration Type <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="registrationIndividual" name="registrationType" value="individual" checked required>
+                            <label for="registrationIndividual">បុគ្គល / Individual</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="registrationTeam" name="registrationType" value="team" required>
+                            <label for="registrationTeam">ក្រុម / Team</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-options" id="teamOptions" hidden>
+                    <div class="form-group">
+                        <label for="teamSize">ចំនួនសមាជិកក្រុម / Team Members <span class="required">*</span></label>
+                        <select id="teamSize" name="teamSize">
+                            <option value="" selected disabled>-- ជ្រើសរើសចំនួនសមាជិក --</option>
+                            <option value="2">សមាជិក ២ នាក់ / 2 Members</option>
+                            <option value="3">សមាជិក ៣ នាក់ / 3 Members</option>
+                        </select>
+                    </div>
+                </div>
+
                 <hr class="form-divider">
                 <hr class="form-divider">
 
+                <h3 class="team-leader-title" id="teamLeaderTitle">ព័ត៌មានបុគ្គល / Individual Information</h3>
+
                 <div class="form-group">
-                    <label for="name">ឈ្មោះពេញ <span class="required">*</span></label>
+                    <label for="name">ឈ្មោះពេញ <span id="leaderNameHint"></span><span class="required">*</span></label>
                     <input type="text" id="name" name="name" placeholder="បញ្ចូលឈ្មោះពេញ / Enter your full name" autocomplete="name" required>
                 </div>
                 <hr class="form-divider">
@@ -1175,6 +1217,60 @@
                             <label for="female">ស្រី</label>
                         </div>
                     </div>
+                </div>
+
+                <div class="team-member-card" id="teamMember2Card" hidden>
+                    <h3>សមាជិកទី២ / Team Member 2</h3>
+                    <div class="form-group">
+                        <label for="teamMember2Name">ឈ្មោះពេញ <span class="required">*</span></label>
+                        <input type="text" id="teamMember2Name" name="teamMember2Name" placeholder="បញ្ចូលឈ្មោះពេញ">
+                    </div>
+                    <div class="form-group">
+                        <label for="teamMember2NameLatin">ឈ្មោះពេញជាអក្សរឡាតាំង <span class="required">*</span></label>
+                        <input type="text" id="teamMember2NameLatin" name="teamMember2NameLatin" placeholder="Enter full name in Latin">
+                    </div>
+                    <div class="form-group">
+                        <label>ភេទ <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <div class="radio-option"><input type="radio" id="teamMember2Male" name="teamMember2Gender" value="male"><label for="teamMember2Male">ប្រុស</label></div>
+                            <div class="radio-option"><input type="radio" id="teamMember2Female" name="teamMember2Gender" value="female"><label for="teamMember2Female">ស្រី</label></div>
+                        </div>
+                    </div>
+                    <div class="form-group"><label for="teamMember2Nationality">សញ្ជាតិ <span class="required">*</span></label><input type="text" id="teamMember2Nationality" name="teamMember2Nationality" placeholder="បញ្ចូលសញ្ជាតិ / Enter nationality"></div>
+                    <div class="form-group"><label for="teamMember2EducationLevel">កម្រិតសិក្សា <span class="required">*</span></label><select id="teamMember2EducationLevel" name="teamMember2EducationLevel"><option value="" selected disabled>-- ជ្រើសរើសកម្រិតសិក្សា --</option><option value="បរិញ្ញាបត្រ">បរិញ្ញាបត្រ</option><option value="បរិញ្ញាបត្ររង">បរិញ្ញាបត្ររង</option></select></div>
+                    <div class="form-group"><label for="teamMember2StudyYear">ឆ្នាំសិក្សា <span class="required">*</span></label><select id="teamMember2StudyYear" name="teamMember2StudyYear"><option value="" selected disabled>-- ជ្រើសរើសឆ្នាំសិក្សា --</option><option value="ឆ្នាំទី១">ឆ្នាំទី១</option><option value="ឆ្នាំទី២">ឆ្នាំទី២</option><option value="ឆ្នាំទី៣">ឆ្នាំទី៣</option><option value="ឆ្នាំទី៤">ឆ្នាំទី៤</option></select></div>
+                    <div class="form-group"><label for="teamMember2Major">មុខជំនាញ <span class="required">*</span></label><input type="text" id="teamMember2Major" name="teamMember2Major" placeholder="បញ្ចូលមុខជំនាញ / Enter major"></div>
+                    <div class="form-group"><label for="teamMember2Organization">ឈ្មោះគ្រឹះស្ថានសិក្សា <span class="required">*</span></label><input type="text" id="teamMember2Organization" name="teamMember2Organization" placeholder="ឈ្មោះសាកលវិទ្យាល័យ / University name"></div>
+                    <div class="form-group"><label for="teamMember2Phone">លេខទូរសព្ទ <span class="required">*</span></label><input type="tel" id="teamMember2Phone" name="teamMember2Phone" placeholder="ឧ. 012 345 678" inputmode="tel"></div>
+                    <div class="form-group"><label for="teamMember2Email">អ៊ីមែល <span class="required">*</span></label><input type="email" id="teamMember2Email" name="teamMember2Email" placeholder="name@example.com" inputmode="email"></div>
+                    <div class="form-group"><label for="teamMember2StudentIdCard">បណ្ណសម្គាល់ខ្លួននិស្សិត <span class="required">*</span></label><input type="file" id="teamMember2StudentIdCard" name="teamMember2StudentIdCard" accept="image/*,.pdf"><small class="file-help">រូបភាព ឬ PDF មិនលើស 5MB / Image or PDF, max 5MB.</small><div id="teamMember2FileError" class="file-error"></div></div>
+                </div>
+
+                <div class="team-member-card" id="teamMember3Card" hidden>
+                    <h3>សមាជិកទី៣ / Team Member 3</h3>
+                    <div class="form-group">
+                        <label for="teamMember3Name">ឈ្មោះពេញ <span class="required">*</span></label>
+                        <input type="text" id="teamMember3Name" name="teamMember3Name" placeholder="បញ្ចូលឈ្មោះពេញ">
+                    </div>
+                    <div class="form-group">
+                        <label for="teamMember3NameLatin">ឈ្មោះពេញជាអក្សរឡាតាំង <span class="required">*</span></label>
+                        <input type="text" id="teamMember3NameLatin" name="teamMember3NameLatin" placeholder="Enter full name in Latin">
+                    </div>
+                    <div class="form-group">
+                        <label>ភេទ <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <div class="radio-option"><input type="radio" id="teamMember3Male" name="teamMember3Gender" value="male"><label for="teamMember3Male">ប្រុស</label></div>
+                            <div class="radio-option"><input type="radio" id="teamMember3Female" name="teamMember3Gender" value="female"><label for="teamMember3Female">ស្រី</label></div>
+                        </div>
+                    </div>
+                    <div class="form-group"><label for="teamMember3Nationality">សញ្ជាតិ <span class="required">*</span></label><input type="text" id="teamMember3Nationality" name="teamMember3Nationality" placeholder="បញ្ចូលសញ្ជាតិ / Enter nationality"></div>
+                    <div class="form-group"><label for="teamMember3EducationLevel">កម្រិតសិក្សា <span class="required">*</span></label><select id="teamMember3EducationLevel" name="teamMember3EducationLevel"><option value="" selected disabled>-- ជ្រើសរើសកម្រិតសិក្សា --</option><option value="បរិញ្ញាបត្រ">បរិញ្ញាបត្រ</option><option value="បរិញ្ញាបត្ររង">បរិញ្ញាបត្ររង</option></select></div>
+                    <div class="form-group"><label for="teamMember3StudyYear">ឆ្នាំសិក្សា <span class="required">*</span></label><select id="teamMember3StudyYear" name="teamMember3StudyYear"><option value="" selected disabled>-- ជ្រើសរើសឆ្នាំសិក្សា --</option><option value="ឆ្នាំទី១">ឆ្នាំទី១</option><option value="ឆ្នាំទី២">ឆ្នាំទី២</option><option value="ឆ្នាំទី៣">ឆ្នាំទី៣</option><option value="ឆ្នាំទី៤">ឆ្នាំទី៤</option></select></div>
+                    <div class="form-group"><label for="teamMember3Major">មុខជំនាញ <span class="required">*</span></label><input type="text" id="teamMember3Major" name="teamMember3Major" placeholder="បញ្ចូលមុខជំនាញ / Enter major"></div>
+                    <div class="form-group"><label for="teamMember3Organization">ឈ្មោះគ្រឹះស្ថានសិក្សា <span class="required">*</span></label><input type="text" id="teamMember3Organization" name="teamMember3Organization" placeholder="ឈ្មោះសាកលវិទ្យាល័យ / University name"></div>
+                    <div class="form-group"><label for="teamMember3Phone">លេខទូរសព្ទ <span class="required">*</span></label><input type="tel" id="teamMember3Phone" name="teamMember3Phone" placeholder="ឧ. 012 345 678" inputmode="tel"></div>
+                    <div class="form-group"><label for="teamMember3Email">អ៊ីមែល <span class="required">*</span></label><input type="email" id="teamMember3Email" name="teamMember3Email" placeholder="name@example.com" inputmode="email"></div>
+                    <div class="form-group"><label for="teamMember3StudentIdCard">បណ្ណសម្គាល់ខ្លួននិស្សិត <span class="required">*</span></label><input type="file" id="teamMember3StudentIdCard" name="teamMember3StudentIdCard" accept="image/*,.pdf"><small class="file-help">រូបភាព ឬ PDF មិនលើស 5MB / Image or PDF, max 5MB.</small><div id="teamMember3FileError" class="file-error"></div></div>
                 </div>
 
                 <hr class="form-divider">
@@ -1218,15 +1314,15 @@
                 <hr class="form-divider">
 
                 <div class="form-group">
-                    <label for="organization">ឈ្មោះគ្រឹះស្ថានសិក្សា</label>
-                    <input type="text" id="organization" name="organization" placeholder="ឈ្មោះសាកលវិទ្យាល័យ / University name" autocomplete="organization">
+                    <label for="organization">ឈ្មោះគ្រឹះស្ថានសិក្សា <span class="required">*</span></label>
+                    <input type="text" id="organization" name="organization" placeholder="ឈ្មោះសាកលវិទ្យាល័យ / University name" autocomplete="organization" required>
                 </div>
 
                 <hr class="form-divider">
 
                 <div class="form-group">
-                    <label for="studentIdCard">បណ្ណសម្គាល់ខ្លូននិស្សិត</label>
-                    <input type="file" id="studentIdCard" name="studentIdCard" accept="image/*,.pdf">
+                    <label for="studentIdCard">បណ្ណសម្គាល់ខ្លួននិស្សិត <span class="required">*</span></label>
+                    <input type="file" id="studentIdCard" name="studentIdCard" accept="image/*,.pdf" required>
                     <small class="file-help">រូបភាព ឬ PDF បណ្ណសម្គាល់ខ្លួននិស្សិតរបស់អ្នក។ / Please upload a clear image or PDF of your student ID card (max 5MB).</small>
                     <div id="fileError" class="file-error"></div>
                     <div id="fileInfo" class="file-info">
@@ -1257,6 +1353,8 @@
                     <input type="email" id="email" name="email" placeholder="name@example.com" autocomplete="email" inputmode="email" required>
                 </div>
 
+                <div id="teamMembersMount"></div>
+
                 <hr class="form-divider">
 
                 <button type="submit" class="btn" id="submitBtn">
@@ -1274,6 +1372,61 @@
             const successContainer = document.getElementById('successContainer');
             const backToFormBtn = document.getElementById('backToForm');
             const formStatus = document.getElementById('formStatus');
+            const registrationTypeInputs = form.querySelectorAll('input[name="registrationType"]');
+            const teamOptions = document.getElementById('teamOptions');
+            const teamSizeInput = document.getElementById('teamSize');
+            const teamMember2Card = document.getElementById('teamMember2Card');
+            const teamMember3Card = document.getElementById('teamMember3Card');
+            const leaderNameHint = document.getElementById('leaderNameHint');
+            const teamLeaderTitle = document.getElementById('teamLeaderTitle');
+            const teamMembersMount = document.getElementById('teamMembersMount');
+            let selectedFile = null;
+            const selectedTeamFiles = { 2: null, 3: null };
+            let savedTeamSize = teamSizeInput.value;
+            teamMembersMount.append(teamMember2Card, teamMember3Card);
+
+            function setMemberRequired(memberNumber, isRequired) {
+                document.getElementById(`teamMember${memberNumber}Card`).querySelectorAll('input, select').forEach(input => {
+                    input.required = isRequired;
+                });
+            }
+
+            function updateRegistrationType() {
+                const registrationType = form.querySelector('input[name="registrationType"]:checked')?.value || 'individual';
+                const isTeam = registrationType === 'team';
+                if (isTeam && !teamSizeInput.value && savedTeamSize) {
+                    teamSizeInput.value = savedTeamSize;
+                }
+                const teamSize = isTeam ? Number(teamSizeInput.value) : 0;
+                const showMember2 = teamSize >= 2;
+                const showMember3 = teamSize === 3;
+
+                teamOptions.hidden = !isTeam;
+                teamLeaderTitle.hidden = false;
+                teamLeaderTitle.textContent = isTeam
+                    ? 'សមាជិកទី១ / Team Member 1 (Team Leader)'
+                    : 'ព័ត៌មានបុគ្គល / Individual Information';
+                teamSizeInput.required = isTeam;
+                teamMember2Card.hidden = !showMember2;
+                teamMember3Card.hidden = !showMember3;
+                setMemberRequired(2, showMember2);
+                setMemberRequired(3, showMember3);
+                leaderNameHint.textContent = isTeam ? '(សមាជិកទី១ / Team Leader) ' : '';
+            }
+
+            registrationTypeInputs.forEach(input => input.addEventListener('change', updateRegistrationType));
+            teamSizeInput.addEventListener('change', () => {
+                savedTeamSize = teamSizeInput.value;
+                updateRegistrationType();
+            });
+            form.addEventListener('reset', () => {
+                selectedFile = null;
+                selectedTeamFiles[2] = null;
+                selectedTeamFiles[3] = null;
+                savedTeamSize = '';
+                setTimeout(updateRegistrationType, 0);
+            });
+            updateRegistrationType();
             
             // Generate a random registration ID
             function generateRegistrationId() {
@@ -1285,6 +1438,10 @@
             
             const submitBtn = document.getElementById('submitBtn');
             const studentIdCardInput = document.getElementById('studentIdCard');
+            const teamMemberFileInputs = {
+                2: document.getElementById('teamMember2StudentIdCard'),
+                3: document.getElementById('teamMember3StudentIdCard')
+            };
             const fileError = document.getElementById('fileError');
             const fileInfo = document.getElementById('fileInfo');
             const fileInfoName = document.getElementById('fileInfoName');
@@ -1294,7 +1451,6 @@
             const filePreviewImg = document.getElementById('filePreviewImg');
             const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
             const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'];
-            let selectedFile = null;
 
             function escapeHtml(text) {
                 if (text === null || text === undefined) return '';
@@ -1318,6 +1474,7 @@
                 fileError.textContent = message;
                 fileError.classList.add('show');
                 studentIdCardInput.classList.add('error');
+                studentIdCardInput.value = '';
                 selectedFile = null;
                 fileInfo.classList.remove('show');
                 filePreview.classList.remove('show');
@@ -1434,6 +1591,31 @@
                 }
             });
 
+            Object.entries(teamMemberFileInputs).forEach(([memberNumber, input]) => {
+                input.addEventListener('change', function() {
+                    const file = this.files[0];
+                    const errorElement = document.getElementById(`teamMember${memberNumber}FileError`);
+                    errorElement.textContent = '';
+                    errorElement.classList.remove('show');
+
+                    if (!file) {
+                        selectedTeamFiles[memberNumber] = null;
+                        return;
+                    }
+
+                    const validation = validateFile(file);
+                    if (!validation.valid) {
+                        selectedTeamFiles[memberNumber] = null;
+                        this.value = '';
+                        errorElement.textContent = validation.message;
+                        errorElement.classList.add('show');
+                        return;
+                    }
+
+                    selectedTeamFiles[memberNumber] = file;
+                });
+            });
+
             fileRemove.addEventListener('click', removeSelectedFile);
 
             // Handle form submission
@@ -1456,9 +1638,31 @@
                 formStatus.className = 'form-status';
 
                 const payload = {
+                    registrationType: form.querySelector('input[name="registrationType"]:checked')?.value || 'individual',
+                    teamSize: document.getElementById('teamSize').value || '1',
                     name: document.getElementById('name').value,
                     nameLatin: document.getElementById('nameLatin').value,
                     gender: form.querySelector('input[name="gender"]:checked')?.value || '',
+                    teamMember2Name: document.getElementById('teamMember2Name').value,
+                    teamMember2NameLatin: document.getElementById('teamMember2NameLatin').value,
+                    teamMember2Gender: form.querySelector('input[name="teamMember2Gender"]:checked')?.value || '',
+                    teamMember3Name: document.getElementById('teamMember3Name').value,
+                    teamMember3NameLatin: document.getElementById('teamMember3NameLatin').value,
+                    teamMember3Gender: form.querySelector('input[name="teamMember3Gender"]:checked')?.value || '',
+                    teamMember2Nationality: document.getElementById('teamMember2Nationality').value,
+                    teamMember2EducationLevel: document.getElementById('teamMember2EducationLevel').value,
+                    teamMember2StudyYear: document.getElementById('teamMember2StudyYear').value,
+                    teamMember2Major: document.getElementById('teamMember2Major').value,
+                    teamMember2Organization: document.getElementById('teamMember2Organization').value,
+                    teamMember2Phone: document.getElementById('teamMember2Phone').value,
+                    teamMember2Email: document.getElementById('teamMember2Email').value,
+                    teamMember3Nationality: document.getElementById('teamMember3Nationality').value,
+                    teamMember3EducationLevel: document.getElementById('teamMember3EducationLevel').value,
+                    teamMember3StudyYear: document.getElementById('teamMember3StudyYear').value,
+                    teamMember3Major: document.getElementById('teamMember3Major').value,
+                    teamMember3Organization: document.getElementById('teamMember3Organization').value,
+                    teamMember3Phone: document.getElementById('teamMember3Phone').value,
+                    teamMember3Email: document.getElementById('teamMember3Email').value,
                     nationality: document.getElementById('nationality').value,
                     educationLevel: document.getElementById('educationLevel').value,
                     studyYear: document.getElementById('studyYear').value,
@@ -1483,10 +1687,31 @@
                     const fileData = await readFileAsBase64(fileToUpload);
 
                     payload.files = [{
+                        owner: 'member1',
                         name: fileToUpload.name,
                         mimeType: fileToUpload.type || 'application/octet-stream',
                         data: fileData
                     }];
+                }
+
+                if (payload.registrationType === 'team') {
+                    const membersToUpload = payload.teamSize === '3' ? [2, 3] : [2];
+                    payload.files = payload.files || [];
+                    for (const memberNumber of membersToUpload) {
+                        let memberFile = selectedTeamFiles[memberNumber];
+                        if (!memberFile) {
+                            throw new Error(`Student ID card is required for team member ${memberNumber}.`);
+                        }
+                        if (memberFile.type.startsWith('image/') && memberFile.size > 1024 * 1024) {
+                            memberFile = await compressImage(memberFile);
+                        }
+                        payload.files.push({
+                            owner: `member${memberNumber}`,
+                            name: memberFile.name,
+                            mimeType: memberFile.type || 'application/octet-stream',
+                            data: await readFileAsBase64(memberFile)
+                        });
+                    }
                 }
 
                 try {

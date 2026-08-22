@@ -38,6 +38,7 @@ function doPost(e) {
   var uploadedFileName = '';
   var uploadedFileUrls = [];
   var uploadedFileNames = [];
+  var uploadedFilesByOwner = {};
   var fileErrors = [];
 
   try {
@@ -63,12 +64,61 @@ function doPost(e) {
     Logger.log('Received data: ' + JSON.stringify(data));
     Logger.log('Files in payload: ' + (filesData ? filesData.length : 0));
 
+    var registrationType = sanitizeInput(data.registrationType || 'individual').toLowerCase();
+    var teamSize = registrationType === 'team' ? Number(data.teamSize) : 1;
+    if (registrationType !== 'individual' && registrationType !== 'team') {
+      throw new Error('Invalid registration type.');
+    }
+    if (registrationType === 'team' && teamSize !== 2 && teamSize !== 3) {
+      throw new Error('A team must have 2 or 3 members.');
+    }
+    if (!sanitizeInput(data.name) || !sanitizeInput(data.nameLatin) || !sanitizeInput(data.gender)) {
+      throw new Error('Member 1 name and gender are required.');
+    }
+    var member1RequiredFields = ['nationality', 'educationLevel', 'studyYear', 'major', 'organization', 'phone', 'email'];
+    if (member1RequiredFields.some(function(field) { return !sanitizeInput(data[field]); })) {
+      throw new Error('All information is required for Member 1.');
+    }
+    if (registrationType === 'team' &&
+        (!sanitizeInput(data.teamMember2Name) || !sanitizeInput(data.teamMember2NameLatin) || !sanitizeInput(data.teamMember2Gender))) {
+      throw new Error('Member 2 name and gender are required.');
+    }
+    if (registrationType === 'team' && teamSize === 3 &&
+        (!sanitizeInput(data.teamMember3Name) || !sanitizeInput(data.teamMember3NameLatin) || !sanitizeInput(data.teamMember3Gender))) {
+      throw new Error('Member 3 name and gender are required.');
+    }
+    var member2RequiredFields = ['teamMember2Nationality', 'teamMember2EducationLevel', 'teamMember2StudyYear', 'teamMember2Major', 'teamMember2Organization', 'teamMember2Phone', 'teamMember2Email'];
+    var member3RequiredFields = ['teamMember3Nationality', 'teamMember3EducationLevel', 'teamMember3StudyYear', 'teamMember3Major', 'teamMember3Organization', 'teamMember3Phone', 'teamMember3Email'];
+    if (registrationType === 'team' && member2RequiredFields.some(function(field) { return !sanitizeInput(data[field]); })) {
+      throw new Error('All information is required for Member 2.');
+    }
+    if (registrationType === 'team' && teamSize === 3 && member3RequiredFields.some(function(field) { return !sanitizeInput(data[field]); })) {
+      throw new Error('All information is required for Member 3.');
+    }
+    var validGenders = ['male', 'female'];
+    var submittedGenders = [String(data.gender || '').toLowerCase()];
+    if (registrationType === 'team') submittedGenders.push(String(data.teamMember2Gender || '').toLowerCase());
+    if (registrationType === 'team' && teamSize === 3) submittedGenders.push(String(data.teamMember3Gender || '').toLowerCase());
+    if (submittedGenders.some(function(gender) { return validGenders.indexOf(gender) === -1; })) {
+      throw new Error('Invalid gender selection.');
+    }
+    var submittedFileOwners = filesData.map(function(file, index) {
+      return sanitizeInput(file.owner || (index === 0 ? 'member1' : '')).toLowerCase();
+    });
+    var requiredFileOwners = registrationType === 'team'
+      ? (teamSize === 3 ? ['member1', 'member2', 'member3'] : ['member1', 'member2'])
+      : ['member1'];
+    if (requiredFileOwners.some(function(owner) { return submittedFileOwners.indexOf(owner) === -1; })) {
+      throw new Error('A student ID card is required for every registered member.');
+    }
+
     const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'];
     const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
     for (var i = 0; i < filesData.length; i++) {
       try {
         var fileData = filesData[i];
+        var fileOwner = sanitizeInput(fileData.owner || (i === 0 ? 'member1' : '')).toLowerCase();
 
         if (!fileData || !fileData.data) {
           fileErrors.push('File ' + i + ': missing base64 data');
@@ -107,6 +157,7 @@ function doPost(e) {
         var savedName = savedFile.getName();
         uploadedFileUrls.push(savedUrl);
         uploadedFileNames.push(savedName);
+        uploadedFilesByOwner[fileOwner] = { url: savedUrl, name: savedName };
         Logger.log('Student ID card saved to Drive: ' + savedName + ' | URL: ' + savedUrl);
       } catch (fileError) {
         var errMsg = 'Error saving student ID card ' + i + ': ' + fileError.toString();
@@ -118,6 +169,10 @@ function doPost(e) {
     uploadedFileUrl = uploadedFileUrls.join(', ');
     uploadedFileName = uploadedFileNames.join(', ');
 
+    if (requiredFileOwners.some(function(owner) { return !uploadedFilesByOwner[owner]; })) {
+      throw new Error('A valid student ID card must be uploaded for every registered member. ' + fileErrors.join(' | '));
+    }
+
     Logger.log('Opening spreadsheet: ' + CONFIG.SHEET_ID + ' | Sheet name: ' + CONFIG.SHEET_NAME);
     var spreadsheet = SpreadsheetApp.openById(CONFIG.SHEET_ID);
     var spreadsheetName = spreadsheet.getName();
@@ -126,12 +181,10 @@ function doPost(e) {
     var sheet = spreadsheet.getSheetByName(CONFIG.SHEET_NAME);
     if (!sheet) {
       sheet = spreadsheet.insertSheet(CONFIG.SHEET_NAME);
-      sheet.appendRow(REGISTRATION_HEADERS);
       Logger.log('Created new sheet: ' + CONFIG.SHEET_NAME);
-    } else {
-      ensureRegistrationHeaders(sheet);
-      Logger.log('Using existing sheet: ' + CONFIG.SHEET_NAME + ' | Last row: ' + sheet.getLastRow());
     }
+    ensureRegistrationHeaders(sheet);
+    Logger.log('Using fixed registration table: ' + CONFIG.SHEET_NAME + ' | Last row: ' + sheet.getLastRow());
 
     // Duplicate prevention: skip if the same email already exists in the sheet
     // Validate email format
@@ -143,6 +196,12 @@ function doPost(e) {
           message: 'Invalid email address.'
         }))
         .setMimeType(ContentService.MimeType.JSON);
+    }
+    if (registrationType === 'team' && !emailRegex.test(String(data.teamMember2Email || '').trim())) {
+      throw new Error('Invalid email address for Member 2.');
+    }
+    if (registrationType === 'team' && teamSize === 3 && !emailRegex.test(String(data.teamMember3Email || '').trim())) {
+      throw new Error('Invalid email address for Member 3.');
     }
 
     // Duplicate prevention: skip if the same email already exists in the sheet
@@ -178,31 +237,75 @@ function doPost(e) {
       Logger.log(emailError);
     }
 
-    var fileLinkFormula = '';
-    if (uploadedFileUrls.length > 0) {
-      var links = uploadedFileUrls.map(function(url, index) {
-        var label = uploadedFileNames[index] || 'View file';
-        return '=HYPERLINK("' + url + '","' + label + '")';
-      });
-      fileLinkFormula = links.join(' & " | " & ');
+    function ownerFileUrl(owner) {
+      return uploadedFilesByOwner[owner] ? uploadedFilesByOwner[owner].url : '';
+    }
+    function ownerFileLink(owner) {
+      if (!uploadedFilesByOwner[owner]) return '';
+      var safeLabel = String(uploadedFilesByOwner[owner].name || 'View file').replace(/"/g, '""');
+      return '=HYPERLINK("' + uploadedFilesByOwner[owner].url + '","' + safeLabel + '")';
     }
 
-    sheet.appendRow([
-      new Date(),
-      sanitizeInput(data.name) || '',
-      sanitizeInput(data.nameLatin) || '',
-      sanitizeInput(data.gender) || '',
-      sanitizeInput(data.nationality) || '',
-      sanitizeInput(data.educationLevel) || '',
-      sanitizeInput(data.studyYear) || '',
-      sanitizeInput(data.major) || '',
-      sanitizeInput(data.organization) || '',
-      sanitizeInput(data.phone) || '',
-      sanitizeInput(data.email) || '',
-      emailSent ? 'Yes' : ('No: ' + emailError),
-      uploadedFileUrl || '',
-      fileLinkFormula
-    ]);
+    var registrationTimestamp = new Date();
+    var emailStatus = emailSent ? 'Yes' : ('No: ' + emailError);
+    var registrationRows = [{
+      'Timestamp': registrationTimestamp,
+      'Name': (registrationType === 'team' ? 'Team Member 1: ' : 'Individual: ') + sanitizeInput(data.name),
+      'Name (Latin)': sanitizeInput(data.nameLatin),
+      'Gender': sanitizeInput(data.gender),
+      'Nationality': sanitizeInput(data.nationality),
+      'Education Level': sanitizeInput(data.educationLevel),
+      'Study Year': sanitizeInput(data.studyYear),
+      'Major': sanitizeInput(data.major),
+      'Organization': sanitizeInput(data.organization),
+      'Phone': sanitizeInput(data.phone),
+      'Email': sanitizeInput(data.email),
+      'Email Sent': emailStatus,
+      'Student ID Card': ownerFileUrl('member1'),
+      'File Link': ownerFileLink('member1')
+    }];
+
+    if (registrationType === 'team') {
+      registrationRows.push({
+        'Timestamp': registrationTimestamp,
+        'Name': 'Team Member 2: ' + sanitizeInput(data.teamMember2Name),
+        'Name (Latin)': sanitizeInput(data.teamMember2NameLatin),
+        'Gender': sanitizeInput(data.teamMember2Gender),
+        'Nationality': sanitizeInput(data.teamMember2Nationality),
+        'Education Level': sanitizeInput(data.teamMember2EducationLevel),
+        'Study Year': sanitizeInput(data.teamMember2StudyYear),
+        'Major': sanitizeInput(data.teamMember2Major),
+        'Organization': sanitizeInput(data.teamMember2Organization),
+        'Phone': sanitizeInput(data.teamMember2Phone),
+        'Email': sanitizeInput(data.teamMember2Email),
+        'Email Sent': emailStatus,
+        'Student ID Card': ownerFileUrl('member2'),
+        'File Link': ownerFileLink('member2')
+      });
+    }
+
+    if (registrationType === 'team' && teamSize === 3) {
+      registrationRows.push({
+        'Timestamp': registrationTimestamp,
+        'Name': 'Team Member 3: ' + sanitizeInput(data.teamMember3Name),
+        'Name (Latin)': sanitizeInput(data.teamMember3NameLatin),
+        'Gender': sanitizeInput(data.teamMember3Gender),
+        'Nationality': sanitizeInput(data.teamMember3Nationality),
+        'Education Level': sanitizeInput(data.teamMember3EducationLevel),
+        'Study Year': sanitizeInput(data.teamMember3StudyYear),
+        'Major': sanitizeInput(data.teamMember3Major),
+        'Organization': sanitizeInput(data.teamMember3Organization),
+        'Phone': sanitizeInput(data.teamMember3Phone),
+        'Email': sanitizeInput(data.teamMember3Email),
+        'Email Sent': emailStatus,
+        'Student ID Card': ownerFileUrl('member3'),
+        'File Link': ownerFileLink('member3')
+      });
+    }
+
+    registrationRows.forEach(function(row) {
+      appendRegistrationRow(sheet, row);
+    });
 
     Logger.log('Data saved to sheet');
 
@@ -210,7 +313,7 @@ function doPost(e) {
       .createTextOutput(JSON.stringify({
         status: 'success',
         message: 'Form submitted successfully',
-        script_version: '2026-08-05-v5',
+        script_version: '2026-08-22-v8',
         sheet_id: CONFIG.SHEET_ID,
         sheet_name: CONFIG.SHEET_NAME,
         debug: {
@@ -253,41 +356,43 @@ function getFormValue(value) {
   return String(value);
 }
 
-// Migrates earlier registration sheets to the current schema.
-// Removes the obsolete Type column and places the student fields after Gender.
+// Enforces one fixed 14-column table and prevents columns being appended again.
 function ensureRegistrationHeaders(sheet) {
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(REGISTRATION_HEADERS);
-    return;
+  var requiredColumnCount = REGISTRATION_HEADERS.length;
+  var maximumColumnCount = sheet.getMaxColumns();
+
+  if (maximumColumnCount < requiredColumnCount) {
+    sheet.insertColumnsAfter(maximumColumnCount, requiredColumnCount - maximumColumnCount);
   }
 
-  var currentColumnCount = Math.max(sheet.getLastColumn(), 1);
-  var currentHeaders = sheet.getRange(1, 1, 1, currentColumnCount).getValues()[0];
+  sheet.getRange(1, 1, 1, requiredColumnCount).setValues([REGISTRATION_HEADERS]);
 
-  if (currentHeaders[1] === 'Type') {
-    sheet.deleteColumn(2);
-    Logger.log('Removed obsolete Type column');
-    currentColumnCount = Math.max(sheet.getLastColumn(), 1);
-    currentHeaders = sheet.getRange(1, 1, 1, currentColumnCount).getValues()[0];
+  maximumColumnCount = sheet.getMaxColumns();
+  if (maximumColumnCount > requiredColumnCount) {
+    sheet.deleteColumns(requiredColumnCount + 1, maximumColumnCount - requiredColumnCount);
+    Logger.log('Removed columns after File Link. Registration table now has exactly 14 columns.');
   }
 
-  var alreadyMigrated = currentHeaders[3] === 'Nationality' &&
-    currentHeaders[4] === 'Education Level' &&
-    currentHeaders[5] === 'Study Year' &&
-    currentHeaders[6] === 'Major';
-
-  if (!alreadyMigrated) {
-    sheet.insertColumnsAfter(3, 4);
-    Logger.log('Inserted columns for Nationality, Education Level, Study Year, and Major');
-  }
-
-  if (currentHeaders[2] !== 'Name (Latin)') {
-    sheet.insertColumnAfter(2);
-    Logger.log('Inserted column for Name (Latin)');
-  }
-
-  sheet.getRange(1, 1, 1, REGISTRATION_HEADERS.length).setValues([REGISTRATION_HEADERS]);
   sheet.setFrozenRows(1);
+}
+
+// Always writes exactly 14 values in the fixed schema order.
+function appendRegistrationRow(sheet, valuesByHeader) {
+  var row = REGISTRATION_HEADERS.map(function(header) {
+    return Object.prototype.hasOwnProperty.call(valuesByHeader, header) ? valuesByHeader[header] : '';
+  });
+  sheet.getRange(sheet.getLastRow() + 1, 1, 1, REGISTRATION_HEADERS.length).setValues([row]);
+}
+
+// Run once manually after deploying to repair an existing expanded table immediately.
+function repairRegistrationTable() {
+  var spreadsheet = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+  var sheet = spreadsheet.getSheetByName(CONFIG.SHEET_NAME);
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(CONFIG.SHEET_NAME);
+  }
+  ensureRegistrationHeaders(sheet);
+  Logger.log('Registration table repaired: ' + REGISTRATION_HEADERS.join(', '));
 }
 
 function sanitizeInput(value) {
@@ -309,9 +414,31 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
   var fileLine = uploadedFileUrl ? "<p>📎 Student ID Card uploaded: <a href='" + uploadedFileUrl + "'>" + linkLabel + "</a></p>" : '';
   
   var safeData = {
+    registrationType: sanitizeInput(data.registrationType || 'individual'),
+    teamSize: sanitizeInput(data.teamSize || '1'),
     name: sanitizeInput(data.name),
     nameLatin: sanitizeInput(data.nameLatin),
     gender: sanitizeInput(data.gender),
+    teamMember2Name: sanitizeInput(data.teamMember2Name),
+    teamMember2NameLatin: sanitizeInput(data.teamMember2NameLatin),
+    teamMember2Gender: sanitizeInput(data.teamMember2Gender),
+    teamMember2Nationality: sanitizeInput(data.teamMember2Nationality),
+    teamMember2EducationLevel: sanitizeInput(data.teamMember2EducationLevel),
+    teamMember2StudyYear: sanitizeInput(data.teamMember2StudyYear),
+    teamMember2Major: sanitizeInput(data.teamMember2Major),
+    teamMember2Organization: sanitizeInput(data.teamMember2Organization),
+    teamMember2Phone: sanitizeInput(data.teamMember2Phone),
+    teamMember2Email: sanitizeInput(data.teamMember2Email),
+    teamMember3Name: sanitizeInput(data.teamMember3Name),
+    teamMember3NameLatin: sanitizeInput(data.teamMember3NameLatin),
+    teamMember3Gender: sanitizeInput(data.teamMember3Gender),
+    teamMember3Nationality: sanitizeInput(data.teamMember3Nationality),
+    teamMember3EducationLevel: sanitizeInput(data.teamMember3EducationLevel),
+    teamMember3StudyYear: sanitizeInput(data.teamMember3StudyYear),
+    teamMember3Major: sanitizeInput(data.teamMember3Major),
+    teamMember3Organization: sanitizeInput(data.teamMember3Organization),
+    teamMember3Phone: sanitizeInput(data.teamMember3Phone),
+    teamMember3Email: sanitizeInput(data.teamMember3Email),
     nationality: sanitizeInput(data.nationality),
     educationLevel: sanitizeInput(data.educationLevel),
     studyYear: sanitizeInput(data.studyYear),
@@ -321,11 +448,28 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
     email: sanitizeInput(data.email)
   };
 
+  var teamDetails = '';
+  if (safeData.registrationType === 'team') {
+    teamDetails = "Registration Type: Team (" + safeData.teamSize + " members)<br>" +
+      "Member 1 / Team Leader: " + safeData.name + " (" + safeData.nameLatin + ", " + safeData.gender + ")<br>" +
+      "Member 2: " + safeData.teamMember2Name + " (" + safeData.teamMember2NameLatin + ", " + safeData.teamMember2Gender + ")<br>" +
+      "Member 2 Study: " + safeData.teamMember2EducationLevel + ", " + safeData.teamMember2StudyYear + ", " + safeData.teamMember2Major + ", " + safeData.teamMember2Organization + "<br>" +
+      "Member 2 Contact: " + safeData.teamMember2Phone + ", " + safeData.teamMember2Email + "<br>";
+    if (safeData.teamSize === '3') {
+      teamDetails += "Member 3: " + safeData.teamMember3Name + " (" + safeData.teamMember3NameLatin + ", " + safeData.teamMember3Gender + ")<br>" +
+        "Member 3 Study: " + safeData.teamMember3EducationLevel + ", " + safeData.teamMember3StudyYear + ", " + safeData.teamMember3Major + ", " + safeData.teamMember3Organization + "<br>" +
+        "Member 3 Contact: " + safeData.teamMember3Phone + ", " + safeData.teamMember3Email + "<br>";
+    }
+  } else {
+    teamDetails = "Registration Type: Individual<br>";
+  }
+
   var htmlMessage = "<p>Hello " + safeData.name + "</p>" +
                 "<p style='color:green; font-weight:bold;'>✅ ការចុះឈ្មោះជោគជ័យ - Successful Registration!</p>" +
                 "<p>Thank you for registering for the Competition Research. Your data has been received and recorded successfully.</p>" +
                 "<p>Here's a copy of your submission:<br>" +
                 "---------------------------------<br>" +
+                teamDetails +
                 "Name: " + safeData.name + "<br>" +
                 "Name (Latin): " + safeData.nameLatin + "<br>" +
                 "Gender: " + safeData.gender + "<br>" +
@@ -350,11 +494,17 @@ function sendConfirmationEmail(data, uploadedFileUrl, uploadedFileName) {
                 "<p>We appreciate your interest in the Competition Research and will respond within 24-48 hours.</p>" +
                 "<p>Regards,<br>Ministry Of Tourism<br>Admin Team</p>";
   
-  MailApp.sendEmail({
+  var mailOptions = {
     to: data.email,
     subject: subject,
     htmlBody: htmlMessage
-  });
+  };
+  if (safeData.registrationType === 'team') {
+    var additionalRecipients = [safeData.teamMember2Email];
+    if (safeData.teamSize === '3') additionalRecipients.push(safeData.teamMember3Email);
+    mailOptions.bcc = additionalRecipients.filter(Boolean).join(',');
+  }
+  MailApp.sendEmail(mailOptions);
 }
 
 // Handle GET requests - returns API status and quota info
