@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
             overlay.classList.toggle('active');
+            hamburger.setAttribute('aria-expanded', String(!isActive));
             
             // Toggle scroll lock
             if (!isActive) {
@@ -75,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             hamburger.classList.remove('active');
             navMenu.classList.remove('active');
             overlay.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
             body.classList.remove('menu-open');
             html.classList.remove('menu-open');
             body.style.position = '';
@@ -89,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
                 overlay.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
                 body.classList.remove('menu-open');
                 html.classList.remove('menu-open');
                 body.style.position = '';
@@ -103,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
                 overlay.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
                 body.classList.remove('menu-open');
                 html.classList.remove('menu-open');
                 body.style.position = '';
@@ -128,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     hamburger.classList.remove('active');
                     navMenu.classList.remove('active');
                     overlay.classList.remove('active');
+                    hamburger.setAttribute('aria-expanded', 'false');
                     body.classList.remove('menu-open');
                     html.classList.remove('menu-open');
                     body.style.position = '';
@@ -139,12 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Countdown uses an explicit UTC+7 deadline, so every visitor sees Cambodia time.
-    const countdown = document.getElementById('deadlineCountdown');
-    if (countdown) {
+    const countdowns = document.querySelectorAll('[data-deadline]');
+    countdowns.forEach((countdown) => {
         const deadline = new Date(countdown.dataset.deadline).getTime();
-        const fields = Object.fromEntries(
-            [...countdown.querySelectorAll('[data-countdown]')].map((field) => [field.dataset.countdown, field])
-        );
+        const fields = Object.fromEntries([...countdown.querySelectorAll('[data-countdown]')]
+            .map((field) => [field.dataset.countdown, field]));
         const updateCountdown = () => {
             const remaining = deadline - Date.now();
             if (remaining <= 0) {
@@ -161,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const countdownTimer = window.setInterval(() => {
             if (!updateCountdown()) window.clearInterval(countdownTimer);
         }, 1000);
-    }
+    });
 
     // Button click handler
     if (actionBtn) {

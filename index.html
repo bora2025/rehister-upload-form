@@ -1302,6 +1302,100 @@
             nav a { font-size: .7rem; }
         }
 
+        .mobile-menu-toggle,
+        .mobile-brand-title,
+        .mobile-countdown { display: none; }
+
+        @media (max-width: 768px) {
+            header {
+                z-index: 50;
+                display: grid;
+                grid-template-columns: minmax(0,1fr) auto;
+                padding: .65rem .8rem;
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 14px;
+                box-shadow: 0 8px 24px rgba(15,39,64,.14);
+                overflow: visible;
+            }
+            .brand { width: auto; min-width: 0; }
+            header > .brand { order: 1; }
+            .brand > a { width: auto; max-width: none; gap: .65rem; text-decoration: none; }
+            .brand picture { display: block; flex: 0 0 auto; width: 46px; height: 46px; }
+            .brand picture .logo { width: 46px; height: 46px; object-fit: contain; filter: none; }
+            .mobile-brand-title { display: block; min-width: 0; color: #006b36; font-size: clamp(.78rem,3.2vw,.96rem); font-weight: 800; line-height: 1.35; white-space: nowrap; }
+            .mobile-brand-title small { display: block; margin-top: .12rem; color: #4b6357; font-size: clamp(.52rem,1.85vw,.64rem); font-weight: 700; }
+            header > .register,
+            header > .header-divider { display: none; }
+            .mobile-menu-toggle {
+                order: 2;
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                width: 46px;
+                height: 46px;
+                padding: 0;
+                border: 0;
+                border-radius: 12px;
+                background: #eef8f2;
+                color: #08733c;
+                cursor: pointer;
+            }
+            .mobile-menu-toggle span { display: block; width: 22px; height: 2px; border-radius: 2px; background: currentColor; transition: transform .25s ease,opacity .2s ease; }
+            .mobile-menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+            .mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
+            .mobile-menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+            header nav {
+                position: absolute;
+                z-index: 55;
+                top: calc(100% + .5rem);
+                left: .5rem;
+                right: .5rem;
+                width: auto;
+                margin: 0;
+                padding: .55rem;
+                border: 1px solid #dce7e1;
+                border-radius: 14px;
+                background: rgba(255,255,255,.98);
+                box-shadow: 0 16px 38px rgba(5,45,27,.2);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: opacity .22s ease,transform .22s ease,visibility .22s;
+            }
+            header nav.active { opacity: 1; visibility: visible; transform: translateY(0); }
+            header nav ul { grid-template-columns: 1fr 1fr; gap: .4rem; }
+            header nav a { min-height: 48px; border-color: #dcebe3; background: #f4faf6; color: #075b32; font-weight: 700; }
+            header nav a:active,
+            header nav a:focus-visible { background: #e0f3e7; border-color: #74bd91; color: #034e2a; }
+            .nav-overlay { position: fixed; z-index: 45; inset: 0; display: block; background: rgba(3,20,35,.5); opacity: 0; visibility: hidden; transition: opacity .22s ease,visibility .22s; }
+            .nav-overlay.active { opacity: 1; visibility: visible; }
+
+            .campaign-hero { min-height: calc(100svh - 86px); }
+            .campaign-content { display: flex; flex-direction: column; justify-content: center; min-width: 0; max-width: 100%; min-height: inherit; padding-block: 1.25rem; overflow: hidden; }
+            .campaign-copy { display: flex; flex-direction: column; align-items: center; width: 100%; min-width: 0; max-width: 100%; }
+            .mobile-countdown { order: -1; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); width: min(100%,360px); gap: .45rem; margin: 0 auto 1.25rem; }
+            .mobile-countdown .countdown-unit { padding: .68rem .25rem; border: 1px solid rgba(255,255,255,.14); background: rgba(3,28,42,.72); box-shadow: 0 8px 18px rgba(0,0,0,.2); backdrop-filter: blur(7px); }
+            .mobile-countdown .countdown-value { color: #9dffb7; }
+            .campaign-title { width: 100%; max-width: 520px; overflow-wrap: anywhere; word-break: normal; }
+            .campaign-summary { width: 100%; max-width: 480px; overflow-wrap: anywhere; }
+            .campaign-deadline { order: -1; margin-bottom: .8rem; border-color: rgba(151,255,185,.5); background: rgba(0,105,54,.78); }
+            .campaign-panel .countdown-title,
+            .campaign-panel .countdown { display: none; }
+            .campaign-actions { max-width: 100%; }
+            .campaign-actions .hero-cta { min-width: 0; white-space: normal; }
+            .campaign-panel { width: 100%; min-width: 0; max-width: 100%; overflow: hidden; }
+        }
+        @media (max-width: 380px) {
+            .brand picture,
+            .brand picture .logo { width: 40px; height: 40px; }
+            .mobile-brand-title { font-size: .73rem; }
+            .mobile-menu-toggle { width: 42px; height: 42px; }
+            .mobile-countdown { gap: .3rem; }
+        }
+
         /* 2026 contest campaign hero */
         .campaign-hero { position: relative; isolation: isolate; min-height: clamp(660px, 82vh, 820px); overflow: hidden; background: #042d58; color: #fff; }
         .campaign-hero .hero-banner-picture { z-index: 0; }
@@ -1382,6 +1476,35 @@
             .countdown-title { margin: .65rem 0 .4rem; }
         }
         @media (prefers-reduced-motion:reduce) { .campaign-copy,.campaign-panel { animation: none; } }
+
+        /* Final mobile campaign overrides must follow the desktop campaign rules. */
+        @media (max-width:768px) {
+            .campaign-hero { min-height: calc(100svh - 86px); }
+            .campaign-content {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: min(calc(100% - 1rem),600px);
+                min-width: 0;
+                max-width: 100%;
+                min-height: inherit;
+                padding: 1.25rem 0 1.5rem;
+                overflow: hidden;
+                text-align: center;
+            }
+            .campaign-copy { display: flex; flex-direction: column; align-items: center; width: 100%; min-width: 0; max-width: 100%; }
+            .mobile-countdown { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); width: min(100%,360px); }
+            .campaign-title,
+            .campaign-summary { width: 100%; min-width: 0; overflow-wrap: anywhere; }
+            .campaign-actions { width: 100%; max-width: 100%; }
+            .campaign-actions .hero-cta { min-width: 0; white-space: normal; }
+            .campaign-panel { width: 100%; min-width: 0; max-width: 100%; overflow: hidden; }
+            .campaign-panel .countdown-title,
+            .campaign-panel .countdown { display: none; }
+        }
+        @media (max-width:480px) {
+            .campaign-content { width: calc(100% - 1rem); }
+        }
 
         /* Responsive site footer */
         footer.site-footer {
@@ -1542,13 +1665,22 @@
 
     <header>
         <div class="brand">
-            <a href="index.html"><img class="logo" alt="Ministry of Tourism Logo" src="assets/img/tourism-logo.png"></a>
+            <a href="index.html">
+                <picture>
+                    <source media="(max-width: 768px)" srcset="assets/img/favicon.png">
+                    <img class="logo" alt="Ministry of Tourism Logo" src="assets/img/tourism-logo.png">
+                </picture>
+                <span class="mobile-brand-title">ក្រសួងទេសចរណ៍<small>នាយកដ្ឋានស្រាវជ្រាវ និងគោលនយោបាយទេសចរណ៍</small></span>
+            </a>
         </div>
         <div class="header-divider" aria-hidden="true"></div>
         <div class="register">
             <a class="btn" href="register.html">ចុះឈ្មោះ</a>
         </div>
-        <nav aria-label="Primary">
+        <button class="mobile-menu-toggle" id="hamburger" type="button" aria-label="បើកម៉ឺនុយ" aria-controls="navMenu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <nav id="navMenu" aria-label="Primary">
             <ul>
                 <li><a href="#about">អំពីចលនាប្រឡងប្រណាំង </a></li>
                 <li><a href="#features">មុខងារ</a></li>
@@ -1567,12 +1699,18 @@
                 </picture>
                 <div class="campaign-content">
                     <div class="campaign-copy">
+                        <div class="mobile-countdown" data-deadline="2026-09-30T23:59:59+07:00" aria-label="ពេលវេលានៅសល់" aria-live="polite">
+                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="days">--</strong><small class="countdown-label">ថ្ងៃ</small></span>
+                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="hours">--</strong><small class="countdown-label">ម៉ោង</small></span>
+                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="minutes">--</strong><small class="countdown-label">នាទី</small></span>
+                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="seconds">--</strong><small class="countdown-label">វិនាទី</small></span>
+                        </div>
                         <h1 class="campaign-title">ចលនាប្រឡងប្រណាំងស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើមក្នុងវិស័យទេសចរណ៍ប្រចាំឆ្នាំ២០២៦</h1>
                         <p class="campaign-summary">បង្ហាញគំនិតច្នៃប្រឌិត និងការស្រាវជ្រាវរបស់អ្នក ដើម្បីរួមចំណែកអភិវឌ្ឍវិស័យទេសចរណ៍កម្ពុជា។</p>
                         <div class="campaign-deadline"><span aria-hidden="true">📅</span><span>ផុតកំណត់៖ ៣០ កញ្ញា ២០២៦ • ម៉ោងនៅកម្ពុជា</span></div>
                         <div class="campaign-actions">
                             <a class="hero-cta" href="register.html">ចុះឈ្មោះឥឡូវនេះ</a>
-                            <a class="hero-cta campaign-secondary" href="#announcement">មើលសេចក្តីជូនដំណឹង</a>
+                            <a class="hero-cta campaign-secondary" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer">ចូលឆាណែលតេឡេក្រាមកម្មវិធី</a>
                         </div>
                     </div>
                     <aside class="campaign-panel" aria-label="រង្វាន់ និងពេលវេលានៅសល់">
