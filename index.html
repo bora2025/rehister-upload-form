@@ -1397,7 +1397,7 @@
         }
 
         /* 2026 contest campaign hero */
-        .campaign-hero { position: relative; isolation: isolate; min-height: clamp(660px, 82vh, 820px); overflow: hidden; background: #042d58; color: #fff; }
+        .campaign-hero { position: relative; isolation: isolate; min-height: clamp(660px, 82vh, 820px); overflow: hidden; background: #fff; color: #fff; }
         .campaign-hero .hero-banner-picture { z-index: 0; }
         .campaign-hero::after { content: ""; position: absolute; z-index: 1; inset: 0; background: radial-gradient(circle at 50% 22%, rgba(255,176,74,.2), transparent 32%), linear-gradient(180deg, rgba(3,24,48,.2), rgba(2,22,44,.94)); pointer-events: none; }
         .campaign-content { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0,1.25fr) minmax(320px,.75fr); align-items: center; gap: clamp(2rem,5vw,5rem); width: min(1180px,calc(100% - 3rem)); min-height: inherit; margin: auto; padding: 3rem 0; }
@@ -1477,9 +1477,19 @@
         }
         @media (prefers-reduced-motion:reduce) { .campaign-copy,.campaign-panel { animation: none; } }
 
+        .mobile-prizes { display: none; }
+
         /* Final mobile campaign overrides must follow the desktop campaign rules. */
         @media (max-width:768px) {
-            .campaign-hero { min-height: calc(100svh - 86px); }
+            main { width: 100%; max-width: none; padding: 0; }
+            .hero { width: 100%; margin: .5rem 0 0; }
+            .campaign-hero {
+                width: 100%;
+                height: calc(100svh - 84px);
+                min-height: 0;
+                max-height: none;
+                border-radius: 0;
+            }
             .campaign-content {
                 display: flex;
                 flex-direction: column;
@@ -1487,23 +1497,45 @@
                 width: min(calc(100% - 1rem),600px);
                 min-width: 0;
                 max-width: 100%;
-                min-height: inherit;
-                padding: 1.25rem 0 1.5rem;
+                height: 100%;
+                min-height: 0;
+                padding: 1rem 0 1.25rem;
                 overflow: hidden;
                 text-align: center;
             }
-            .campaign-copy { display: flex; flex-direction: column; align-items: center; width: 100%; min-width: 0; max-width: 100%; }
+            .campaign-copy { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-width: 0; max-width: 100%; height: 100%; }
             .mobile-countdown { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); width: min(100%,360px); }
             .campaign-title,
             .campaign-summary { width: 100%; min-width: 0; overflow-wrap: anywhere; }
             .campaign-actions { width: 100%; max-width: 100%; }
             .campaign-actions .hero-cta { min-width: 0; white-space: normal; }
-            .campaign-panel { width: 100%; min-width: 0; max-width: 100%; overflow: hidden; }
-            .campaign-panel .countdown-title,
-            .campaign-panel .countdown { display: none; }
+            .campaign-content > .campaign-panel { display: none; }
+            .mobile-prizes {
+                display: block;
+                width: 100%;
+                padding: 1.4rem max(1rem,env(safe-area-inset-left)) 1.6rem max(1rem,env(safe-area-inset-right));
+                background: #fff;
+                color: #15324f;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            .mobile-prizes h2 { margin: 0 0 1rem; color: #004282; font-size: 1.35rem; }
+            .mobile-prizes .prize-list { width: min(100%,560px); margin: 0 auto; }
+            .mobile-prizes .prize-card { background: #f1f6fb; border: 1px solid #d8e5f0; box-shadow: 0 8px 20px rgba(0,66,130,.08); }
+            .mobile-prizes .prize-card:first-child { background: #fff7ed; border-color: #f4b477; }
+            .mobile-prizes .prize-label { color: #60758a; }
+            .mobile-prizes .prize-amount { color: #15324f; }
         }
         @media (max-width:480px) {
             .campaign-content { width: calc(100% - 1rem); }
+        }
+        @media (max-width:768px) and (max-height:700px) {
+            .mobile-countdown { margin-bottom: .65rem; }
+            .mobile-countdown .countdown-unit { padding-block: .45rem; }
+            .campaign-title { font-size: clamp(1.3rem,5.8vw,1.65rem); line-height: 1.38; }
+            .campaign-summary { margin-block: .45rem .55rem; font-size: .82rem; line-height: 1.5; }
+            .campaign-deadline { margin-bottom: .55rem; padding-block: .45rem; font-size: .76rem; }
+            .campaign-actions { gap: .45rem; }
+            .campaign-actions .hero-cta { min-height: 43px; padding-block: .45rem; }
         }
 
         /* Responsive site footer */
@@ -1730,6 +1762,14 @@
                     </aside>
                 </div>
             </div>
+            <aside class="mobile-prizes" aria-label="រង្វាន់ជ័យលាភី">
+                <h2>រង្វាន់ជ័យលាភី</h2>
+                <div class="prize-list">
+                    <div class="prize-card"><span class="prize-rank">១</span><span><small class="prize-label">ជ័យលាភីលេខ ១</small><strong class="prize-amount">៤,០០០,០០០ រៀល</strong></span></div>
+                    <div class="prize-card"><span class="prize-rank">២</span><span><small class="prize-label">ជ័យលាភីលេខ ២</small><strong class="prize-amount">៣,០០០,០០០ រៀល</strong></span></div>
+                    <div class="prize-card"><span class="prize-rank">៣</span><span><small class="prize-label">ជ័យលាភីលេខ ៣</small><strong class="prize-amount">២,០០០,០០០ រៀល</strong></span></div>
+                </div>
+            </aside>
         </section>
 
         <section id="about" class="section">
