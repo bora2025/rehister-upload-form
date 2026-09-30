@@ -1144,6 +1144,21 @@
 
         .hero-cta:hover { background: #d96a11; transform: translateY(-2px); }
 
+        .hero-cta.upload-cta {
+            animation: uploadButtonPulse 2.2s ease-in-out infinite;
+        }
+
+        @keyframes uploadButtonPulse {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                box-shadow: 0 10px 24px rgba(239, 125, 31, 0.28);
+            }
+            50% {
+                transform: translateY(-4px) scale(1.035);
+                box-shadow: 0 16px 34px rgba(239, 125, 31, 0.5);
+            }
+        }
+
         .hero-actions {
             display: flex;
             align-items: center;
@@ -1229,7 +1244,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .hero-banner-image, .hero .slide.active .slide-caption > * { animation: none; }
+            .hero-banner-image, .hero .slide.active .slide-caption > *, .hero-cta.upload-cta { animation: none; }
         }
 
         /* Home header: compact, touch-friendly mobile layout */
@@ -1706,16 +1721,12 @@
                 <span class="mobile-brand-title">ក្រសួងទេសចរណ៍<small>នាយកដ្ឋានស្រាវជ្រាវ និងគោលនយោបាយទេសចរណ៍</small></span>
             </a>
         </div>
-        <div class="header-divider" aria-hidden="true"></div>
-        <div class="register">
-            <a class="btn" href="register.html">ចុះឈ្មោះ</a>
-        </div>
         <button class="mobile-menu-toggle" id="hamburger" type="button" aria-label="បើកម៉ឺនុយ" aria-controls="navMenu" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
         <nav id="navMenu" aria-label="Primary">
             <ul>
-                <li><a href="#about">អំពីចលនាប្រឡងប្រណាំង </a></li>
+                <li><a href="#about">អំពីចលនាប្រឡងប្រណាំង</a></li>
                 <li><a href="#features">មុខងារ</a></li>
                 <li><a href="library.html">បណ្ណាល័យឯកសារទេសចរណ៍</a></li>
                 <li><a href="upload.html">ដាក់បញ្ជូនឯកសារ</a></li>
@@ -1733,17 +1744,10 @@
                 </picture>
                 <div class="campaign-content">
                     <div class="campaign-copy">
-                        <div class="mobile-countdown" data-deadline="2026-09-30T23:59:59+07:00" aria-label="ពេលវេលានៅសល់" aria-live="polite">
-                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="days">--</strong><small class="countdown-label">ថ្ងៃ</small></span>
-                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="hours">--</strong><small class="countdown-label">ម៉ោង</small></span>
-                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="minutes">--</strong><small class="countdown-label">នាទី</small></span>
-                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="seconds">--</strong><small class="countdown-label">វិនាទី</small></span>
-                        </div>
                         <h1 class="campaign-title">ចលនាប្រឡងប្រណាំងស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើមក្នុងវិស័យទេសចរណ៍ប្រចាំឆ្នាំ២០២៦</h1>
                         <p class="campaign-summary">បង្ហាញគំនិតច្នៃប្រឌិត និងការស្រាវជ្រាវរបស់អ្នក ដើម្បីរួមចំណែកអភិវឌ្ឍវិស័យទេសចរណ៍កម្ពុជា។</p>
-                        <div class="campaign-deadline"><span aria-hidden="true">📅</span><span>ផុតកំណត់៖ ៣០ កញ្ញា ២០២៦ • ម៉ោងនៅកម្ពុជា</span></div>
                         <div class="campaign-actions">
-                            <a class="hero-cta" href="register.html">ចុះឈ្មោះឥឡូវនេះ</a>
+                            <a class="hero-cta upload-cta" href="upload.html">Upload</a>
                             <a class="hero-cta campaign-secondary" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer">ចូលឆាណែលតេឡេក្រាមកម្មវិធី</a>
                         </div>
                     </div>
@@ -1753,13 +1757,6 @@
                             <div class="prize-card"><span class="prize-rank">១</span><span><small class="prize-label">ជ័យលាភីលេខ ១</small><strong class="prize-amount">៤,០០០,០០០ រៀល</strong></span></div>
                             <div class="prize-card"><span class="prize-rank">២</span><span><small class="prize-label">ជ័យលាភីលេខ ២</small><strong class="prize-amount">៣,០០០,០០០ រៀល</strong></span></div>
                             <div class="prize-card"><span class="prize-rank">៣</span><span><small class="prize-label">ជ័យលាភីលេខ ៣</small><strong class="prize-amount">២,០០០,០០០ រៀល</strong></span></div>
-                        </div>
-                        <p class="countdown-title">ពេលវេលានៅសល់រហូតដល់ថ្ងៃផុតកំណត់</p>
-                        <div class="countdown" id="deadlineCountdown" data-deadline="2026-09-30T23:59:59+07:00" aria-live="polite">
-                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="days">--</strong><small class="countdown-label">ថ្ងៃ</small></span>
-                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="hours">--</strong><small class="countdown-label">ម៉ោង</small></span>
-                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="minutes">--</strong><small class="countdown-label">នាទី</small></span>
-                            <span class="countdown-unit"><strong class="countdown-value" data-countdown="seconds">--</strong><small class="countdown-label">វិនាទី</small></span>
                         </div>
                     </aside>
                 </div>
@@ -1807,14 +1804,6 @@
         <section id="features" class="section">
             <h2>Features</h2>
             <div class="features">
-                <article class="card">
-                    <div class="icon">📝</div>
-                    <div class="meta">
-                        <h3>Register</h3>
-                        <p>Sign up for the research competition and submit your work online.</p>
-                        <a class="btn" href="register.html">Register Now</a>
-                    </div>
-                </article>
                 <article class="card">
                     <div class="icon">📚</div>
                     <div class="meta">
