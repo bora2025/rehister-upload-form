@@ -1144,21 +1144,6 @@
 
         .hero-cta:hover { background: #d96a11; transform: translateY(-2px); }
 
-        .hero-cta.upload-cta {
-            animation: uploadButtonPulse 2.2s ease-in-out infinite;
-        }
-
-        @keyframes uploadButtonPulse {
-            0%, 100% {
-                transform: translateY(0) scale(1);
-                box-shadow: 0 10px 24px rgba(239, 125, 31, 0.28);
-            }
-            50% {
-                transform: translateY(-4px) scale(1.035);
-                box-shadow: 0 16px 34px rgba(239, 125, 31, 0.5);
-            }
-        }
-
         .hero-actions {
             display: flex;
             align-items: center;
@@ -1244,7 +1229,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .hero-banner-image, .hero .slide.active .slide-caption > *, .hero-cta.upload-cta { animation: none; }
+            .hero-banner-image, .hero .slide.active .slide-caption > * { animation: none; }
         }
 
         /* Home header: compact, touch-friendly mobile layout */
@@ -1729,7 +1714,6 @@
                 <li><a href="#about">អំពីចលនាប្រឡងប្រណាំង</a></li>
                 <li><a href="#features">មុខងារ</a></li>
                 <li><a href="library.html">បណ្ណាល័យឯកសារទេសចរណ៍</a></li>
-                <li><a href="upload.html">ដាក់បញ្ជូនឯកសារ</a></li>
                 <li><a href="guide.html" title="សៀវភៅណែនាំប្រើប្រាស់គេហទំព័រ">សៀវភៅណែនាំប្រើប្រាស់</a></li>
             </ul>
         </nav>
@@ -1747,7 +1731,6 @@
                         <h1 class="campaign-title">ចលនាប្រឡងប្រណាំងស្នាដៃអត្ថបទស្រាវជ្រាវឆ្នើមក្នុងវិស័យទេសចរណ៍ប្រចាំឆ្នាំ២០២៦</h1>
                         <p class="campaign-summary">បង្ហាញគំនិតច្នៃប្រឌិត និងការស្រាវជ្រាវរបស់អ្នក ដើម្បីរួមចំណែកអភិវឌ្ឍវិស័យទេសចរណ៍កម្ពុជា។</p>
                         <div class="campaign-actions">
-                            <a class="hero-cta upload-cta" href="upload.html">Upload</a>
                             <a class="hero-cta campaign-secondary" href="https://t.me/+O8E1NI5QxwJlMjQ1" target="_blank" rel="noopener noreferrer">ចូលឆាណែលតេឡេក្រាមកម្មវិធី</a>
                         </div>
                     </div>
